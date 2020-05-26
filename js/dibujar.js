@@ -268,59 +268,6 @@ function euleriano(gradopar){
   else
     return false;
 }
-/*
-
-  //// HAMILTONIANO ////
-
-function dirac(vertices, listagrado){ // para que se cumpla, deben haber mas de 3 vertices
-  var b=0;                            // el grado de todos los vertices debe ser >= (n/2) 
-  if(vertices.length>=3){
-    for(let i=0;i<listagrado.length; i++){
-      if(listagrado[i] < (vertice/2))
-        return false;
-      else
-        b++;
-      }}
-  else
-    return false;    
-}
-function ore(listagrado,vertice){   ///sumar vertices adyacentes y que el resultado sea >= n
-  if(vertices>=3){
-    if((listagrado[0]+listagrado[2] )>= (vertice/2))
-      return 0; 
-    else  
-      return 1;
-    }      
-}
-
-function grado_uno(listagrado){
-    for(let i=0;i<listagrado.length;i++){
-      if(listagrado[i]===1)
-      return false;
-    }
-}
-function hamiltoniano(dirac,ore, conexo){    // si se cumple ore o dirac es hamiltoniano 
-  if (conexo=true && dirac=true ||conexo=true && ore=true){   // vertices tiene que tener grado mayor a 1
-    console.log("Si es Hamiltoniano");
-    return true;
-    }
-  else{
-    console.log("No es Hamiltoniano");
-    return false; }
-
-}
-
-      //FIN
-
-
-    
-
-    /
-
-
-
-    
-
     /*---------------------------------------------------------------------------------------------------
                                     Funciones para el item de flujo maximo
     -----------------------------------------------------------------------------------------------------

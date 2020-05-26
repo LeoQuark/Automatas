@@ -7,18 +7,11 @@
 
     <!-- Bootstrap CSS -->
     <link type="text/css" rel="stylesheet" href="css/styles.css">
-    <link type="text/css" rel="stylesheet" href="css/grafos.css">
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" >
-    <script type="text/javascript" src="js/dibujar.js"></script>
-
     <script src="https://kit.fontawesome.com/b097035380.js" crossorigin="anonymous"></script>
-    <!-- vis -->
-    <script type="text/javascript" src="js/exampleUtil.js"></script>
-    <script type="text/javascript" src="dist/vis.js"></script>
-    <link href="dist/vis-network.min.css" rel="stylesheet" type="text/css" />
-    <link rel="icon" href="img/logo.svg">
-    
+    <!-- <script type="text/javascript" src="js/automatas.js"></script> -->
 
+    <link rel="icon" href="img/logo.svg">
     <title>Autómatas | Análisis</title>
   </head>
   <body>
@@ -52,9 +45,39 @@
             </div>
         </div>
     </nav><br><br><br>
+
+    <!-- Contenido -->
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-5 col-sm-12 my-2 mx-2 bg-white rounded shadow">
+                <h2 class="text-center my-2">Quintupla de valores AFD</h2>
+                <hr>
+                
+                    <label for="">Estados de Entrada</label>
+                    <input id="entrada" type="text" class="form-control" placeholder="separe los datos por ' , '"><br>
+                    <label for="">Alfabeto de Entrada</label>
+                    <input id="alfabeto" type="text" class="form-control" placeholder="separe los datos por ' , '"><br>
+                    <label for="">Estado Inicial</label>
+                    <input id="estadosIniciales" type="text" class="form-control" placeholder="Debe pertenecer a los estados de entrada"><br>
+                    <label for="">Estados Finales</label>
+                    <input id="estadosFinales" type="text" class="form-control" placeholder="separe los datos por ' , '">
+                    <div class="row d-flex justify-content-center">
+                        <button id="Enviar" class="btn btn-primary mt-3 mb-2">Ingresar Datos</button>
+                    </div>
+                
+            </div>
+            <div class="col-lg-5 col-sm-12 my-2 mx-2 bg-white rounded shadow">
+                <h4 class="text-center my-3">Tabla de Transición</h4>
+                <hr>
+                <div id="tablaTransicion"></div>
+            </div>
+        </div>
+    </div>
+
+
     <!--FOOTER-->
     <div>
-        <div class="container fixed-bottom">
+        <div class="container">
         <footer class="pt-1">
             <div class="row my-2">
                 <div class="col d-flex justify-content-center">
@@ -77,8 +100,7 @@
 
 
     <!-- Optional JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="crossorigin="anonymous"></script>
-    <script type="text/javascript" src="js/grafos.js"></script>
+    <script type="text/javascript" src="js/automatas.js"></script>
     
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
