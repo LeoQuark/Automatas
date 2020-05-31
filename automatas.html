@@ -49,20 +49,41 @@
     <!-- Contenido -->
     <div class="container">
         <div class="row d-flex justify-content-center">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-7 col-sm-12 text-center">
+                    <p class="font-weight-light"> <strong> En este apartado podrá ingresar dos Autómatas de tipo AFD o AFND, para luego realizar diversas operaciones.</strong></p>
+                </div>
+            </div>
             <div class="col-lg-5 col-sm-12 my-2 mx-2 bg-white rounded shadow">
-                <h2 class="text-center my-2">Quintupla de valores AFD</h2>
+                <h2 class="text-center my-2">Valores del 1° AFD/AFND</h2>
                 <hr>
                 <div class="form-group">
                     <label for="">Estados de Entrada</label>
-                    <input id="entrada" type="text" class="form-control" placeholder="separe los datos por ' , '"><br>
+                    <input id="entrada1" type="text" class="form-control" placeholder="separe los datos por ' , '"><br>
                     <label for="">Alfabeto de Entrada</label>
-                    <input id="alfabeto" type="text" class="form-control" placeholder="separe los datos por ' , '"><br>
+                    <input id="alfabeto1" type="text" class="form-control" placeholder="separe los datos por ' , '"><br>
                     <label for="">Estado Inicial</label>
-                    <input id="estadosIniciales" type="text" class="form-control" placeholder="Debe pertenecer a los estados de entrada"><br>
+                    <input id="estadosIniciales1" type="text" class="form-control" placeholder="Debe pertenecer a los estados de entrada"><br>
                     <label for="">Estados Finales</label>
-                    <input id="estadosFinales" type="text" class="form-control" placeholder="separe los datos por ' , '">
+                    <input id="estadosFinales1" type="text" class="form-control" placeholder="separe los datos por ' , '">
                     <div class="row d-flex justify-content-center">
-                        <button id="Enviar" class="btn btn-primary mt-3 mb-2">Ingresar Datos</button>
+                        <button id="Enviar1" class="btn btn-primary mt-3 mb-2">Ingresar Datos</button>
+                    </div>
+                </div>
+            </div><div class="col-lg-5 col-sm-12 my-2 mx-2 bg-white rounded shadow">
+                <h2 class="text-center my-2">Valores del 2° AFD/AFND</h2>
+                <hr>
+                <div class="form-group">
+                    <label for="">Estados de Entrada</label>
+                    <input id="entrada2" type="text" class="form-control" placeholder="separe los datos por ' , '"><br>
+                    <label for="">Alfabeto de Entrada</label>
+                    <input id="alfabeto2" type="text" class="form-control" placeholder="separe los datos por ' , '"><br>
+                    <label for="">Estado Inicial</label>
+                    <input id="estadosIniciales2" type="text" class="form-control" placeholder="Debe pertenecer a los estados de entrada"><br>
+                    <label for="">Estados Finales</label>
+                    <input id="estadosFinales2" type="text" class="form-control" placeholder="separe los datos por ' , '">
+                    <div class="row d-flex justify-content-center">
+                        <button id="Enviar2" class="btn btn-primary mt-3 mb-2">Ingresar Datos</button>
                     </div>
                 </div>
             </div>
@@ -70,7 +91,14 @@
                 <h4 class="text-center my-3">Tabla de Transición</h4>
                 <hr>
                 <div class="row d-flex justify-content-center">
-                    <div id="tablaTransicion" class="mx-2"></div>
+                    <div id="tablaTransicion1" class="mx-2"></div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-sm-12 my-2 mx-2 bg-white rounded shadow">
+                <h4 class="text-center my-3">Tabla de Transición</h4>
+                <hr>
+                <div class="row d-flex justify-content-center">
+                    <div id="tablaTransicion2" class="mx-2"></div>
                 </div>
             </div>
         </div>
