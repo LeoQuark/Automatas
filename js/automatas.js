@@ -1,11 +1,19 @@
-/*Constructor*/
+/*Constructores*/
+/*Quintupla*/
 function Quintupla(est_Entrada,arr_alfabeto,est_Iniciales,est_Finales){
     this.est_Entrada = est_Entrada
     this.arr_alfabeto = arr_alfabeto
- //   this. = 
+   // this.arr_transiciones = arr_transiciones
     this.est_Iniciales = est_Iniciales
     this.est_Finales = est_Finales
 }
+/* Transiciones*/
+function Transicion(estado_from,lectura,estado_to){
+    this.estado_from = estado_from 
+    this.lectura = lectura
+    this.estado_to = estado_to
+}
+/*-------------------------------------------------------------------------*/
 
 /*Variables para primer autómata*/
 const tablaTransicion1 = document.querySelector("#tablaTransicion1");
@@ -51,9 +59,9 @@ function ordenarElementosAutomata1(e){
     arr_alfabeto1 = b.split(',');
     est_Iniciales1 = c.split(',');
     est_Finales1 = d.split(',');
-    quintupla1 = [est_Entrada1, arr_alfabeto1, est_Iniciales1, est_Finales1];
+    //quintupla1 = [est_Entrada1, arr_alfabeto1, est_Iniciales1, est_Finales1];
     enviar1.disabled = true;
-    console.log(quintupla1);
+    //console.log(quintupla1);
     var afd = new Quintupla(est_Entrada1, arr_alfabeto1, est_Iniciales1, est_Finales1)
     console.log(afd)
     crearTablatransicion1();
@@ -74,7 +82,7 @@ function crearTablatransicion1(){
     }
     tabla_padre.appendChild(fila);
  
-    for(let j=0; j<(entrada1.length * alfabeto1.length) ; j++){
+    for(let j=0; j<(est_Entrada1.length * arr_alfabeto1.length) ; j++){
         var filas = document.createElement('tr');
         var columna_three = document.createElement('td');
         var input = document.createElement('input');
