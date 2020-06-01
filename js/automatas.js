@@ -7,7 +7,7 @@ function Quintupla(est_Entrada,arr_alfabeto,est_Iniciales,est_Finales){
     this.est_Iniciales = est_Iniciales
     this.est_Finales = est_Finales
 }
-/* Transiciones*/
+/* Transiciones o Relaciones*/
 function Transicion(estado_from,lectura,estado_to){
     this.estado_from = estado_from 
     this.lectura = lectura
@@ -116,6 +116,53 @@ function crearTablatransicion1(){
     
     tablaTransicion1.appendChild(tabla_padre);
 }
+/*--------------EJEMPLOOOOO-----------------------*/
+//AUTOMATA FINITO DETERMINISTA
+var entrada=["q0","q1","q2"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1","q2"]
+var transiciones=[]
+transiciones[0]= {estado_from:"q0",lectura:"a",estado_to:"q1"}
+transiciones[1]= {estado_from:"q0",lectura:"b",estado_to:"q2"}
+transiciones[2]= {estado_from:"q1",lectura:"a",estado_to:"q1"}
+transiciones[3]= {estado_from:"q1",lectura:"b",estado_to:"q1"}
+transiciones[4]= {estado_from:"q2",lectura:"a",estado_to:"q0"}
+transiciones[5]= {estado_from:"q2",lectura:"b",estado_to:"q2"}
+
+var AFDejemplo = {
+    est_Entrada: entrada,
+    arr_alfabeto: alfabeto,
+    arr_transiciones:transiciones,
+    est_Iniciales: inicial,
+    est_Finales: final
+}
+console.log(AFDejemplo)
+
+//AUTOMATA FINITO NO DETERMINISTA
+var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q0","q1"]
+var transiciones=[]
+transiciones[0]= {estado_from:"q0",lectura:"a",estado_to:"q1"}
+transiciones[1]= {estado_from:"q0",lectura:"a",estado_to:"q2"}
+transiciones[2]= {estado_from:"q1",lectura:"a",estado_to:"q1"}
+transiciones[3]= {estado_from:"q1",lectura:"a",estado_to:"q2"}
+transiciones[4]= {estado_from:"q2",lectura:"a",estado_to:"q1"}
+transiciones[5]= {estado_from:"q2",lectura:"b",estado_to:"q3"}
+transiciones[6]= {estado_from:"q2",lectura:"b",estado_to:"q4"}
+transiciones[7]= {estado_from:"q3",lectura:"a",estado_to:"q1"}
+transiciones[8]= {estado_from:"q3",lectura:"b",estado_to:"q3"}
+transiciones[9]= {estado_from:"q3",lectura:"b",estado_to:"q4"}
+
+var AFNDejemplo = {
+    est_Entrada: entrada,
+    arr_alfabeto: alfabeto,
+    arr_transiciones:transiciones,
+    est_Iniciales: inicial,
+    est_Finales: final
+}
+console.log(AFNDejemplo)
+
+/*-----------------------------------------------------*/
+function AFDEquivalente(){
+}
+
 
 /* -------------------------------------------------------------------------------------------------------------------------------------------------- */
 /*Creación del segundo autómata*/
