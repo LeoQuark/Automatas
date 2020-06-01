@@ -1,3 +1,12 @@
+/*Constructor*/
+function Quintupla(est_Entrada,arr_alfabeto,est_Iniciales,est_Finales){
+    this.est_Entrada = est_Entrada
+    this.arr_alfabeto = arr_alfabeto
+ //   this. = 
+    this.est_Iniciales = est_Iniciales
+    this.est_Finales = est_Finales
+}
+
 /*Variables para primer autómata*/
 const tablaTransicion1 = document.querySelector("#tablaTransicion1");
 
@@ -45,6 +54,8 @@ function ordenarElementosAutomata1(e){
     quintupla1 = [est_Entrada1, arr_alfabeto1, est_Iniciales1, est_Finales1];
     enviar1.disabled = true;
     console.log(quintupla1);
+    var afd = new Quintupla(est_Entrada1, arr_alfabeto1, est_Iniciales1, est_Finales1)
+    console.log(afd)
     crearTablatransicion1();
 }
 
