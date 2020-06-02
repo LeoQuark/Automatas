@@ -117,11 +117,11 @@ function crearTablatransicion1(){
 //AUTOMATA FINITO DETERMINISTA
 var entrada=["q1","q2","q3","q4","q5"], alfabeto=["a","b"], inicial= ["q5"], final= ["q2","q3","q4","q5"]
 var estado=[]
-estado[0]= {nombre:"q5",final:"1" ,estado_to:["q4","q3"]}
-estado[1]= {nombre:"q4",final:"1",estado_to:["q4","q2"]}
-estado[2]= {nombre:"q3",final:"1",estado_to:["q4","q1"]}
-estado[3]= {nombre:"q2",final:"1",estado_to:["q4","q1"]}
-estado[4]= {nombre:"q1",final:"0",estado_to:[null,"q1"]}
+estado[0]= {nombre:"q5",final:true ,estado_to:["q4","q3"]}
+estado[1]= {nombre:"q4",final:true,estado_to:["q4","q2"]}
+estado[2]= {nombre:"q3",final:true,estado_to:["q4","q1"]}
+estado[3]= {nombre:"q2",final:true,estado_to:["q4","q1"]}
+estado[4]= {nombre:"q1",final:false,estado_to:[null,"q1"]}
 
 var AFDejemplo = {
     est_entrada: entrada,
@@ -181,7 +181,7 @@ function semiMatriz(AFDejemplo,matriz,estado1,estado2){
                     else{
                         k1=buscariEstado(f1,AFDejemplo), k2=buscariEstado(f2,AFDejemplo)
                         console.log("k1,k2 ",k1,k2)
-                        if(((AFDejemplo.arr_estados)[k1]).final === "1" && ((AFDejemplo.arr_estados)[k2]).final=== "1" || ((AFDejemplo.arr_estados)[k1]).final === "0" && ((AFDejemplo.arr_estados)[k2]).final=== "0"){
+                        if(((AFDejemplo.arr_estados)[k1]).final === true && ((AFDejemplo.arr_estados)[k2]).final=== true || ((AFDejemplo.arr_estados)[k1]).final === false && ((AFDejemplo.arr_estados)[k2]).final=== false){
                             cont++;
                         }
                     }
@@ -195,8 +195,7 @@ function semiMatriz(AFDejemplo,matriz,estado1,estado2){
         }
         matriz.push(aux_m)
         aux_m = []
-        aux++;
-        
+        aux++;   
     }
 }
 function Simplificar(AFDejemplo){
