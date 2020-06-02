@@ -135,25 +135,32 @@ console.log("EJEMPLO AFN")
 console.log(AFDejemplo)
 
 /*-----------------------------------------------------*/
+
 function MatrizDiagonal(matriz,indice){
     console.log(indice)
-    for (var i=0;i<indice.length;i++) {
-        for (var j=0;j<=i;j++) { 
-           //m[i-j][j]);
+    var aux_m = [], aux= 1
+    for (var i=0;i<indice;i++) {
+        for (var j=0;j<aux;j++) { 
+           aux_m[j]=0  //1 
         }
+        matriz.push(aux_m)
+        aux_m = []
+        aux++
     }
+    return matriz;
 }
 
-function Matriz(filas,columnas){
-    this.filas = filas
-    this.columnas = columnas
-}
+
 
 function Simplificar(AFDejemplo){
-    var filas, columnas, matriz = new Matriz(filas,columnas)
+    var matriz = []
     console.log()
     var indice= AFDejemplo.est_Entrada  //Todos los estados disponibles
     MatrizDiagonal(matriz,indice.length-1)
+    console.log(matriz)
+
+
+
 
 }
 Simplificar(AFDejemplo)
