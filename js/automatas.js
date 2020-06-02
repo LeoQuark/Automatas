@@ -1,20 +1,20 @@
 /*Constructores*/
 /*Quintupla*/
-function Quintupla(est_Entrada,arr_alfabeto,est_Iniciales,est_Finales){
+function Quintupla(est_Entrada,arr_alfabeto,est_Iniciales,est_Finales,arrestados){
     this.est_Entrada = est_Entrada
     this.arr_alfabeto = arr_alfabeto
-   // this.arr_transiciones = arr_transiciones
     this.est_Iniciales = est_Iniciales
     this.est_Finales = est_Finales
+    this.arr_estados = arr_estados
 }
-/* Transiciones o Relaciones*/
-function Transicion(estado_from,lectura,estado_to){
-    this.estado_from = estado_from 
+/*Estados con sus Transiciones*/
+function Estado(nombre,final,lectura,estado_to){
+    this.nombre = nombre
+    this.final = final // 0 no, 1 si
     this.lectura = lectura
     this.estado_to = estado_to
 }
 /*-------------------------------------------------------------------------*/
-
 /*Variables para primer autómata*/
 const tablaTransicion1 = document.querySelector("#tablaTransicion1");
 
@@ -62,8 +62,6 @@ function ordenarElementosAutomata1(e){
     //quintupla1 = [est_Entrada1, arr_alfabeto1, est_Iniciales1, est_Finales1];
     enviar1.disabled = true;
     //console.log(quintupla1);
-    var afd = new Quintupla(est_Entrada1, arr_alfabeto1, est_Iniciales1, est_Finales1)
-    console.log(afd)
     crearTablatransicion1();
 }
 
@@ -118,53 +116,52 @@ function crearTablatransicion1(){
 }
 /*--------------EJEMPLOOOOO-----------------------*/
 //AUTOMATA FINITO DETERMINISTA
-var entrada=["q0","q1","q2"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1","q2"]
-var transiciones=[]
-transiciones[0]= {estado_from:"q0",lectura:"a",estado_to:"q1"}
-transiciones[1]= {estado_from:"q0",lectura:"b",estado_to:"q2"}
-transiciones[2]= {estado_from:"q1",lectura:"a",estado_to:"q1"}
-transiciones[3]= {estado_from:"q1",lectura:"b",estado_to:"q1"}
-transiciones[4]= {estado_from:"q2",lectura:"a",estado_to:"q0"}
-transiciones[5]= {estado_from:"q2",lectura:"b",estado_to:"q2"}
+var entrada=["q1","q2","q3","q4","q5"], alfabeto=["a","b"], inicial= ["q5"], final= ["q2","q3","q4","q5"]
+var estado=[]
+estado[0]= {nombre:"q5",final:["1"] ,lectura: ["a","b"],estado_to:["q4","q3"]}
+estado[1]= {nombre:"q4",final:["1"],lectura:["a","b"],estado_to:["q4","q2"]}
+estado[2]= {nombre:"q3",final:["1"],lectura:["a","b"],estado_to:["q4","q1"]}
+estado[3]= {nombre:"q2",final:["1"],lectura:["a","b"],estado_to:["q4","q1"]}
+estado[4]= {nombre:"q1",final:["0"],lectura:["a","b"],estado_to:[null,"q1"]}
 
 var AFDejemplo = {
     est_Entrada: entrada,
     arr_alfabeto: alfabeto,
-    arr_transiciones:transiciones,
     est_Iniciales: inicial,
-    est_Finales: final
+    est_Finales: final,
+    arr_estados : estado,
 }
+console.log("EJEMPLO AFN")
 console.log(AFDejemplo)
 
-//AUTOMATA FINITO NO DETERMINISTA
-var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q0","q1"]
-var transiciones=[]
-transiciones[0]= {estado_from:"q0",lectura:"a",estado_to:"q1"}
-transiciones[1]= {estado_from:"q0",lectura:"a",estado_to:"q2"}
-transiciones[2]= {estado_from:"q1",lectura:"a",estado_to:"q1"}
-transiciones[3]= {estado_from:"q1",lectura:"a",estado_to:"q2"}
-transiciones[4]= {estado_from:"q2",lectura:"a",estado_to:"q1"}
-transiciones[5]= {estado_from:"q2",lectura:"b",estado_to:"q3"}
-transiciones[6]= {estado_from:"q2",lectura:"b",estado_to:"q4"}
-transiciones[7]= {estado_from:"q3",lectura:"a",estado_to:"q1"}
-transiciones[8]= {estado_from:"q3",lectura:"b",estado_to:"q3"}
-transiciones[9]= {estado_from:"q3",lectura:"b",estado_to:"q4"}
-
-var AFNDejemplo = {
-    est_Entrada: entrada,
-    arr_alfabeto: alfabeto,
-    arr_transiciones:transiciones,
-    est_Iniciales: inicial,
-    est_Finales: final
-}
-console.log(AFNDejemplo)
-
 /*-----------------------------------------------------*/
-function AFDEquivalente(){
+function MatrizDiagonal(matriz,indice){
+    console.log(indice)
+    for (var i=0;i<indice.length;i++) {
+        for (var j=0;j<=i;j++) { 
+           //m[i-j][j]);
+        }
+    }
 }
 
+function Matriz(filas,columnas){
+    this.filas = filas
+    this.columnas = columnas
+}
+
+function Simplificar(AFDejemplo){
+    var filas, columnas, matriz = new Matriz(filas,columnas)
+    console.log()
+    var indice= AFDejemplo.est_Entrada  //Todos los estados disponibles
+    MatrizDiagonal(matriz,indice.length-1)
+
+}
+Simplificar(AFDejemplo)
 
 /* -------------------------------------------------------------------------------------------------------------------------------------------------- */
+
+
+
 /*Creación del segundo autómata*/
 enviar2.addEventListener('click',ordenarElementosAutomata2);
 
