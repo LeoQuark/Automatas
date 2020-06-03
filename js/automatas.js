@@ -316,6 +316,75 @@ function Simplificar(AFDejemplo){
 }
 Simplificar(AFDejemplo)
 
+/*-------Concatenación-------*/
+/*--Función que concatena dos autómatas (por ahora funciona con ambos autómatas de igual alfabeto)*/
+
+function Concatenación (a, b){
+    var entradaConcatenacion, alfabetoConcatenacion, inicialConcatenacion;      //Se crean variables
+    var finalConcatenacion, estadoConcatenacion = [];
+    var aux, contador = 0;
+    
+    aux = a.est_entrada + "," + b.est_entrada;      //Concatenación de los parámetros
+    entradaConcatenacion = aux.split(",");
+    aux = a.arr_alfabeto + "," + "epsilon";
+    alfabetoConcatenacion = aux.split(",");
+    inicialConcatenacion = a.est_iniciales;
+    aux = a.est_finales + "," + b.est_finales;
+    finalConcatenacion = aux.split(",");
+    for (var i=0;i<a.arr_estados.length;i++){
+        estadoConcatenacion[contador] = a.arr_estados[i];
+        contador++;
+    }
+    for (var i=0;i<b.arr_estados.length;i++){
+        estadoConcatenacion[contador] = b.arr_estados[i];
+        contador++;
+    }
+    
+    var AFDConcatenacion = {                        //Se crea un nuevo autómata definido
+        est_entrada: entradaConcatenacion,
+        arr_alfabeto: alfabetoConcatenacion,
+        est_iniciales: inicialConcatenacion,
+        est_finales: finalConcatenacion,
+        arr_estados : estadoConcatenacion,
+    }
+    for (var m=0;m<AFDConcatenacion.arr_estados.length;m++){
+        AFDConcatenacion.arr_estados[m].estado_to[AFDConcatenacion.arr_alfabeto.length-1] = null;
+    }
+    //Finalmente se concatenan los estados INICIALES 
+    for (var j=0;j<AFDConcatenacion.arr_estados.length;j++){   
+        if (AFDConcatenacion.arr_estados[j].nombre == AFDConcatenacion.est_iniciales){
+            AFDConcatenacion.arr_estados[j].estado_to[AFDConcatenacion.arr_estados[j].estado_to.length-1] = b.est_iniciales[0];
+        }
+    }
+    
+    return AFDConcatenacion;  //Se retorna el autómata para su posterior utilización sin afectar al autómata AFDejemplo uwu
+}
+
+//console.log(Concatenacion(AFDejemplo, AFDejemplo));
+/*Agregué en este caso al alfabeto la palabra vacía "epsilon", por si ven que estado_to tienen al
+final el elemento null, es porque como el estado inicial por ejemplo:
+
+    estado.nombre = q1
+    alfabeto  = [    a   ,   b   ,   epsilon ]
+    estado_to = [   q2  ,   q1  ,   null    ]
+    
+    q1-----a------>q2
+    q1-----b------>q1
+    q1----epsilon----->null (no existe)
+    
+Caso contrario, si al final no está el null:
+
+    estado.nombre = q1
+    alfabeto  = [    a   ,   b   ,   epsilon ]
+    estado_to = [   q2  ,   q1  ,   q3    ]
+    
+    q1-----a------>q2
+    q1-----b------>q1
+    q1----epsilon----->q3 (si la palabra vacía es leída se va a q3)
+
+*/
+/*-----------------------------------------------------------------------------*/
+
 
 /*-------Creación del segundo autómata-------*/
 enviar2.addEventListener('click',ordenarElementosAutomata2);
