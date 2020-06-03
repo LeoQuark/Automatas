@@ -1,0 +1,12 @@
+.formatoTablaTitulo{
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    background: #cfd8dc;
+}
+.formatoTabla{
+    width: 200px;
+    height: 50px;
+    text-align: center;
+    background: white;
+}

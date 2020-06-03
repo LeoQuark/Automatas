@@ -13,8 +13,8 @@ function Estado(nombre,final,estado_to){
     this.final = final // 0 no, 1 si
     this.estado_to = estado_to
 }
-/*-------------------------------------------------------------------------*/
-/*Variables para primer autómata*/
+
+/*---------Variables para primer autómata----------*/
 const tablaTransicion1 = document.querySelector("#tablaTransicion1");
 
 const entrada1 = document.querySelector("#entrada1");
@@ -22,16 +22,15 @@ const alfabeto1 = document.querySelector("#alfabeto1");
 const iniciales1 = document.querySelector("#estadosIniciales1");
 const finales1 = document.querySelector("#estadosFinales1");
 
-var transiciones1 = ['Entrada','Lectura','Destino'];
+var transiciones = ['Entrada','Lectura','Destino'];
 var quintupla1 = [];
 var est_Entrada1 =[];
 var arr_alfabeto1 = [];
 var est_Iniciales1 = [];
 var est_Finales1 = [];
-
 const enviar1 = document.querySelector("#Enviar1");
-/* -------------------------------------------------------------------------- */
-/*Variables para segundo autómata*/
+
+/*-------Variables para segundo autómata----------*/
 const tablaTransicion2 = document.querySelector("#tablaTransicion2");
 
 const entrada2 = document.querySelector("#entrada2");
@@ -39,7 +38,6 @@ const alfabeto2 = document.querySelector("#alfabeto2");
 const iniciales2 = document.querySelector("#estadosIniciales2");
 const finales2 = document.querySelector("#estadosFinales2");
 
-var transiciones2 = ['Entrada','Lectura','Destino'];
 var quintupla2 = [];
 var est_Entrada2 =[];
 var arr_alfabeto2 = [];
@@ -47,8 +45,8 @@ var est_Iniciales2 = [];
 var est_Finales2 = [];
 
 const enviar2 = document.querySelector("#Enviar2");
-/* -------------------------------------------------------------------------------------------------------------------------------------------------- */
-/*Creación del primer autómata*/
+
+/*-------Creación del primer autómata------*/
 enviar1.addEventListener('click',ordenarElementosAutomata1);
 
 function ordenarElementosAutomata1(e){
@@ -58,61 +56,58 @@ function ordenarElementosAutomata1(e){
     arr_alfabeto1 = b.split(',');
     est_Iniciales1 = c.split(',');
     est_Finales1 = d.split(',');
-    //quintupla1 = [est_Entrada1, arr_alfabeto1, est_Iniciales1, est_Finales1];
     enviar1.disabled = true;
-    //console.log(quintupla1);
-    crearTablatransicion1();
-}
-
-function crearTablatransicion1(){
-    // e.preventDefault();
-    var tabla_padre = document.createElement('table');
-    var fila = document.createElement('tr');
-    for(let i=0; i<3 ; i++){
-        var columna_p = document.createElement('td');
-        columna_p.style.width="200px";
-        columna_p.style.height="50px";
-        columna_p.style.textAlign="center";
-        columna_p.style.backgroundColor="#cfd8dc";
-        columna_p.textContent = transiciones1[i];
-        fila.appendChild(columna_p);
-    }
-    tabla_padre.appendChild(fila);
- 
-    for(let j=0; j<(est_Entrada1.length * arr_alfabeto1.length) ; j++){
-        var filas = document.createElement('tr');
-        var columna_three = document.createElement('td');
-        var input = document.createElement('input');
-        for(let m=0; m<3; m++){
-            var columna_one = document.createElement('td');
-            var columna_two = document.createElement('td');
-  
-            columna_one.style.width="200px";
-            columna_one.style.height="50px";
-            columna_one.style.textAlign="center";
-            columna_one.textContent = est_Entrada1[m];
-
-            columna_two.style.width="200px";
-            columna_two.style.height="50px";
-            columna_two.style.textAlign="center";
-            if(alfabeto1[m]!=undefined)
-                columna_two.textContent = alfabeto1[m];
-            
-            columna_three.style.width="200px";
-            columna_three.style.height="50px";
-            columna_three.style.textAlign="center";
-            input.className='form-control';
-            columna_three.textContent = input;
-
-            filas.appendChild(columna_three); 
-            filas.appendChild(columna_one);
-            filas.appendChild(columna_two);
-        }
-        tabla_padre.appendChild(filas);
-    }
     
-    tablaTransicion1.appendChild(tabla_padre);
+    crearTablaTransicion();
+    console.log("quintupla1");
 }
+
+/*------Tabla de transiciones con input----- */
+function crearTablaTransicion(){
+    // e.preventDefault();
+    var tablaPadre = document.createElement('table'),
+        filaTitulo = document.createElement('tr');
+    for(let i=0; i<transiciones.length ; i++){
+        var columnaTitulo = document.createElement('td');
+        columnaTitulo.className='formatoTablaTitulo';
+        columnaTitulo.textContent = transiciones[i];
+        filaTitulo.appendChild(columnaTitulo);
+    }
+    tablaPadre.appendChild(filaTitulo);
+    for(let i=0; i<arr_alfabeto1.length; i++){
+        for(let j=0; j<est_Entrada1.length; j++){
+            var filaDatos = document.createElement('tr'), 
+                columnaEstados = document.createElement('td'), 
+                columnaAlfabeto = document.createElement('td'),
+                columnaInput = document.createElement('td'),
+                input = document.createElement('input');
+            
+            columnaEstados.className='formatoTabla';
+            columnaEstados.textContent = est_Entrada1[j];
+            columnaAlfabeto.className='formatoTabla';
+            columnaAlfabeto.textContent = arr_alfabeto1[i];
+            input.className='form-control';
+            input.setAttribute('placeholder','Estado Destino');
+            input.setAttribute('type','text');
+            input.id=`${est_Entrada1[j]}-${arr_alfabeto1[i]}`;
+            columnaInput.appendChild(input);
+            
+            filaDatos.appendChild(columnaEstados);
+            filaDatos.appendChild(columnaAlfabeto);
+            filaDatos.appendChild(columnaInput);
+            tablaPadre.appendChild(filaDatos);
+        }
+    }
+    tablaTransicion1.appendChild(tablaPadre);
+}
+
+/*------Obtener el estado destino-------*/
+// var 
+// const datosTabla = document.querySelector('#datosTabla');
+// datosTabla.addEventListener('click',function(){
+
+// })
+
 /*--------------EJEMPLOOOOO-----------------------*/
 //AUTOMATA FINITO DETERMINISTA
 var entrada=["q1","q2","q3","q4","q5"], alfabeto=["a","b"], inicial= ["q5"], final= ["q2","q3","q4","q5"]
@@ -210,11 +205,8 @@ function Simplificar(AFDejemplo){
 }
 Simplificar(AFDejemplo)
 
-/* -------------------------------------------------------------------------------------------------------------------------------------------------- */
 
-
-
-/*Creación del segundo autómata*/
+/*-------Creación del segundo autómata-------*/
 enviar2.addEventListener('click',ordenarElementosAutomata2);
 
 function ordenarElementosAutomata2(e){
@@ -230,55 +222,6 @@ function ordenarElementosAutomata2(e){
     crearTablatransicion2();
 }
 
-function crearTablatransicion2(){
-    // e.preventDefault();
-    var tabla_padre = document.createElement('table');
-    var fila = document.createElement('tr');
-    for(let i=0; i<3 ; i++){
-        var columna_p = document.createElement('td');
-        columna_p.style.width="200px";
-        columna_p.style.height="50px";
-        columna_p.style.textAlign="center";
-        columna_p.style.backgroundColor="#cfd8dc";
-        columna_p.textContent = transiciones2[i];
-        fila.appendChild(columna_p);
-    }
-    tabla_padre.appendChild(fila);
- 
-    for(let j=0; j<(entrada2.length * alfabeto2.length) ; j++){
-        var filas = document.createElement('tr');
-        var columna_three = document.createElement('td');
-        var input = document.createElement('input');
-        for(let m=0; m<3; m++){
-            var columna_one = document.createElement('td');
-            var columna_two = document.createElement('td');
-  
-            columna_one.style.width="200px";
-            columna_one.style.height="50px";
-            columna_one.style.textAlign="center";
-            columna_one.textContent = est_Entrada2[m];
-
-            columna_two.style.width="200px";
-            columna_two.style.height="50px";
-            columna_two.style.textAlign="center";
-            if(alfabeto2[m]!=undefined)
-                columna_two.textContent = alfabeto2[m];
-            
-            columna_three.style.width="200px";
-            columna_three.style.height="50px";
-            columna_three.style.textAlign="center";
-            input.className='form-control';
-            columna_three.textContent = input;
-
-            filas.appendChild(columna_three); 
-            filas.appendChild(columna_one);
-            filas.appendChild(columna_two);
-        }
-        tabla_padre.appendChild(filas);
-    }
-    
-    tablaTransicion2.appendChild(tabla_padre);
-}
 
 
 
