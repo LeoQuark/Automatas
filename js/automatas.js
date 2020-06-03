@@ -10,7 +10,7 @@ function Quintupla(est_Entrada,arr_alfabeto,est_Iniciales,est_Finales,arrestados
 /*Estados con sus Transiciones*/
 function Estado(nombre,final,estado_to){
     this.nombre = nombre
-    this.final = final // 0 no, 1 si
+    this.final = final // true or false
     this.estado_to = estado_to
 }
 
@@ -24,7 +24,7 @@ const finales1 = document.querySelector("#estadosFinales1");
 
 var transiciones = ['Entrada','Lectura','Destino'];
 var quintupla1 = [];
-var est_Entrada1 =[];
+var est_Entrada1 = [];
 var arr_alfabeto1 = [];
 var est_Iniciales1 = [];
 var est_Finales1 = [];
@@ -37,7 +37,6 @@ const entrada2 = document.querySelector("#entrada2");
 const alfabeto2 = document.querySelector("#alfabeto2");
 const iniciales2 = document.querySelector("#estadosIniciales2");
 const finales2 = document.querySelector("#estadosFinales2");
-
 var quintupla2 = [];
 var est_Entrada2 =[];
 var arr_alfabeto2 = [];
@@ -57,13 +56,11 @@ function ordenarElementosAutomata1(e){
     est_Iniciales1 = c.split(',');
     est_Finales1 = d.split(',');
     enviar1.disabled = true;
-    
-    crearTablaTransicion();
-    console.log("quintupla1");
+    crearTablaTransicion1();
 }
 
 /*------Tabla de transiciones con input----- */
-function crearTablaTransicion(){
+function crearTablaTransicion1(){
     // e.preventDefault();
     var tablaPadre = document.createElement('table'),
         filaTitulo = document.createElement('tr');
@@ -74,8 +71,8 @@ function crearTablaTransicion(){
         filaTitulo.appendChild(columnaTitulo);
     }
     tablaPadre.appendChild(filaTitulo);
-    for(let i=0; i<arr_alfabeto1.length; i++){
-        for(let j=0; j<est_Entrada1.length; j++){
+    for(let i=0; i<est_Entrada1.length; i++){
+        for(let j=0; j<arr_alfabeto1.length; j++){
             var filaDatos = document.createElement('tr'), 
                 columnaEstados = document.createElement('td'), 
                 columnaAlfabeto = document.createElement('td'),
@@ -83,13 +80,13 @@ function crearTablaTransicion(){
                 input = document.createElement('input');
             
             columnaEstados.className='formatoTabla';
-            columnaEstados.textContent = est_Entrada1[j];
+            columnaEstados.textContent = est_Entrada1[i];
             columnaAlfabeto.className='formatoTabla';
-            columnaAlfabeto.textContent = arr_alfabeto1[i];
+            columnaAlfabeto.textContent = arr_alfabeto1[j];
             input.className='form-control';
             input.setAttribute('placeholder','Estado Destino');
             input.setAttribute('type','text');
-            input.id=`${est_Entrada1[j]}-${arr_alfabeto1[i]}`;
+            input.id=`${est_Entrada1[i]}-${arr_alfabeto1[j]}`;
             columnaInput.appendChild(input);
             
             filaDatos.appendChild(columnaEstados);
@@ -102,11 +99,39 @@ function crearTablaTransicion(){
 }
 
 /*------Obtener el estado destino-------*/
-// var 
-// const datosTabla = document.querySelector('#datosTabla');
-// datosTabla.addEventListener('click',function(){
 
-// })
+var Estados = [], estado_to = [];
+const datosTabla = document.querySelector('#datosTabla');
+datosTabla.addEventListener('click',obtenerEstadosDestino);
+
+function obtenerEstadosDestino(){
+    for(let i=0; i<est_Entrada1.length;i++){
+        for(let j=0; j<arr_alfabeto1.length;j++){
+            var inputDestino = document.querySelector(`#${est_Entrada1[i]}-${arr_alfabeto1[j]}`),
+                valorDestino = inputDestino.value;
+            estado_to.push(valorDestino);
+        }
+        // si el estado es final y esta dentro del arreglo estados iniciales retorna != -1
+        var existe = est_Finales1.indexOf(est_Entrada1[i]);
+        if(existe != -1 )
+            Estados[i] = new Estado(est_Entrada1[i],true,estado_to);
+        else
+            Estados[i] = new Estado(est_Entrada1[i],false,estado_to);
+        
+        estado_to=[];
+        console.log(Estados[i]);
+    }
+
+}
+console.log(est_Entrada1);
+var AFD = {
+    est_entrada: est_Entrada1,
+    arr_alfabeto: arr_alfabeto1,
+    est_iniciales: est_Iniciales1,
+    est_finales: est_Finales1,
+    arr_estados : Estados,
+}
+console.log(AFD);
 
 /*--------------EJEMPLOOOOO-----------------------*/
 //AUTOMATA FINITO DETERMINISTA
@@ -221,9 +246,3 @@ function ordenarElementosAutomata2(e){
     console.log(quintupla2);
     crearTablatransicion2();
 }
-
-
-
-
-
-
