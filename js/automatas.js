@@ -1,10 +1,10 @@
 /*Constructores*/
 /*Quintupla*/
 function Quintupla(est_Entrada,arr_alfabeto,est_Iniciales,est_Finales,arr_estados){
-    this.est_Entrada = est_Entrada
+    this.est_entrada = est_Entrada
     this.arr_alfabeto = arr_alfabeto
-    this.est_Iniciales = est_Iniciales
-    this.est_Finales = est_Finales
+    this.est_inicial = est_Iniciales
+    this.est_finales = est_Finales
     this.arr_estados = arr_estados
 }
 /*Estados con sus Transiciones*/
@@ -123,7 +123,7 @@ function obtenerEstadosDestino(){
     }
 
 }
-console.log(est_Entrada1);
+//console.log(est_Entrada1);
 var AFD = {
     est_entrada: est_Entrada1,
     arr_alfabeto: arr_alfabeto1,
@@ -131,26 +131,27 @@ var AFD = {
     est_finales: est_Finales1,
     arr_estados : Estados,
 }
-console.log(AFD);
+//console.log(AFD);
 
 /*--------------EJEMPLOOOOO-----------------------*/
 //AUTOMATA FINITO DETERMINISTA
 //EJEMPLO1
-/*var entrada=["q1","q2","q3","q4","q5"], alfabeto=["a","b"], inicial= ["q5"], final= ["q2","q3","q4","q5"]
+var entrada=["q1","q2","q3","q4","q5"], alfabeto=["a","b"], inicial= ["q5"], final= ["q2","q3","q4","q5"]
 var estado=[]
 estado[0]= {nombre:"q5",final:true ,estado_to:["q4","q3"]}
 estado[1]= {nombre:"q4",final:true,estado_to:["q4","q2"]}
 estado[2]= {nombre:"q3",final:true,estado_to:["q4","q1"]}
 estado[3]= {nombre:"q2",final:true,estado_to:["q4","q1"]}
-estado[4]= {nombre:"q1",final:false,estado_to:[null,"q1"]} */
-//EJEMPLO 2
+estado[4]= {nombre:"q1",final:false,estado_to:[null,"q1"]} 
+//EJEMPLO 2 
+/*
 var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1","q3"]
 var estado=[]
 estado[0]= {nombre:"q0",final:false ,estado_to:["q1","q3"]}
 estado[1]= {nombre:"q1",final:true,estado_to:["q2","q1"]}
 estado[2]= {nombre:"q2",final:false,estado_to:["q1","q2"]}
 estado[3]= {nombre:"q3",final:true,estado_to:["q4","q3"]}
-estado[4]= {nombre:"q4",final:false,estado_to:["q3","q4"]}
+estado[4]= {nombre:"q4",final:false,estado_to:["q3","q4"]} */
 
 var AFDejemplo = {
     est_entrada: entrada,
@@ -159,10 +160,11 @@ var AFDejemplo = {
     est_finales: final,
     arr_estados : estado,
 }
-console.log("EJEMPLO AFN")
-console.log(AFDejemplo)
+//console.log("EJEMPLO AFN",AFDejemplo)
 
-/*-----------------------------------------------------*/
+/*-----------Simplificacion-----------------*/
+/*Funcion para simplificar un automata*/ 
+
 function arr_estados(matriz1, matriz2,indice,afd){ //
     //console.log("Funcion arr_estados")  
     for (let i=0;i<indice-1;i++){
@@ -310,11 +312,50 @@ function Simplificar(AFDejemplo){
     arr_estados(estado1,estado2,ar_estados.length,ar_estados)
     semiMatriz(AFDejemplo,matriz,estado2,estado1)
     AFDsimp = AFDSimplificado(AFDejemplo, matriz)
-    console.log(matriz)
-    console.log(AFDsimp)
+    //console.log(matriz)
+    //console.log("AFD SIMPLIFICADO",AFDsimp)
     //return AFDSimp
 }
 Simplificar(AFDejemplo)
+/*-----------------------------*/
+
+/*------------Complemento-----------*/
+function CopiarC(AFD){
+    var AFDCopia = new Quintupla(AFD.est_entrada,AFD.arr_alfabeto ,AFD.est_inicial, AFD.est_finales, AFD.arr_estados)
+    return AFDCopia
+}
+function complemento(AFD){
+    var AFDComplemento = JSON.parse(JSON.stringify(AFD)), n_finales = []
+    for(let i=0;i<(AFDComplemento.arr_estados).length;i++){
+        if(((AFDComplemento.arr_estados)[i]).final === true){
+            ((AFDComplemento.arr_estados)[i]).final = false
+        }
+        else{
+            ((AFDComplemento.arr_estados)[i]).final = true
+        }
+    }
+    for(let j=0;j<(AFDComplemento.arr_estados).length;j++){
+        if(((AFDComplemento.arr_estados)[j]).final === true){
+            n_finales.push(((AFDComplemento.arr_estados)[j]).nombre)
+        } 
+    }
+    AFDComplemento.est_finales = n_finales
+    return AFDComplemento
+}
+function llamarComplemento(AFD){
+    var AFDcomp = new Quintupla
+    AFDcomp = complemento(AFD)
+
+    console.log("AFD ORIGINAL",AFDejemplo)
+    console.log("COMPLEMENTO",AFDcomp)
+}
+llamarComplemento(AFDejemplo)
+
+
+
+
+
+
 
 /*-------Concatenación-------*/
 /*--Función que concatena dos autómatas (por ahora funciona con ambos autómatas de igual alfabeto)*/
