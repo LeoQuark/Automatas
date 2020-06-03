@@ -1,34 +1,110 @@
 /*Constructores*/
-/*Quintupla*/
-function Quintupla(est_Entrada,arr_alfabeto,est_Iniciales,est_Finales,arr_estados){
-    this.est_entrada = est_Entrada
+//Quintupla
+function Quintupla(est_entrada,arr_alfabeto,est_iniciales,est_finales,arr_estados){
+    this.est_entrada = est_entrada
     this.arr_alfabeto = arr_alfabeto
-    this.est_inicial = est_Iniciales
-    this.est_finales = est_Finales
+    this.est_inicial = est_iniciales
+    this.est_finales = est_finales
     this.arr_estados = arr_estados
 }
-/*Estados con sus Transiciones*/
+//Estados con sus Transiciones
 function Estado(nombre,final,estado_to){
     this.nombre = nombre
     this.final = final // true or false
     this.estado_to = estado_to
 }
-
 /*---------Variables para primer autómata----------*/
 const tablaTransicion1 = document.querySelector("#tablaTransicion1");
-
 const entrada1 = document.querySelector("#entrada1");
 const alfabeto1 = document.querySelector("#alfabeto1");
 const iniciales1 = document.querySelector("#estadosIniciales1");
 const finales1 = document.querySelector("#estadosFinales1");
 
 var transiciones = ['Entrada','Lectura','Destino'];
-var quintupla1 = [];
-var est_Entrada1 = [];
-var arr_alfabeto1 = [];
-var est_Iniciales1 = [];
-var est_Finales1 = [];
+var est_entrada = [];
+var arr_alfabeto = [];
+var est_inicial = [];
+var est_finales = [];
 const enviar1 = document.querySelector("#Enviar1");
+/*-------Creación del primer autómata------*/
+enviar1.addEventListener('click',ordenarElementosAutomata1);
+function ordenarElementosAutomata1(e){
+    e.preventDefault();
+    var a = entrada1.value, b = alfabeto1.value, c = iniciales1.value, d = finales1.value;
+    est_entrada = a.split(',');
+    arr_alfabeto = b.split(',');
+    est_inicial = c.split(',');
+    est_finales = d.split(',');
+    enviar1.disabled = true;
+    crearTablaTransicion();
+}
+/*------Tabla de transiciones con input----- */
+function crearTablaTransicion(){
+    // e.preventDefault();
+    var tablaPadre = document.createElement('table'),
+        filaTitulo = document.createElement('tr');
+    for(let i=0; i<transiciones.length ; i++){
+        var columnaTitulo = document.createElement('td');
+        columnaTitulo.className='formatoTablaTitulo';
+        columnaTitulo.textContent = transiciones[i];
+        filaTitulo.appendChild(columnaTitulo);
+    }
+    tablaPadre.appendChild(filaTitulo);
+    for(let i=0; i<est_entrada.length; i++){
+        for(let j=0; j<arr_alfabeto.length; j++){
+            var filaDatos = document.createElement('tr'), 
+                columnaEstados = document.createElement('td'), 
+                columnaAlfabeto = document.createElement('td'),
+                columnaInput = document.createElement('td'),
+                input = document.createElement('input');
+            
+            columnaEstados.className='formatoTabla';
+            columnaEstados.textContent = est_entrada[i];
+            columnaAlfabeto.className='formatoTabla';
+            columnaAlfabeto.textContent = arr_alfabeto[j];
+            input.className='form-control';
+            input.setAttribute('placeholder','Estado Destino');
+            input.setAttribute('type','text');
+            input.id=`${est_entrada[i]}-${arr_alfabeto[j]}`;
+            columnaInput.appendChild(input);
+            
+            filaDatos.appendChild(columnaEstados);
+            filaDatos.appendChild(columnaAlfabeto);
+            filaDatos.appendChild(columnaInput);
+            tablaPadre.appendChild(filaDatos);
+        }
+    }
+    tablaTransicion1.appendChild(tablaPadre);
+}
+/*------Obtener el estado destino-------*/
+var Estados = [], estado_to = [];
+const datosTabla = document.querySelector('#datosTabla');
+datosTabla.addEventListener('click',obtenerEstadosDestino);
+
+function obtenerEstadosDestino(){
+    for(let i=0; i<est_entrada.length;i++){
+        for(let j=0; j<arr_alfabeto.length;j++){
+            var inputDestino = document.querySelector(`#${est_entrada[i]}-${arr_alfabeto[j]}`),
+                valorDestino = inputDestino.value;
+            estado_to.push(valorDestino);
+        }
+        // si el estado es final y esta dentro del arreglo estados iniciales retorna != -1
+        var existe = est_finales.indexOf(est_entrada[i]);
+        if(existe != -1 )
+            Estados[i] = new Estado(est_entrada[i],true,estado_to);
+        else
+            Estados[i] = new Estado(est_entrada[i],false,estado_to);
+        
+        estado_to=[];
+        console.log(Estados[i]);
+    }
+
+    var AUTOMATA1 = new Quintupla(est_entrada, arr_alfabeto, est_inicial,est_finales,Estados)
+console.log(AUTOMATA1);
+}
+//console.log(est_Entrada1);
+
+
 
 /*-------Variables para segundo autómata----------*/
 const tablaTransicion2 = document.querySelector("#tablaTransicion2");
@@ -45,93 +121,8 @@ var est_Finales2 = [];
 
 const enviar2 = document.querySelector("#Enviar2");
 
-/*-------Creación del primer autómata------*/
-enviar1.addEventListener('click',ordenarElementosAutomata1);
 
-function ordenarElementosAutomata1(e){
-    e.preventDefault();
-    var a = entrada1.value, b = alfabeto1.value, c = iniciales1.value, d = finales1.value;
-    est_Entrada1 = a.split(',');
-    arr_alfabeto1 = b.split(',');
-    est_Iniciales1 = c.split(',');
-    est_Finales1 = d.split(',');
-    enviar1.disabled = true;
-    crearTablaTransicion1();
-}
 
-/*------Tabla de transiciones con input----- */
-function crearTablaTransicion1(){
-    // e.preventDefault();
-    var tablaPadre = document.createElement('table'),
-        filaTitulo = document.createElement('tr');
-    for(let i=0; i<transiciones.length ; i++){
-        var columnaTitulo = document.createElement('td');
-        columnaTitulo.className='formatoTablaTitulo';
-        columnaTitulo.textContent = transiciones[i];
-        filaTitulo.appendChild(columnaTitulo);
-    }
-    tablaPadre.appendChild(filaTitulo);
-    for(let i=0; i<est_Entrada1.length; i++){
-        for(let j=0; j<arr_alfabeto1.length; j++){
-            var filaDatos = document.createElement('tr'), 
-                columnaEstados = document.createElement('td'), 
-                columnaAlfabeto = document.createElement('td'),
-                columnaInput = document.createElement('td'),
-                input = document.createElement('input');
-            
-            columnaEstados.className='formatoTabla';
-            columnaEstados.textContent = est_Entrada1[i];
-            columnaAlfabeto.className='formatoTabla';
-            columnaAlfabeto.textContent = arr_alfabeto1[j];
-            input.className='form-control';
-            input.setAttribute('placeholder','Estado Destino');
-            input.setAttribute('type','text');
-            input.id=`${est_Entrada1[i]}-${arr_alfabeto1[j]}`;
-            columnaInput.appendChild(input);
-            
-            filaDatos.appendChild(columnaEstados);
-            filaDatos.appendChild(columnaAlfabeto);
-            filaDatos.appendChild(columnaInput);
-            tablaPadre.appendChild(filaDatos);
-        }
-    }
-    tablaTransicion1.appendChild(tablaPadre);
-}
-
-/*------Obtener el estado destino-------*/
-
-var Estados = [], estado_to = [];
-const datosTabla = document.querySelector('#datosTabla');
-datosTabla.addEventListener('click',obtenerEstadosDestino);
-
-function obtenerEstadosDestino(){
-    for(let i=0; i<est_Entrada1.length;i++){
-        for(let j=0; j<arr_alfabeto1.length;j++){
-            var inputDestino = document.querySelector(`#${est_Entrada1[i]}-${arr_alfabeto1[j]}`),
-                valorDestino = inputDestino.value;
-            estado_to.push(valorDestino);
-        }
-        // si el estado es final y esta dentro del arreglo estados iniciales retorna != -1
-        var existe = est_Finales1.indexOf(est_Entrada1[i]);
-        if(existe != -1 )
-            Estados[i] = new Estado(est_Entrada1[i],true,estado_to);
-        else
-            Estados[i] = new Estado(est_Entrada1[i],false,estado_to);
-        
-        estado_to=[];
-        console.log(Estados[i]);
-    }
-
-}
-//console.log(est_Entrada1);
-var AFD = {
-    est_entrada: est_Entrada1,
-    arr_alfabeto: arr_alfabeto1,
-    est_iniciales: est_Iniciales1,
-    est_finales: est_Finales1,
-    arr_estados : Estados,
-}
-//console.log(AFD);
 
 /*--------------EJEMPLOOOOO-----------------------*/
 //AUTOMATA FINITO DETERMINISTA
@@ -142,7 +133,7 @@ estado[0]= {nombre:"q5",final:true ,estado_to:["q4","q3"]}
 estado[1]= {nombre:"q4",final:true,estado_to:["q4","q2"]}
 estado[2]= {nombre:"q3",final:true,estado_to:["q4","q1"]}
 estado[3]= {nombre:"q2",final:true,estado_to:["q4","q1"]}
-estado[4]= {nombre:"q1",final:false,estado_to:[null,"q1"]} 
+estado[4]= {nombre:"q1",final:false,estado_to:["q1","q1"]} 
 //EJEMPLO 2 
 /*
 var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1","q3"]
@@ -320,10 +311,6 @@ Simplificar(AFDejemplo)
 /*-----------------------------*/
 
 /*------------Complemento-----------*/
-function CopiarC(AFD){
-    var AFDCopia = new Quintupla(AFD.est_entrada,AFD.arr_alfabeto ,AFD.est_inicial, AFD.est_finales, AFD.arr_estados)
-    return AFDCopia
-}
 function complemento(AFD){
     var AFDComplemento = JSON.parse(JSON.stringify(AFD)), n_finales = []
     for(let i=0;i<(AFDComplemento.arr_estados).length;i++){
