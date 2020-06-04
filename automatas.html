@@ -49,15 +49,15 @@
     <!-- Contenido -->
     <div class="container">
         <div class="row d-flex justify-content-center">
-            <div class="row d-flex justify-content-center">
-                <div class="col-lg-7 col-sm-12 text-center">
-                    <p class="font-weight-light"> <strong> En este apartado podrá ingresar dos Autómatas de tipo AFD o AFND, para luego realizar diversas operaciones.</strong></p>
-                </div>
-            </div>
             <div class="col-lg-5 col-sm-12 my-2 mx-2 bg-white rounded shadow">
-                <h2 class="text-center my-2">Valores del 1° AFD/AFND</h2>
+                <h3 class="text-center my-2">Valores del 1<sup>er</sup> Autómata</h3>
                 <hr>
                 <div class="form-group">
+                    <label for="">Tipo de Autómata</label>
+                    <select class="form-control mb-2" id="tipoAutomata1">
+                        <option value="AFD">AFD</option>
+                        <option value="AFND">AFND</option>
+                    </select>
                     <label for="">Estados de Entrada</label>
                     <input id="entrada1" type="text" class="form-control" placeholder="separe los datos por ' , '"><br>
                     <label for="">Alfabeto de Entrada</label>
@@ -71,9 +71,14 @@
                     </div>
                 </div>
             </div><div class="col-lg-5 col-sm-12 my-2 mx-2 bg-white rounded shadow">
-                <h2 class="text-center my-2">Valores del 2° AFD/AFND</h2>
+                <h3 class="text-center my-2">Valores del 2<sup>do</sup> Autómata</h3>
                 <hr>
                 <div class="form-group">
+                    <label for="">Tipo de Autómata</label>
+                    <select class="form-control mb-2" id="tipoAutomata2">
+                        <option value="AFD">AFD</option>
+                        <option value="AFND">AFND</option>
+                    </select>
                     <label for="">Estados de Entrada</label>
                     <input id="entrada2" type="text" class="form-control" placeholder="separe los datos por ' , '"><br>
                     <label for="">Alfabeto de Entrada</label>
@@ -100,6 +105,7 @@
                 <hr>
                 <div class="row d-flex justify-content-center">
                     <div id="tablaTransicion2" class="mx-2"></div>
+                    <button class="btn btn-primary mt-3 mb-2" id="datosTabla2">Ingresar Datos</button>
                 </div>
             </div>
         </div>
