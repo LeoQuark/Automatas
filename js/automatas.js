@@ -177,22 +177,23 @@ console.log(AUTOMATA1);
 /*--------------EJEMPLOOOOO-----------------------*/
 //AUTOMATA FINITO DETERMINISTA
 //EJEMPLO1
+/*
 var entrada=["q1","q2","q3","q4","q5"], alfabeto=["a","b"], inicial= ["q5"], final= ["q2","q3","q4","q5"]
 var estado=[]
 estado[0]= {nombre:"q5",final:true ,estado_to:["q4","q3"]}
 estado[1]= {nombre:"q4",final:true,estado_to:["q4","q2"]}
 estado[2]= {nombre:"q3",final:true,estado_to:["q4","q1"]}
 estado[3]= {nombre:"q2",final:true,estado_to:["q4","q1"]}
-estado[4]= {nombre:"q1",final:false,estado_to:["q1","q1"]} 
+estado[4]= {nombre:"q1",final:false,estado_to:["q1","q1"]}  */
 //EJEMPLO 2 
-/*
+
 var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1","q3"]
 var estado=[]
 estado[0]= {nombre:"q0",final:false ,estado_to:["q1","q3"]}
 estado[1]= {nombre:"q1",final:true,estado_to:["q2","q1"]}
 estado[2]= {nombre:"q2",final:false,estado_to:["q1","q2"]}
 estado[3]= {nombre:"q3",final:true,estado_to:["q4","q3"]}
-estado[4]= {nombre:"q4",final:false,estado_to:["q3","q4"]} */
+estado[4]= {nombre:"q4",final:false,estado_to:["q3","q4"]} 
 
 var AFDejemplo = {
     est_entrada: entrada,
@@ -259,7 +260,7 @@ function semiMatriz(AFDejemplo,matriz,estado1,estado2){
                     }
                 }
                 if(cont === (AFDejemplo.arr_alfabeto).length ){
-                    aux_m[j]= estado1[i];
+                    aux_m[j]= [estado1[i],estado2[j]];
                 }
                 else
                     aux_m[j]="x"
@@ -296,32 +297,41 @@ function AFDSimplificado(AFD,matriz){
         //INICIAL
         for(let i=0;i<n_estados.length;i++){
             console.log(n_estados[i], "-" ,AFD.est_inicial[0])
-            if(AFD.est_inicial[0] === n_estados[i]){
-                inicial.push(n_estados[i])
-                existe=true
-                console.log("iguales")
+            for(let j=0;j<n_estados[i].length;j++){
+                if(AFD.est_inicial[0] === n_estados[i][j]){
+                    inicial.push(n_estados[i])
+                    existe=true //no esta dentro de n_estados
+                    console.log("iguales")
+                }
             }
         }
-        // console.log(inicial);
+        
+       
         //ALFABETO
         alfabeto = AFD.arr_alfabeto
         //ESTADOS
         if(existe===false){
             estados.push(AFD.est_inicial[0])
+            inicial.push(AFD.est_inicial[0])
         }
         for(let i=0;i<n_estados.length;i++){
             estados.push(n_estados[i])
 
         }
+        console.log(inicial);
         console.log(estados);
         //ESTADOS FINALES
-        for(let k=0;k<estados.length;k++){
+        let k;
+        if(existe===false){k=1} else{k=0}
+        for(k;k<estados.length;k++){
+            var b=(estados[k]).length
+            //console.log(b)
             for(let l=0;l<(AFD.est_finales).length;l++){
-                console.log(estados[k], "--", AFD.est_finales[l])
-                if(estados[k]===AFD.est_finales[l]){
+                //console.log(estados[k][b], "--", AFD.est_finales[l])
+                if(estados[k][b-2]===AFD.est_finales[l] || estados[k][b-2]===AFD.est_finales[l] ){
                     finales.push(estados[k])
                 }   
-            }
+            }   
         }
         console.log(finales)
     }
@@ -330,20 +340,31 @@ function AFDSimplificado(AFD,matriz){
     var AFDSimplificado = new Quintupla(estados,alfabeto,inicial,finales,transiciones)
     return AFDSimplificado
 }
-function Transiciones(AFD,estados){
+function Transiciones(AFD,estados,bool){
+    console.log(estados)
     var arr_estados = []
-    for(let i=0;i<estados.length;i++){
+    let i
+    if(bool == false){
+        i=1
         for(let j=0;j<(AFD.arr_estados).length;j++){
-            console.log(estados[i],((AFD.arr_estados)[j]).nombre)
-            if(estados[i] === ((AFD.arr_estados)[j]).nombre){
+            if(estados[0] === ((AFD.arr_estados)[j]).nombre){
                 console.log((AFD.arr_estados)[j])
-               // var Estado = new Estado((AFD.arr_estados)[j].nombre,(AFD.arr_estados)[j].final,(AFD.arr_estados)[j].estado_to)
                 arr_estados.push((AFD.arr_estados)[j])
-               // console.log(arr_estados)
             }
         }
     }
-    //console.log(arr_estados)
+    else{i=0}
+    for(i;i<estados.length;i++){
+        var aux= estados[i].length
+        for(let j=0;j<(AFD.arr_estados).length;j++){
+            if(estados[i][0] === ((AFD.arr_estados)[j]).nombre){
+                var aux_estado = (AFD.arr_estados)[j]
+                aux_estado.nombre=estados[i]
+                arr_estados.push(aux_estado)
+            }
+        }
+    }
+    console.log(arr_estados)
     return arr_estados
 }
 function Simplificar(AFDejemplo){
@@ -353,8 +374,7 @@ function Simplificar(AFDejemplo){
     arr_estados(estado1,estado2,ar_estados.length,ar_estados)
     semiMatriz(AFDejemplo,matriz,estado2,estado1)
     AFDsimp = AFDSimplificado(AFDejemplo, matriz)
-    //console.log(matriz)
-    //console.log("AFD SIMPLIFICADO",AFDsimp)
+    console.log("AFD SIMPLIFICADO",AFDsimp)
     //return AFDSimp
 }
 Simplificar(AFDejemplo)
@@ -386,7 +406,7 @@ function llamarComplemento(AFD){
     console.log("AFD ORIGINAL",AFDejemplo)
     console.log("COMPLEMENTO",AFDcomp)
 }
-llamarComplemento(AFDejemplo)
+//llamarComplemento(AFDejemplo)
 
 
 
