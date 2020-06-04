@@ -31,15 +31,15 @@ const entrada2 = document.querySelector("#entrada2");
 const alfabeto2 = document.querySelector("#alfabeto2");
 const iniciales2 = document.querySelector("#estadosIniciales2");
 const finales2 = document.querySelector("#estadosFinales2");
-var quintupla2 = [], est_entrada2 =[], arr_alfabeto2 = [], est_iniciales2 = [], est_Ffnales2 = [];
+var quintupla2 = [], est_entrada2 =[], arr_alfabeto2 = [], est_iniciales2 = [], est_finales2 = [];
 
 /*-------Creación del primer autómata------*/
 const enviar1 = document.querySelector("#Enviar1");
 enviar1.addEventListener('click',ordenarElementosAutomata1);
 function ordenarElementosAutomata1(e){
     e.preventDefault();
-    var a = entrada1.value, b = alfabeto1.value.toLowerCase(), 
-        c = iniciales1.value, d = finales1.value, automata = tipoAutomata.value;
+    var a = entrada1.value.toLowerCase(), b = alfabeto1.value.toLowerCase(), 
+        c = iniciales1.value.toLowerCase(), d = finales1.value.toLowerCase(), automata = tipoAutomata.value;
     est_entrada = a.split(',');
     arr_alfabeto = b.split(',');
     est_inicial = c.split(',');
@@ -47,12 +47,33 @@ function ordenarElementosAutomata1(e){
     var validar = validarDatos(automata,est_entrada,arr_alfabeto,est_inicial,est_finales);
     if(validar != false){
         enviar1.disabled = true;
-        crearTablaTransicion(est_entrada,arr_alfabeto);
-    }   
+        crearTablaTransicion(est_entrada,arr_alfabeto,tablaTransicion1);
+    }
+}
+
+/*-------Creación del segundo autómata-------*/
+const enviar2 = document.querySelector("#Enviar2");
+enviar2.addEventListener('click',ordenarElementosAutomata2);
+function ordenarElementosAutomata2(e){
+    e.preventDefault();
+    var a = entrada2.value.toLowerCase(), b = alfabeto2.value.toLowerCase(), 
+        c = iniciales2.value.toLowerCase(), d = finales2.value.toLowerCase(), automata = tipoAutomata2.value;
+    est_entrada2 = a.split(',');
+    arr_alfabeto2 = b.split(',');
+    est_iniciales2 = c.split(',');
+    est_finales2 = d.split(',');
+    var validar = validarDatos(automata,est_entrada2,arr_alfabeto2,est_iniciales2,est_finales2);
+    if(validar != false){
+        enviar2.disabled = true;
+        crearTablaTransicion(est_entrada2,arr_alfabeto2,tablaTransicion2);
+    }
 }
 
 /*----Validacion de los datos del 1er automata-----*/
 function validarDatos(automata,entrada,alfabeto,inicial,final){
+    var strAlert = `!! Error ¡¡\nNo puedes ingresar una ',' (coma) al final del input.\nDebes finalizar la  entrada con el ultimo dato.`,
+        strAlertAll = `!! Error ¡¡\nPuede que hayas ingresado una palabra no valida en alguno de los input.\nPrueba reingresando los datos.`;
+    
     if(automata === 'AFD'){
         for(let i=0; i<alfabeto.length; i++){
             if(alfabeto[i] == 'e'){
@@ -61,44 +82,40 @@ function validarDatos(automata,entrada,alfabeto,inicial,final){
         }
     }
     if(automata === 'AFND'){
-        for(let i=0; i<alfabeto.length; i++){
-            if(alfabeto[i] != 'e'){
-                alert(`!! Error ¡¡\nEl automata es '${automata}', DEBES ocupar dentro de tu alfabeto la palabra reservada 'e' (epsilon).\nIngresa un alfabeto con esta letra.`);
-                return false;}
-        }
+        var aux = alfabeto.indexOf('e');
+        if(aux == -1){
+            alert(`!! Error ¡¡\nEl automata es '${automata}', DEBES ocupar dentro de tu alfabeto la palabra reservada 'e' (epsilon).\nIngresa un alfabeto con esta letra.`);
+            return false;}
+    }
+    for(let m=0; m<entrada.length; m++){
+        if(entrada[m]===""){    alert(strAlert);    return false;}
+        if(entrada[m] == 'null' || entrada[m] == 'undefined'){  alert(strAlertAll);     return false;}
+    }
+    for(let m=0; m<alfabeto.length; m++){
+        if(alfabeto[m]===""){   alert(strAlert);    return false;}
+        if(alfabeto[m] == 'null' || alfabeto[m] == 'undefined'){  alert(strAlertAll);     return false;}
     }
     for(let i=0; i<inicial.length; i++){
         var existeInicial = entrada.indexOf(inicial[i]);
         if(existeInicial == -1){
-            alert(`!! Error ¡¡\nEl estado incial - ${inicial[i]} - no se encuentra presente en los estados ingresados.\nPor favor ingrese un estado inicial valido.`);
+            alert(`!! Error ¡¡\nEl estado incial ' ${inicial[i]} ' no se encuentra presente en los estados ingresados.\nPor favor ingrese un estado inicial valido.`);
             return false;}
+        if(inicial[i]===""){    alert(strAlert);    return false;}
+        if(inicial[i] == 'null' || inicial[i] == 'undefined'){  alert(strAlertAll);     return false;}
     }
     for(let j=0; j<final.length; j++){
-        var existeFinal = entrada.indexOf(final[j]);
+        var existeFinal = entrada.indexOf(final[j]), seRepite = inicial.indexOf(final[j]);
         if(existeFinal == -1){
-            alert(`!! Error ¡¡\nEl estado incial - ${final[j]} - no se encuentra presente en los estados ingresados.\nPor favor ingrese un estado final valido.`);
-            return false;} 
+            alert(`!! Error ¡¡\nEl estado incial ' ${final[j]} ' no se encuentra presente en los estados ingresados.\nPor favor ingrese un estado final valido.`);
+            return false;}
+        // if(seRepite == -1){   alert(strAlertAll);   return false;}
+        if(final[j]===""){  alert(strAlert);    return false;}
+        if(final[j] == 'null' || final[j] == 'undefined'){  alert(strAlertAll);     return false;}   
     }
-}
-
-
-/*-------Creación del segundo autómata-------*/
-const enviar2 = document.querySelector("#Enviar2").addEventListener('click',ordenarElementosAutomata2);
-function ordenarElementosAutomata2(e){
-    e.preventDefault();
-    var a = entrada2.value, b = alfabeto2.value, c = iniciales2.value, d = finales2.value;
-    est_Entrada2 = a.split(',');
-    arr_alfabeto2 = b.split(',');
-    est_Iniciales2 = c.split(',');
-    est_Finales2 = d.split(',');
-    quintupla2 = [est_Entrada1, arr_alfabeto1, est_Iniciales1, est_Finales1];
-    enviar2.disabled = true;
-    // console.log(quintupla2);
-    crearTablatransicion();
 }
 
 /*------Tabla de transiciones con input----- */
-function crearTablaTransicion(entrada,alfabeto,){
+function crearTablaTransicion(entrada,alfabeto,tablaTransicion){
     // e.preventDefault();
     var tablaPadre = document.createElement('table'),
         filaTitulo = document.createElement('tr');
@@ -116,7 +133,7 @@ function crearTablaTransicion(entrada,alfabeto,){
                 columnaAlfabeto = document.createElement('td'),
                 columnaInput = document.createElement('td'),
                 input = document.createElement('input');
-            
+            //estilos y contenido a las columnas
             columnaEstados.className='formatoTabla';
             columnaEstados.textContent = entrada[i];
             columnaAlfabeto.className='formatoTabla';
@@ -125,20 +142,21 @@ function crearTablaTransicion(entrada,alfabeto,){
             input.setAttribute('placeholder','Estado Destino');
             input.setAttribute('type','text');
             input.id=`${entrada[i]}-${alfabeto[j]}`;
+            //agrego los elementos a sus nodos padres
             columnaInput.appendChild(input);
-            
             filaDatos.appendChild(columnaEstados);
             filaDatos.appendChild(columnaAlfabeto);
             filaDatos.appendChild(columnaInput);
             tablaPadre.appendChild(filaDatos);
         }
     }
-    tablaTransicion1.appendChild(tablaPadre);
+    tablaTransicion.appendChild(tablaPadre);
 }
 
 /*------Obtener el estado destino 1er automata-------*/
 var Estados1 = [], estado_to1 = [];
-const datosTabla = document.querySelector('#datosTabla').addEventListener('click',obtenerEstadosDestino);
+const datosTabla = document.querySelector('#datosTabla');
+datosTabla.addEventListener('click',obtenerEstadosDestino);
 
 function obtenerEstadosDestino(){
     for(let i=0; i<est_entrada.length;i++){
@@ -157,11 +175,9 @@ function obtenerEstadosDestino(){
         estado_to1=[];
         console.log(Estados1[i]);
     }
-
     var AUTOMATA1 = new Quintupla(est_entrada, arr_alfabeto, est_inicial,est_finales,Estados1)
 console.log(AUTOMATA1);
 }
-//console.log(est_Entrada1);
 
 
 
