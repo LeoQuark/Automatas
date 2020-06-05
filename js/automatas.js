@@ -202,7 +202,7 @@ estado[2]= {nombre:"q3",final:true,estado_to:["q4","q1"]}
 estado[3]= {nombre:"q2",final:true,estado_to:["q4","q1"]}
 estado[4]= {nombre:"q1",final:false,estado_to:["q1","q1"]}  */
 //EJEMPLO 2 
-
+/*
 var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1","q3"]
 var estado=[]
 estado[0]= {nombre:"q0",final:false ,estado_to:["q1","q3"]}
@@ -210,6 +210,16 @@ estado[1]= {nombre:"q1",final:true,estado_to:["q2","q1"]}
 estado[2]= {nombre:"q2",final:false,estado_to:["q1","q2"]}
 estado[3]= {nombre:"q3",final:true,estado_to:["q4","q3"]}
 estado[4]= {nombre:"q4",final:false,estado_to:["q3","q4"]} 
+*/
+//EJEMPLO 3
+var entrada=["q","q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q"], final= ["q1","q3"]
+var estado=[]
+estado[0]= {nombre:"q",final:false ,estado_to:["q0","q0"]}
+estado[1]= {nombre:"q0",final:false ,estado_to:["q1","q3"]}
+estado[2]= {nombre:"q1",final:true,estado_to:["q2","q1"]}
+estado[3]= {nombre:"q2",final:false,estado_to:["q1","q2"]}
+estado[4]= {nombre:"q3",final:true,estado_to:["q4","q3"]}
+estado[5]= {nombre:"q4",final:false,estado_to:["q3","q4"]} 
 
 var AFDejemplo = {
     est_entrada: entrada,
@@ -321,8 +331,6 @@ function AFDSimplificado(AFD,matriz){
                 }
             }
         }
-        
-       
         //ALFABETO
         alfabeto = AFD.arr_alfabeto
         //ESTADOS
