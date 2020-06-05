@@ -97,6 +97,7 @@ function validarDatos(automata,entrada,alfabeto,inicial,final){
     }
     for(let i=0; i<inicial.length; i++){
         var existeInicial = entrada.indexOf(inicial[i]);
+        if(inicial.length>1){alert(`!! Error ¡¡\nSolo puedes poner un estado inicial.`);    return false;}
         if(existeInicial == -1){
             alert(`!! Error ¡¡\nEl estado incial ' ${inicial[i]} ' no se encuentra presente en los estados ingresados.\nPor favor ingrese un estado inicial valido.`);
             return false;}
@@ -108,15 +109,14 @@ function validarDatos(automata,entrada,alfabeto,inicial,final){
         if(existeFinal == -1){
             alert(`!! Error ¡¡\nEl estado incial ' ${final[j]} ' no se encuentra presente en los estados ingresados.\nPor favor ingrese un estado final valido.`);
             return false;}
-        // if(seRepite == -1){   alert(strAlertAll);   return false;}
         if(final[j]===""){  alert(strAlert);    return false;}
-        if(final[j] == 'null' || final[j] == 'undefined'){  alert(strAlertAll);     return false;}   
+        if(final[j] == 'null' || final[j] == 'undefined'){  alert(strAlertAll);     return false;}
+        if(seRepite != -1){   alert(strAlertAll);   return false;}   
     }
 }
 
 /*------Tabla de transiciones con input----- */
 function crearTablaTransicion(entrada,alfabeto,tablaTransicion){
-    // e.preventDefault();
     var tablaPadre = document.createElement('table'),
         filaTitulo = document.createElement('tr');
     for(let i=0; i<transiciones.length ; i++){
@@ -153,30 +153,71 @@ function crearTablaTransicion(entrada,alfabeto,tablaTransicion){
     tablaTransicion.appendChild(tablaPadre);
 }
 
+/*------Eliminar seccion de Instrucciones-----*/
+const aceptar = document.querySelector('#aceptar');
+aceptar.addEventListener('click',function(e){
+    e.preventDefault();
+    const instrucciones = document.querySelector('#instrucciones').remove(); 
+});
+
 /*------Obtener el estado destino 1er automata-------*/
 var Estados1 = [], estado_to1 = [];
 const datosTabla = document.querySelector('#datosTabla');
-datosTabla.addEventListener('click',obtenerEstadosDestino);
+datosTabla.addEventListener('click',obtenerEstadosDestino1);
 
-function obtenerEstadosDestino(){
-    for(let i=0; i<est_entrada.length;i++){
-        for(let j=0; j<arr_alfabeto.length;j++){
-            var inputDestino = document.querySelector(`#${est_entrada[i]}-${arr_alfabeto[j]}`),
-                valorDestino = inputDestino.value;
-            estado_to1.push(valorDestino);
+function obtenerEstadosDestino1(){
+    var validar = validarDatosTransicion(est_entrada,arr_alfabeto);
+    if(validar != false){
+        datosTabla.disabled=true;
+        crearAutomata(est_entrada,arr_alfabeto,est_inicial,est_finales,Estados1,estado_to1);
+    }
+}
+
+/*------Obtener el estado destino 2do automata-------*/
+var Estados2 = [], estado_to2 = [];
+const datosTabla2 = document.querySelector('#datosTabla2');
+datosTabla2.addEventListener('click',obtenerEstadosDestino2);
+
+function obtenerEstadosDestino2(){
+    var validar = validarDatosTransicion(est_entrada2,arr_alfabeto2);
+    if(validar != false){
+        datosTabla.disabled=true;
+        crearAutomata(est_entrada2,arr_alfabeto2,est_iniciales2,est_finales2,Estados2,estado_to2);
+    }
+}
+
+function validarDatosTransicion(entrada,alfabeto){
+    var strAlertAll = `!! Error ¡¡\nPuede que hayas ingresado una palabra no valida en alguno de los input.\nPrueba reingresando los datos.`;
+    for(let i=0; i<entrada.length; i++){
+        for(let j=0; j<alfabeto.length; j++){
+            var inputDestino = document.querySelector(`#${entrada[i]}-${alfabeto[j]}`).value.toLowerCase(),
+                aux = entrada.indexOf(inputDestino);
+            if(aux == -1){  alert(strAlertAll);     return false;}
+            if(inputDestino == '' || inputDestino == 'null' || inputDestino == 'undefined'){
+                alert(strAlertAll);
+                return false;
+            }
+        }
+    }
+}
+
+function crearAutomata(entrada,alfabeto,inicial,finales,Estados,estado_to){
+    for(let i=0; i<entrada.length;i++){
+        for(let j=0; j<alfabeto.length;j++){
+            var inputDestino = document.querySelector(`#${entrada[i]}-${alfabeto[j]}`).value.toLowerCase();
+            estado_to.push(inputDestino);
         }
         // si el estado es final y esta dentro del arreglo estados iniciales retorna != -1
-        var existe = est_finales.indexOf(est_entrada[i]);
+        var existe = finales.indexOf(entrada[i]);
         if(existe != -1 )
-            Estados1[i] = new Estado(est_entrada[i],true,estado_to1);
+            Estados[i] = new Estado(entrada[i],true,estado_to);
         else
-            Estados1[i] = new Estado(est_entrada[i],false,estado_to1);
-        
-        estado_to1=[];
-        console.log(Estados1[i]);
+            Estados[i] = new Estado(entrada[i],false,estado_to);
+        estado_to=[];
+        console.log(Estados[i]);
     }
-    var AUTOMATA1 = new Quintupla(est_entrada, arr_alfabeto, est_inicial,est_finales,Estados1)
-console.log(AUTOMATA1);
+    var AUTOMATA1 = new Quintupla(entrada,alfabeto,inicial,finales,Estados)
+    console.log(AUTOMATA1);
 }
 
 
@@ -432,16 +473,9 @@ function llamarComplemento(AFD){
 }
 //llamarComplemento(AFDejemplo)
 
-
-
-
-
-
-
 /*-------Concatenación-------*/
 /*--Función que concatena dos autómatas (por ahora funciona con ambos autómatas de igual alfabeto)*/
-
-function Concatenación (a, b){
+function Concatenacion (a, b){
     var entradaConcatenacion, alfabetoConcatenacion, inicialConcatenacion;      //Se crean variables
     var finalConcatenacion, estadoConcatenacion = [];
     var aux, contador = 0;
@@ -450,7 +484,7 @@ function Concatenación (a, b){
     entradaConcatenacion = aux.split(",");
     aux = a.arr_alfabeto + "," + "epsilon";
     alfabetoConcatenacion = aux.split(",");
-    inicialConcatenacion = a.est_iniciales;
+    inicialConcatenacion = a.est_inicial;
     aux = a.est_finales + "," + b.est_finales;
     finalConcatenacion = aux.split(",");
     for (var i=0;i<a.arr_estados.length;i++){
@@ -465,47 +499,26 @@ function Concatenación (a, b){
     var AFDConcatenacion = {                        //Se crea un nuevo autómata definido
         est_entrada: entradaConcatenacion,
         arr_alfabeto: alfabetoConcatenacion,
-        est_iniciales: inicialConcatenacion,
+        est_inicial: inicialConcatenacion,
         est_finales: finalConcatenacion,
         arr_estados : estadoConcatenacion,
     }
     for (var m=0;m<AFDConcatenacion.arr_estados.length;m++){
         AFDConcatenacion.arr_estados[m].estado_to[AFDConcatenacion.arr_alfabeto.length-1] = null;
     }
-    //Finalmente se concatenan los estados INICIALES 
-    for (var j=0;j<AFDConcatenacion.arr_estados.length;j++){   
-        if (AFDConcatenacion.arr_estados[j].nombre == AFDConcatenacion.est_iniciales){
-            AFDConcatenacion.arr_estados[j].estado_to[AFDConcatenacion.arr_estados[j].estado_to.length-1] = b.est_iniciales[0];
+    //Se concatenan los estados finales del autómata A con el inicial del autómata B
+    for (var j=0;j<a.arr_estados.length;j++){   
+        if (AFDConcatenacion.arr_estados[j].final == true){
+            AFDConcatenacion.arr_estados[j].estado_to[AFDConcatenacion.arr_estados[j].estado_to.length-1] = b.est_inicial[0];
+        }
+    }
+    //Se cambia el estado del autómata concatenado
+    for (var j=0;j<a.arr_estados.length;j++){   
+        if (AFDConcatenacion.arr_estados[j].final == true){
+            AFDConcatenacion.arr_estados[j].final = false;
         }
     }
     
     return AFDConcatenacion;  //Se retorna el autómata para su posterior utilización sin afectar al autómata AFDejemplo uwu
 }
-
-//console.log(Concatenacion(AFDejemplo, AFDejemplo));
-/*Agregué en este caso al alfabeto la palabra vacía "epsilon", por si ven que estado_to tienen al
-final el elemento null, es porque como el estado inicial por ejemplo:
-
-    estado.nombre = q1
-    alfabeto  = [    a   ,   b   ,   epsilon ]
-    estado_to = [   q2  ,   q1  ,   null    ]
-    
-    q1-----a------>q2
-    q1-----b------>q1
-    q1----epsilon----->null (no existe)
-    
-Caso contrario, si al final no está el null:
-
-    estado.nombre = q1
-    alfabeto  = [    a   ,   b   ,   epsilon ]
-    estado_to = [   q2  ,   q1  ,   q3    ]
-    
-    q1-----a------>q2
-    q1-----b------>q1
-    q1----epsilon----->q3 (si la palabra vacía es leída se va a q3)
-
-*/
-/*-----------------------------------------------------------------------------*/
-
-
 
