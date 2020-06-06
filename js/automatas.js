@@ -104,7 +104,7 @@ function validarDatos(automata,entrada,alfabeto,inicial,final){
         if(inicial[i]===""){    alert(strAlert);    return false;}
         if(inicial[i] == 'null' || inicial[i] == 'undefined'){  alert(strAlertAll);     return false;}
     }
-    for(let j=0; j<final.length; j++){
+ /*   for(let j=0; j<final.length; j++){
         var existeFinal = entrada.indexOf(final[j]), seRepite = inicial.indexOf(final[j]);
         if(existeFinal == -1){
             alert(`!! Error ¡¡\nEl estado incial ' ${final[j]} ' no se encuentra presente en los estados ingresados.\nPor favor ingrese un estado final valido.`);
@@ -112,7 +112,7 @@ function validarDatos(automata,entrada,alfabeto,inicial,final){
         if(final[j]===""){  alert(strAlert);    return false;}
         if(final[j] == 'null' || final[j] == 'undefined'){  alert(strAlertAll);     return false;}
         if(seRepite != -1){   alert(strAlertAll);   return false;}   
-    }
+    } */
 }
 
 /*------Tabla de transiciones con input----- */
@@ -222,7 +222,15 @@ function crearAutomata(entrada,alfabeto,inicial,finales,Estados,estado_to){
 
 
 
+/*--------AFD O AFND---------*/
+function AFDoAFND(AUTOMATA){
 
+    for(let i=0;i<(AUTOMATA.arr_estados).length;i++){
+        
+    }
+
+
+}
 
 
 
@@ -271,6 +279,14 @@ estado[1]= {nombre:"q1",final:true ,estado_to:["q2","q3"]}
 estado[2]= {nombre:"q2",final:false,estado_to:["q2","q2"]}
 estado[3]= {nombre:"q3",final:true,estado_to:["q3","q3"]}
 
+//EJEMPLO 5 AFND
+/*
+var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q0","q1"]
+var estado=[]
+estado[0]= {nombre:"q0",final:true ,estado_to:["q1","q3"]}
+estado[1]= {nombre:"q1",final:true ,estado_to:["q2","q3"]}
+estado[2]= {nombre:"q2",final:false,estado_to:["q2","q2"]}
+estado[3]= {nombre:"q3",final:true,estado_to:["q3","q3"]} */
 
 var AFDejemplo = {
     est_entrada: entrada,
