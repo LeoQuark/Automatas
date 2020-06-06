@@ -253,6 +253,7 @@ estado[3]= {nombre:"q3",final:true,estado_to:["q4","q3"]}
 estado[4]= {nombre:"q4",final:false,estado_to:["q3","q4"]} 
 */
 //EJEMPLO 3
+/*
 var entrada=["q","q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q"], final= ["q1","q3"]
 var estado=[]
 estado[0]= {nombre:"q",final:false ,estado_to:["q0","q0"]}
@@ -261,6 +262,15 @@ estado[2]= {nombre:"q1",final:true,estado_to:["q2","q1"]}
 estado[3]= {nombre:"q2",final:false,estado_to:["q1","q2"]}
 estado[4]= {nombre:"q3",final:true,estado_to:["q4","q3"]}
 estado[5]= {nombre:"q4",final:false,estado_to:["q3","q4"]} 
+*/
+//EJEMPLO 4
+var entrada=["q0","q1","q2","q3"], alfabeto=["0","1"], inicial= ["q0"], final= ["q0","q1","q3"]
+var estado=[]
+estado[0]= {nombre:"q0",final:true ,estado_to:["q1","q3"]}
+estado[1]= {nombre:"q1",final:true ,estado_to:["q2","q3"]}
+estado[2]= {nombre:"q2",final:false,estado_to:["q2","q2"]}
+estado[3]= {nombre:"q3",final:true,estado_to:["q3","q3"]}
+
 
 var AFDejemplo = {
     est_entrada: entrada,
@@ -296,7 +306,7 @@ function buscariEstado(nom_estado,AFDejemplo){
 function semiMatriz(AFDejemplo,matriz,estado1,estado2){
     console.log("Funcion semiMatriz")  
     var indice = (AFDejemplo.est_entrada).length, aux_m =[],aux=1, e1, e2
-    for (let i=0;i<indice;i++){
+    for (let i=0;i<indice-1;i++){
         for (let j=0;j<aux && aux<indice ;j++){ //columna, creo?
             //console.log("aux",aux)
             console.log("estado1",estado1[i], "estado2", estado2[j])
@@ -339,16 +349,23 @@ function semiMatriz(AFDejemplo,matriz,estado1,estado2){
     }
 }
 function AFDSimplificado(AFD,matriz){
-    console.log("matriz simplificado",matriz)
+    console.log(" AFDSimplificado, matriz simplificado",matriz)
     var aux=1, simplificado= true, n_estados = [], aux_m, AFDSimplificado
     for(let i=0;i<matriz.length;i++){
-        for (let j=0;j<aux && aux<matriz.length ;j++){
-            
-            if(matriz[i][j] != "x"){
-                simplificado = false
-                aux_m=matriz[i][j]
-               // console.log(i,j,matriz[i][j])
-                n_estados.push(matriz[i][j]);
+        console.log(aux, matriz.length+1)
+        for (let j=0;j<aux && aux<matriz.length+1 ;j++){
+            console.log("i",i,"j",j)
+            for(let k=0;k<matriz[i][j].length;k++){
+                console.log(matriz[i][j][k], "x")
+                if((matriz[i][j])[k] != "x"){  //
+                    console.log(matriz[i][j][k])
+                    simplificado = false
+                    if(k==0){
+                        aux_m=matriz[i][j]
+                        n_estados.push(matriz[i][j]);
+                        console.log(matriz[i][j][k], simplificado)
+                    }  
+                }
             }
         }
         aux++;
