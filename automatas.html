@@ -9,6 +9,7 @@
     <link type="text/css" rel="stylesheet" href="css/styles.css">
     <link type="text/css" rel="stylesheet" href="css/automatas.css">
     <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css" >
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
     <script src="https://kit.fontawesome.com/b097035380.js" crossorigin="anonymous"></script>
 
     <link rel="icon" href="img/logo.svg">
@@ -53,14 +54,13 @@
                 <h3 class="text-center my-2" id="title">Instrucciones</h3><hr>
                 <p>A continuación podrás crear 2 autómatas de tipo <strong>AFD</strong> o <strong>AFND</strong>, según tus necesidades. Sólo debes rellenar los campos de la quintupla, una vez ingresados los datos, podrás ingresar el estado destino a travéz de la tabla de transición.</p>
                 <p>Al agregar los datos en la quintupla, separalos mediante una coma.</p>
-                <div class="alert alert-danger">Para un <em style="font-weight: bold;">AFND</em>, ingresa en el alfabeto la letra reservada <em style="font-weight: bold;">e</em><em> (epsilon).</em></div>
                 <div class="row d-flex justify-content-center">
                     <button class="btn btn-primary mb-3" id="aceptar">Aceptar</button>
                 </div>
             </div>
         </div>
         <div class="row d-flex justify-content-center">
-            <div class="col-lg-5 col-sm-12 mx-2 bg-white rounded shadow">
+            <div class="col-lg-4 col-sm-12 mx-2 bg-white rounded shadow">
                 <h3 class="text-center my-2">Valores del 1<sup>er</sup> Autómata</h3>
                 <hr>
                 <div class="form-group">
@@ -81,7 +81,20 @@
                         <button id="Enviar1" class="btn btn-primary mt-3 mb-2">Ingresar Datos</button>
                     </div>
                 </div>
-            </div><div class="col-lg-5 col-sm-12 mx-2 bg-white rounded shadow">
+            </div>
+            <div class="col-lg-6 col-sm-12 mx-2 bg-white rounded shadow">
+                <h4 class="text-center my-3">Tabla de Transición 1<sup>er</sup> Autómata</h4>
+                <hr>
+                <div class="row d-flex justify-content-center">
+                    <div id="tablaTransicion1" class="mx-2"></div>
+                </div>
+                <div class="row d-flex justify-content-center">
+                    <button class="btn btn-primary mt-3 mb-2" id="datosTabla">Ingresar Datos</button>
+                </div>
+            </div>
+        </div>
+        <div class="row d-flex justify-content-center my-2">
+            <div class="col-lg-4 col-sm-12 mx-2 bg-white rounded shadow">
                 <h3 class="text-center my-2">Valores del 2<sup>do</sup> Autómata</h3>
                 <hr>
                 <div class="form-group">
@@ -103,19 +116,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5 col-sm-12 my-2 mx-2 bg-white rounded shadow">
-                <h4 class="text-center my-3">Tabla de Transición</h4>
-                <hr>
-                <div class="row d-flex justify-content-center">
-                    <div id="tablaTransicion1" class="mx-2"></div>
-                    <button class="btn btn-primary mt-3 mb-2" id="datosTabla">Ingresar Datos</button>
-                </div>
-            </div>
-            <div class="col-lg-5 col-sm-12 my-2 mx-2 bg-white rounded shadow">
-                <h4 class="text-center my-3">Tabla de Transición</h4>
+            <div class="col-lg-6 col-sm-12 mx-2 bg-white rounded shadow">
+                <h4 class="text-center my-3">Tabla de Transición 2<sup>do</sup> Autómata</h4>
                 <hr>
                 <div class="row d-flex justify-content-center">
                     <div id="tablaTransicion2" class="mx-2"></div>
+                </div>
+                <div class="row d-flex justify-content-center">
                     <button class="btn btn-primary mt-3 mb-2" id="datosTabla2">Ingresar Datos</button>
                 </div>
             </div>
