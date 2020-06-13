@@ -30,3 +30,16 @@
     transition: 0.2s;
 }
 
+.tablatransicion{
+    width: 100px;
+    height: 25px;
+    text-align: center;
+    background: #4db6ac;
+}
+.tablatransicionHijos{
+    width: 100px;
+    height: 25px;
+    text-align: center;
+    background: white;
+    border: 1px solid #bdbdbd;
+}
