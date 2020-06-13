@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Acme&display=swap');
+:root{
+    --marineBlue: #043353;
+    --lightBlue:#18A4E0;
+    --nordicBreeze: #D3DDE6;
+}
 .formatoTablaTitulo{
     width: 200px;
     height: 50px;
@@ -10,3 +16,17 @@
     text-align: center;
     background: white;
 }
+
+.bg-marineblue p{
+    font-family: 'Acme',sans-serif;
+    color: white;
+    padding-top: 10px;
+    font-size: 25px;
+}
+
+.bg-marineblue{
+    background-color: var(--marineBlue);
+    height: 70px;
+    transition: 0.2s;
+}
+

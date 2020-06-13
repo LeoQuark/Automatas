@@ -33,6 +33,8 @@ const iniciales2 = document.querySelector("#estadosIniciales2");
 const finales2 = document.querySelector("#estadosFinales2");
 var quintupla2 = [], est_entrada2 =[], arr_alfabeto2 = [], est_iniciales2 = [], est_finales2 = [];
 
+var aceptado1 = false , aceptado2 = false;
+
 /*-------Creación del primer autómata------*/
 const enviar1 = document.querySelector("#Enviar1");
 enviar1.addEventListener('click',ordenarElementosAutomata1);
@@ -48,6 +50,7 @@ function ordenarElementosAutomata1(e){
     if(validar != false){
         enviar1.disabled = true;
         crearTablaTransicion(est_entrada,arr_alfabeto,tablaTransicion1);
+        aceptado1 = true;
     }
 }
 
@@ -66,6 +69,7 @@ function ordenarElementosAutomata2(e){
     if(validar != false){
         enviar2.disabled = true;
         crearTablaTransicion(est_entrada2,arr_alfabeto2,tablaTransicion2);
+        aceptado2 = true;
     }
 }
 
@@ -205,7 +209,7 @@ function obtenerEstadosDestino1(){
 }
 
 /*------Obtener el estado destino 2do automata-------*/
-var Estados2 = [], estado_to2 = [];
+var Estados2 = [], estado_to2 = [], AUTOMATA2 = [];
 const datosTabla2 = document.querySelector('#datosTabla2');
 datosTabla2.addEventListener('click',obtenerEstadosDestino2);
 
@@ -253,8 +257,7 @@ function validarDatosTransicion(tipoautomata,entrada,alfabeto){
     }
 }
 
-function crearAutomata(tipoautomata,entrada,alfabeto,inicial,finales,Estados,estado){
-
+function crearAutomata(tipoautomata,entrada,alfabeto,inicial,finales,Estados,estado,selector){
     for(let i=0; i<entrada.length;i++){
         for(let j=0; j<alfabeto.length;j++){
             var inputDestino = document.querySelector(`#${entrada[i]}-${alfabeto[j]}`).value.toLowerCase();
@@ -275,9 +278,40 @@ function crearAutomata(tipoautomata,entrada,alfabeto,inicial,finales,Estados,est
         totalEstados=[];
         estado=[];
     }
-    automata = new Quintupla(entrada,alfabeto,inicial,finales,Estados);
-    console.log(automata);  
+    return automata = new Quintupla(entrada,alfabeto,inicial,finales,Estados);
+    // console.log(automata);  
 }
+/*-----Eliminar bloque de anlisis de los automatas-----*/
+// const aceptar2 = document.querySelector('#aceptar2');
+// aceptar2.addEventListener('click', uwu);
+
+// function uwu (e){
+//     e.preventDefault();
+//     const instrucciones2 = document.querySelector('#instrucciones2').remove();
+// }
+
+/*-----1er automata Analisis-----*/
+function pregunta1(){
+    if(tipoAutomata.value == 'AFD'){
+        var descripcionAFD = `<p>Dado que se ingresó un autómata '<strong>${tipoAutomata.value}</strong>', se procede a realizar la simplificación:</p>`;
+        const introduccion = document.querySelector('#parte1-introduccion');
+        introduccion.innerHTML = descripcionAFD;
+
+
+    }else{
+        var descripcionAFD = `<p>Dado que se ingresó un autómata '<strong>${tipoAutomata.value}</strong>', se procede a obtener el AFD equivalente:</p>`;
+        const introduccion = document.querySelector('#parte1-introduccion');
+        introduccion.innerHTML = descripcionAFD;
+    }
+    
+
+    
+
+}
+
+
+
+
 
 
 /*--------AFD O AFND---------*/
@@ -285,13 +319,6 @@ function crearAutomata(tipoautomata,entrada,alfabeto,inicial,finales,Estados,est
     for(let i=0;i<(AUTOMATA.arr_estados).length;i++){
     }
 }*/
-
-
-
-
-
-
-
 
 /*--------------EJEMPLOOOOO-----------------------*/
 //AUTOMATA FINITO DETERMINISTA
@@ -925,7 +952,6 @@ function Simplificar(AFDejemplo){
     //return AFDSimp
 }
 Simplificar(AFDejemplo)
-/*-----------------------------*/
 
 /*------------Complemento-----------*/
 function complemento(AFD){

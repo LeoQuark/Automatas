@@ -127,9 +127,76 @@
                 </div>
             </div>
         </div>
+    </div><br>
+    <br>
+    <div class="container">
+        <div class="row d-flex justify-content-center my-3 mx-1" id="instrucciones2">
+            <div class="col-lg-8 col-sm-12 bg-white rounded shadow  ">
+                <h3 id="title" class="text-center my-2">Análisis de los Autómatas</h3>
+                <hr>
+                <p>En este apartado podrás obtener un completo análisis de los autómatas previamente ingresados. Sólo debes <strong>presionar</strong> en los recuadros de abajo; Obtener AFD equivalente, Complemento, unión y más, Autómata anterior a AFD. Una vez apretado podrás ver la información resultante.</p>
+                <!-- <div class="row d-flex justify-content-center">
+                    <button class="btn btn-danger mb-3" id="aceptar2">Aceptar</button>
+                </div> -->
+            </div>
+        </div>
+        <div class="accordion" id="accordionExample">
+            <div class="card" onclick="pregunta1();">
+                <div class="bg-marineblue" id="primeraParte">
+                    <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-center text-white collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="text-decoration: none;" id="parte1">
+                    <p>Obtener AFD equivalente</p>
+                    </button>
+                    </h2>
+                </div>
+                <div id="collapseOne" class="collapse" aria-labelledby="primeraParte" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <!-- 1er automata -->
+                        <div>
+                            <div class="row d-flex justify-content-center">
+                                <h4>1 <sup>er</sup> Autómata</h4>
+                            </div><hr>
+                            <div class="row">
+                                <div class="col-lg-5 col-sm-12" id="parte1-introduccion">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="bg-marineblue" id="segundaParte">
+                    <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-center text-white collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="text-decoration: none;">
+                    <p>Complemento, unión y más</p>
+                    </button>
+                    </h2>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="segundaParte" data-parent="#accordionExample">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="bg-marineblue" id="terceraParte">
+                    <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-center text-white collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="text-decoration: none;">
+                    <p>Autómata anterior a AFD</p>
+                    </button>
+                    </h2>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="terceraParte" data-parent="#accordionExample">
+                    <div class="card-body">
+                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-
+    <br>
     <!--FOOTER-->
     <div>
         <div class="container">
@@ -152,11 +219,8 @@
         </footer>
         </div>
     </div>
-
-
     <!-- Optional JavaScript -->
     <script type="text/javascript" src="js/automatas.js"></script>
-    
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
