@@ -286,11 +286,9 @@ function crearAutomata(tipoautomata,entrada,alfabeto,inicial,finales,Estados,est
 }
 
 /*----Crear tabla de transicion para mostrar los resultados----*/
-function crearTablaTransicionResultados(automata,tablaTransicion){
-    console.log('LEOOO',automata);
-    console.log((automata.est_entrada).lenght);
-
-    let transiciones = ['Entrada','Final','Lectura','Destino'];
+function crearTablaTransicionResultados(automata,tablaTransicion){ 
+    console.log('LEITO',automata);
+    let transiciones = ['Entrada','Es Final','Lectura','Destino'];
     var tablaPadre = document.createElement('table'),
         filaTitulo = document.createElement('tr'); 
 
@@ -301,23 +299,25 @@ function crearTablaTransicionResultados(automata,tablaTransicion){
         filaTitulo.appendChild(columnaTitulo);
     }
     tablaPadre.appendChild(filaTitulo);
-    for(let i=0; i<(automata.est_entrada).lenght; i++){
-        for(let j=0; j<(automata.arr_alfabeto).length; j++){
+    for(let i=0; i<automata.est_entrada.length; i++){
+        for(let j=0; j<automata.arr_alfabeto.length; j++){
             var filaDatos = document.createElement('tr'), 
                 columnaEstados = document.createElement('td'),
                 columnaFinal = document.createElement('td'), 
                 columnaAlfabeto = document.createElement('td'),
                 columnaDestinos = document.createElement('td');
             //estilos y contenido a las columnas
-            
             columnaEstados.className='tablatransicionHijos';
-            columnaEstados.textContent = ((automata.est_entrada)[i]);
+            columnaEstados.textContent = automata.est_entrada[i];
             columnaFinal.className='tablatransicionHijos';
-            columnaFinal.textContent=((automata.arr_estados)[i]).final;
+            if( automata.arr_estados[i].final )
+                columnaFinal.textContent = 'Si';
+            else   
+                columnaFinal.textContent = 'No';
             columnaAlfabeto.className='tablatransicionHijos';
-            columnaAlfabeto.textContent = (automata.arr_alfabeto)[j];
+            columnaAlfabeto.textContent = automata.arr_alfabeto[j];
             columnaDestinos.className='tablatransicionHijos';
-            columnaDestinos.textContent = (((automata.arr_estados)[i]).estado_to)[j];
+            columnaDestinos.textContent = automata.arr_estados[i].estado_to[j];
             //agrego los elementos a sus nodos padres
             filaDatos.appendChild(columnaEstados);
             filaDatos.appendChild(columnaFinal);
@@ -358,26 +358,56 @@ function pregunta1(){
 }
 
 function pregunta2(){
-    const resumenAutomatas = document.querySelector('#resumenAutomatas'), transicionComplemento = document.querySelector('#transicionComplemento');
+    const resumenAutomatas = document.querySelector('#resumenAutomatas'),
+        transicionComplemento = document.querySelector('#transicionComplemento'),
+        transicionUnion = document.querySelector('#transicionUnion');
+    let complemento1, complemento2, union1, union2;
     if(tipoAutomata2.value == 'AFD' && tipoAutomata2.value == 'AFD'){  
-        let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se procede a obtener un autómata a partir del complemento, unión, concatenación e intersección entre ambos autómatas ingresados.</p>`,
-            complemento1;
-        let titulo = `<div class="row d-flex justify-content-center"><h4>1 <sup>er</sup> Autómata</h4></div><p>Obtenermos el complemento :</p>`;
+        let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se procede a obtener un autómata a partir del complemento, unión, concatenación e intersección entre ambos autómatas ingresados.</p>`;
+        //primer automata AFD
+        let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento1 = complemento(AUTOMATA1);
-        resumenAutomatas.innerHTML = descripcion + titulo;
+        resumenAutomatas.innerHTML = descripcion +`<br>`+ titulo;
         crearTablaTransicionResultados(complemento1,transicionComplemento);
+
+        //segundo automata AFD
+        let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
+        complemento2 = complemento(AUTOMATA2);
+        // resumenAutomatas.innerHTML = descripcion + titulo;
+        // crearTablaTransicionResultados(complemento1,transicionComplemento);
     }
     if(tipoAutomata.value == 'AFND' && tipoAutomata2.value == 'AFND'){
         let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se debe proceder a tranformar ambos autómatas a su <strong>AFD</strong> equivalente:</p>`;
-        resumenAutomatas.innerHTML = descripcion;
+        //primer automata AFND
+        let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
+        resumenAutomatas.innerHTML = descripcion + titulo;
+        complemento1 = complemento(AUTOMATA1);
+
+        //segundo automata AFND
+        let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
+        complemento2 = complemento(AUTOMATA2);
     }
     if(tipoAutomata.value == 'AFND' && tipoAutomata2.value == 'AFD'){
         let descripcion = `<p>Dado que el 1<sup>er</sup> Autómata es de tipo '<strong>${tipoAutomata.value}</strong>', se debe obtener su '<strong>AFD</strong>' equivalente:</p>`;
+        //primer automataAFND
+        let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
         resumenAutomatas.innerHTML = descripcion;
+        complemento1 = complemento(AUTOMATA1);
+
+        //segundo automata AFD
+        let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
+        complemento2 = complemento(AUTOMATA2);
     }
     if(tipoAutomata.value == 'AFD' && tipoAutomata2.value == 'AFND'){
         let descripcion = `<p>Dado que el 2<sup>do</sup> Autómata es de tipo '<strong>${tipoAutomata2.value}</strong>', se debe obtener su '<strong>AFD</strong>' equivalente:</p>`;
+        //primer automata AFD
+        let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         resumenAutomatas.innerHTML = descripcion;
+        complemento1 = complemento(AUTOMATA1);
+
+        //segundo automata AFND
+        let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
+        complemento2 = complemento(AUTOMATA2);
     }
 }
 
@@ -789,7 +819,7 @@ function Tabla_Transición(estado2,entrada2,alfabeto2){
                 Tabla[j].push(estado2[z].estado_to[k])}
         k++;}
     return Tabla;
-    }
+}
 
 
 function Tabla_Epsilon(estado2,entrada2){
@@ -911,6 +941,7 @@ function semiMatriz(AFDejemplo,matriz,estado1,estado2){
         aux++;   
     }
 }
+
 function AFDSimplificado(AFD,matriz){
     console.log(" AFDSimplificado, matriz simplificado",matriz)
     var aux=1, simplificado= true, n_estados = [], aux_m, AFDSimplificado
