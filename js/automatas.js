@@ -13,6 +13,12 @@ function Estado(nombre,final,estado_to){
     this.final = final // true or false
     this.estado_to = estado_to
 }
+function EstadoN(nombre,final,estado_to,epsilon){
+    this.nombre = nombre
+    this.final = final // true or false
+    this.estado_to = estado_to
+    this.epsilon = epsilon
+}
 /*---------Variables para primer autómata----------*/
 const tablaTransicion1 = document.querySelector("#tablaTransicion1");
 const tipoAutomata = document.querySelector('#tipoAutomata1');
@@ -281,8 +287,8 @@ function crearAutomata(tipoautomata,entrada,alfabeto,inicial,finales,Estados,est
         estado=[];
     }
     var automata = new Quintupla(entrada,alfabeto,inicial,finales,Estados);
-    console.log(automata);
-    return automata;  
+    return automata;
+    // console.log(automata);  
 }
 
 /*----Crear tabla de transicion para mostrar los resultados----*/
@@ -357,40 +363,25 @@ function pregunta1(){
     }
 }
 
-
-const resultado2 = document.querySelector('#resultado2');
-resultado2.addEventListener('click',pregunta2);
-
-function pregunta2(e){
-    e.preventDefault();
-    // const para el primer automata
-    const resumenAutomatas1 = document.querySelector('#resumenAutomatas1'),
-        transicionComplemento1 = document.querySelector('#transicionComplemento1'),
-        transicionUnion1 = document.querySelector('#transicionUnion1');
-
-    // const para el segundo automata
-    const resumenAutomatas2 = document.querySelector('#resumenAutomatas2'),
-        transicionComplemento2 = document.querySelector('#transicionComplemento2'),
-        transicionUnion2 = document.querySelector('#transicionUnion2');
-      
+function pregunta2(){
+    const resumenAutomatas = document.querySelector('#resumenAutomatas'),
+        transicionComplemento = document.querySelector('#transicionComplemento'),
+        transicionUnion = document.querySelector('#transicionUnion');
     let complemento1, complemento2, union1, union2;
-
     if(tipoAutomata2.value == 'AFD' && tipoAutomata2.value == 'AFD'){  
         let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se procede a obtener un autómata a partir del complemento, unión, concatenación e intersección entre ambos autómatas ingresados.</p>`;
         //primer automata AFD
         let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento1 = complemento(AUTOMATA1);
-        resumenAutomatas1.innerHTML = descripcion +`<br>`+ titulo;
-        crearTablaTransicionResultados(complemento1,transicionComplemento1);
+        resumenAutomatas.innerHTML = descripcion +`<br>`+ titulo;
+        crearTablaTransicionResultados(complemento1,transicionComplemento);
 
         //segundo automata AFD
         let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento2 = complemento(AUTOMATA2);
-        resumenAutomatas2.innerHTML = titulo;
-        crearTablaTransicionResultados(complemento1,transicionComplemento2);
+        // resumenAutomatas.innerHTML = descripcion + titulo;
+        // crearTablaTransicionResultados(complemento1,transicionComplemento);
     }
-
-
     if(tipoAutomata.value == 'AFND' && tipoAutomata2.value == 'AFND'){
         let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se debe proceder a tranformar ambos autómatas a su <strong>AFD</strong> equivalente:</p>`;
         //primer automata AFND
@@ -424,8 +415,335 @@ function pregunta2(e){
         let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
         complemento2 = complemento(AUTOMATA2);
     }
-    resultado2.disabled = true;
 }
+/*-------------------Equivalencia    ------------------*/
+var tablaTransiciones;
+var tablaClausuraEpsilon = [];
+for (let i = 0; i < AFDejemplo.est_entrada.length; i++){
+    tablaClausuraEpsilon.push(ClausuraEpsilon( AFDejemplo.est_entrada, AFDejemplo.arr_estados, AFDejemplo.est_entrada[i]));
+}
+tablaTransiciones = Tabla_Transición(AFDejemplo.arr_estados, AFDejemplo.est_entrada,AFDejemplo.arr_alfabeto)
+
+function compararArreglos(arregloA, arregloB){// se enviaran arreglos ordenados
+    if(arregloA.length!=arregloB.length){
+        return false
+    }else{
+        for(let i=0; i<arregloA.length;i++){
+            if(arregloA[i]!=arregloB[i]){
+                return false;
+            }
+        }
+    }
+    return true
+}
+function ArregloEsta(estado, ArregloEstados){
+    for(let i=0; i<ArregloEstados.length;i++){
+        if(compararArreglos(estado,ArregloEstados[i])){
+            return true;
+        }
+    }return false;
+}
+function TablaEquivalencia(Transiciones, ClausurasEpsilon, EstadoInicialAutomata){
+    let RecorrerEstados = false;
+    let CantidadEstados = 0;
+    let cantidadAlfabeto = Transiciones.length-2
+    var TablaRetorno = [];
+    var TransicionesAlfabeto = [];
+    let EstadoActual = [];
+    let transiciones = [];
+    var PosActual;
+    var Alcances;
+    var index;
+
+    for (let i = 0; i< EstadoInicialAutomata.length; i++){ // agregar primer estado, juntando los iniciales
+        EstadoActual.push(EstadoInicialAutomata[i]);
+        var aux = tablaClausuraEpsilon[Transiciones[0].indexOf(EstadoInicialAutomata[i])]
+        EstadoActual.push(aux[0])
+    }
+    TransicionesAlfabeto.push(EstadoActual);
+
+    while (!RecorrerEstados){
+        transiciones=[];
+        EstadoActual=[];
+        EstadoActual=TransicionesAlfabeto[CantidadEstados];
+        transiciones.push(EstadoActual);
+        for(let i=0; i<cantidadAlfabeto;i++){ 
+            Alcances = [];
+            for (let j=0; j<EstadoActual.length;j++){ // se agregan los alcances con el alfabeto desde los estados
+                PosActual = Transiciones[0].indexOf(EstadoActual[j]);
+                let auxilia = Transiciones[i+2][PosActual];
+                if(Array.isArray(auxilia)===true){
+                    for (let k=0; k<auxilia.length;k++){
+                        if((auxilia[k] != null) && (!BuscarEstado(auxilia[k],Alcances))){
+                            Alcances.push(auxilia[k]);}}}
+                else{
+                    if((auxilia != null) && (!BuscarEstado(auxilia,Alcances))){
+                        Alcances.push(auxilia);}
+                }           
+            }             
+
+            for (let j=0; j<EstadoActual.length;j++){ // se agregan los alcances; epsilon -> alfabeto
+                if(Array.isArray(EstadoActual[j])){
+                    let auxiliar = EstadoActual[j];
+                    for(let z = 0; z<auxiliar.length;z++){
+                        PosActual = Transiciones[0].indexOf(auxiliar[z]);
+                        for(let k=0; k<ClausurasEpsilon[PosActual].length; k++){
+                            index = Transiciones[0].indexOf(ClausurasEpsilon[PosActual][k]);
+                            if((Transiciones[i+2][index] != null) && (!BuscarEstado(Transiciones[i+2][index],Alcances))){
+                                Alcances.push(Transiciones[i+2][index]);}}}}
+                else{
+                PosActual = Transiciones[0].indexOf(EstadoActual[j]);
+                for(let k=0; k<ClausurasEpsilon[PosActual].length; k++){
+                    index = Transiciones[0].indexOf(ClausurasEpsilon[PosActual][k]);
+                    let auxiliar = Transiciones[i+2][index];
+                        if(Array.isArray(Transiciones[i+2][index])){
+                            for (let z = 0; z<auxiliar.length; z++){
+                                if((auxiliar != null) && (!BuscarEstado(auxiliar[z],Alcances))){
+                                    Alcances.push(auxiliar[z]);}}}
+                        else
+                            if((auxiliar != null) && (!BuscarEstado(auxiliar,Alcances))){
+                                Alcances.push(auxiliar)}
+                    
+                }}
+            }                
+            for (let j=0; j<Alcances.length;j++){ // se agregan los alcances epsilon -> alfabeto -> epsilon
+                if(Array.isArray(Alcances[j])){
+                    let auxil = Alcances[j]
+                    for(let z=0; z<auxil;z++){
+                        PosActual = Transiciones[0].indexOf(auxil[z]);
+                        for(let k=0; k<ClausurasEpsilon[PosActual].length; k++){ // ClausurasEpsilon[PosActual][k]
+                            if( (ClausurasEpsilon[PosActual][k]!=null) && (!BuscarEstado(ClausurasEpsilon[PosActual][k],Alcances))){
+                                Alcances.push(ClausurasEpsilon[PosActual][k]);
+                            }  
+                        }}}
+                else
+                    PosActual = Transiciones[0].indexOf(Alcances[j]);
+                    for(let k=0; k<ClausurasEpsilon[PosActual].length; k++){ // ClausurasEpsilon[PosActual][k]
+                        if( (ClausurasEpsilon[PosActual][k]!=null) && (!BuscarEstado(ClausurasEpsilon[PosActual][k],Alcances))){
+                            Alcances.push(ClausurasEpsilon[PosActual][k]);
+                        }  
+                    }
+                }                
+            Alcances.sort();
+            if(!ArregloEsta(Alcances,TransicionesAlfabeto)){
+                TransicionesAlfabeto.push(Alcances);
+            }
+            //verificar si alcance es un estado nuevo y agregarlo a TransicionesAlfabeto
+            transiciones.push(Alcances);        
+        }
+        TablaRetorno.push(transiciones);
+        CantidadEstados++;
+        if(CantidadEstados >= TransicionesAlfabeto.length){
+            RecorrerEstados = true;
+        }
+    } 
+    //agregar sumideros
+    for(let i=0; i<TablaRetorno.length; i++){
+        for(let j=0; j<TablaRetorno[i].length;j++){
+            if (TablaRetorno[i][j].length==0){
+                TablaRetorno[i][j].push("S");
+            }
+        }
+    }
+    return TablaRetorno;
+}
+function Tabla_Transición(estado2,entrada2,alfabeto2){
+    let Tabla = new Array(alfabeto2.length+2);
+    let k = 0;
+    Tabla[0] = [estado2[0].nombre];
+    //Tabla[1] = [estado2[0].epsilon];
+    for (var i=1; i < entrada2.length; i++){
+        Tabla[0].push(estado2[i].nombre);
+       // Tabla[1].push(estado2[i].epsilon);
+        }
+    for(var j=2; j<Tabla.length;j++){
+        for(var z = 0; z<entrada2.length ; z++){
+            if(z === 0){
+                Tabla[j] = [estado2[z].estado_to[k]];
+                }
+            else
+                Tabla[j].push(estado2[z].estado_to[k])}
+        k++;}
+    return Tabla;
+}
+function Tabla_Epsilon(estado2,entrada2){
+    let Tabla = [];
+    Tabla[0] = [estado2[0].nombre];
+    Tabla[1] = [ClausuraEpsilon(entrada2, estado2, estado2[0].nombre)]
+    for(var i = 1; i<entrada2.length; i++){
+        (Tabla[0]).push(estado2[i].nombre);
+        (Tabla[1]).push(ClausuraEpsilon(entrada2, estado2 , estado2[i].nombre));
+    }
+    return Tabla;
+    }
+    function BuscarEstado(estado, arregloEstados){
+        for (let i=0; i<arregloEstados.length; i++){
+            if(arregloEstados[i]===estado){
+                return true;
+            }
+        }return false
+    }
+    function ClausuraEpsilon(EstadosEntrada, Estadosinfo, Estado){  
+        let EpsilonFinal = false;
+        let EpsilonCaminos = [];
+        let recorrerEpsilon = 0;
+        let InfoEstadoActual=Estadosinfo[EstadosEntrada.indexOf(Estado)];
+        let PosActual=EstadosEntrada.indexOf(Estado)
+        if(InfoEstadoActual.epsilon[0]==null){
+            EpsilonCaminos[0]=null;
+            return EpsilonCaminos;
+        }
+        while(!EpsilonFinal){
+            if(Estadosinfo[PosActual].epsilon[0] != null){
+                for (let i=0; i<Estadosinfo[PosActual].epsilon.length ; i++){
+                    if((!BuscarEstado(Estadosinfo[PosActual].epsilon[i],EpsilonCaminos)) && (Estado != Estadosinfo[PosActual].epsilon[i])){
+                        EpsilonCaminos.push(Estadosinfo[PosActual].epsilon[i]); 
+                    }
+                }
+            }       
+            PosActual=EstadosEntrada.indexOf(EpsilonCaminos[recorrerEpsilon]);
+            InfoEstadoActual=Estadosinfo[PosActual];
+            recorrerEpsilon++;
+            if(recorrerEpsilon>EpsilonCaminos.length){
+                EpsilonFinal=true;
+            }
+        }
+        return EpsilonCaminos;
+    }
+
+function Equivalente(AUTOMATA){
+    var EpsilonCaminos = [], Tabla = [], TablaTransicion = [], Tabla_Equivalencia = []
+    EpsilonCaminos = ClausuraEpsilon(AUTOMATA.est_entrada, AUTOMATA.arr_estados, "q0")
+    Tabla = Tabla_Epsilon(AUTOMATA.arr_estados,AUTOMATA.est_entrada)
+    console.log(Tabla)
+    TablaTransicion = Tabla_Transición(AUTOMATA.arr_estados,AUTOMATA.est_entrada,AUTOMATA.arr_alfabeto)
+    Tabla_Equivalencia = TablaEquivalencia(tablaTransiciones, tablaClausuraEpsilon, AUTOMATA.est_inicial)
+    //console.log(Tabla_Equivalencia)
+    Etiquetado(AUTOMATA,Tabla_Equivalencia,AUTOMATA.arr_alfabeto,Tabla)
+}
+
+/*-----------Crear AFD NUEVO----------------*/
+function Separar(TablaEquivalencia, Alfabeto, Aux1, Aux2){
+    var Aux3 = []
+    for(let i=0; i < TablaEquivalencia.length; i++){
+        for(let j=0; j < Alfabeto.length+1; j++){
+            if(j === 0){
+                Aux1.push(TablaEquivalencia[i][j])
+
+           }
+           else{
+                Aux3.push(TablaEquivalencia[i][j])
+           }
+        }
+        Aux2.push(Aux3)
+        Aux3 = []
+    }
+}
+function Comparar(Array1,Array2){ //se podia hacer con indexOf pero js no siempre iguala bien los arrays
+    var Cont = 0
+    if(Array1.length === Array2.length){
+        for(let i=0; i < Array1.length; i++){
+            if(Array1[i] === Array2[i]){
+                Cont++
+            }
+            else{
+                return false
+            }
+        }
+        if(Cont === Array1.length){
+            return true
+        }
+
+    }
+    else{
+        return false
+    }
+}
+function Renombrar2(Estados,Arr_Estados,Aux1){
+    var Asc = 65
+    for(let i=0; i < Estados.length; i++){
+        Aux1.push(String.fromCharCode(Asc+i))
+
+    }
+    var Aux3= [], Aux_Transiciones = []
+    for(let j=0; j <Arr_Estados.length; j++){
+        for(let k=0; k <Arr_Estados[j].length; k++){
+            for(let m=0; m <Estados.length; m++){
+                var Bool = Comparar(Arr_Estados[j][k],Estados[m])
+                if(Bool === true){
+                    Aux3.push(Aux1[m])
+                }
+            }
+        }
+        Aux_Transiciones.push(Aux3)
+        Aux3 = []
+    }
+    return Aux_Transiciones
+}
+function Finales(A, Estados,E){
+    console.log(E)
+    var final = []
+    for(let i=0; i < E.length; i++){
+        for(let j=0; j < E[i].length; j++){
+            for(let k=0; k < (A.est_finales).length; k++){
+                if(E[i][j] === (A.est_finales)[k]){
+                    final.push(Estados[i])
+                    break;
+                }
+            }
+        }
+    }
+    return final
+}
+function Crear_Afd(A, Estados, Transiciones, E,Tabla){
+    //Inicial
+    var Inicial = A.est_inicial , Indice, InicialF
+    Indice = (A.est_entrada).indexOf(Inicial[0])
+    for(let i=0; i < Tabla[1][Indice].length; i++){
+        Inicial.push(Tabla[1][Indice][i])
+    }
+    for(let j=0; j < E.length; j++){
+        var Bool
+        Bool = Comparar(Inicial,E[j])
+        if(Bool === true){
+            InicialF = Estados[j]
+        }
+    }
+    //Finales
+    var Final = Finales(A,Estados,E)
+   //Arr_Estados
+    var Arr_estados = []
+    for(let x=0; x < Estados.length; x++){
+        var nombre, final, estado_to
+        nombre = Estados[x]
+        //final
+        if(Final.indexOf(nombre)>= 0){
+            final = true
+        }
+        else{
+            final = false
+        }
+        //estado_to
+        estado_to = Transiciones[x]
+        Arr_estados.push(new Estado(nombre,final,estado_to))
+        
+    }
+    var AFD = new Quintupla(Estados,A.arr_alfabeto,InicialF,Final,Arr_estados)
+    return AFD
+
+}
+function Etiquetado(A,TablaEquivalencia, Alfabeto,Tabla){
+    var Estados = [], Arr_Estados= [], Transiciones = [], Estados_Renombrados = [], AFD
+    Separar(TablaEquivalencia, Alfabeto, Estados, Arr_Estados)
+    Transiciones = Renombrar2(Estados,Arr_Estados,Estados_Renombrados)
+    AFD = Crear_Afd(A,Estados_Renombrados,Transiciones, Estados, Tabla)
+    console.log(AFD)
+}
+Equivalente(AFDejemplo)
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!para pasar de afnd a afd llamar a Equivalente(AUTOMATA) ::::::::::::...................
+
+
 
 /*-----------Simplificacion-----------------*/
 /*Funcion para simplificar un automata*/ 
@@ -608,8 +926,6 @@ function Simplificar(AUTOMATA){
     console.log("AFD SIMPLIFICADO",AFDSimp)
     return AFDSimp;
 }
-//Simplificar(AUTOMATA)
-
 //COMPLEMENTO, UNION, CONCATENACION, INTERSECCION
 /*------------Complemento-----------*/
 function complemento(AFD){
@@ -668,7 +984,7 @@ function Estado_uwu(EstadoA,Estados, Alf,Alfabeto,AllEstados){ //retorna un obje
             }
         }
     }
-    var Aux = new Estado(Nombre,Final,Estados_tof)
+    var Aux = new EstadoN(Nombre,Final,Estados_tof,null)
     return Aux
 }
 function Renombrar(A1,A2, Alf, Arr_Estados, Iniciales){
@@ -706,7 +1022,6 @@ function Union(Automata1, Automata2){ //va a retornar la union de los dos automa
     var Alfabeto = [], Inicial = [], EstadoInicial_to = [], Iniciales = [], Finales = []
     //Alfabeto
     Alfabeto = UnirListas(Automata1.arr_alfabeto,Automata2.arr_alfabeto)
-    Alfabeto.push("Ɛ")
     //Inicial
     Inicial = [String.fromCharCode(65)]
     //Entrada y arr_estados
@@ -716,8 +1031,7 @@ function Union(Automata1, Automata2){ //va a retornar la union de los dos automa
     for(let i=0; i<Alfabeto.length; i++){
         EstadoInicial_to.push(null)
     }
-    EstadoInicial_to[Alfabeto.length-1] = Iniciales
-    var EstadoInicial = new Estado(Inicial[0],false,EstadoInicial_to)
+    var EstadoInicial = new EstadoN(Inicial[0],false,EstadoInicial_to,Iniciales)
     Arr_Estados.unshift(EstadoInicial)
     console.log(Arr_Estados)
     //Finales
@@ -728,10 +1042,22 @@ function Union(Automata1, Automata2){ //va a retornar la union de los dos automa
     }
     //Union de los Automatas
     var A1uA2 = new Quintupla(Estados,Alfabeto,Inicial,Finales,Arr_Estados)
+
     console.log(A1uA2)
+    return A1uA2
 }
 //PARA LLAMAR A LA FUNCION : UNION(AUTOMATA1,AUTOMATA2)
-
+ //Interseccion
+ function Interseccion(AUTOMATA1,AUTOMATA2){
+    var A1C, A2C, Union, AFDUnion, Interseccion
+    A1C = complemento(AUTOMATA1)
+    A2C = complemento(AUTOMATA2)
+    Union = Union(A1C,A2C)
+    AFDUnion = Equivalente(Union)
+    Interseccion = complemento(AFDUnion)
+    return Interseccion
+ }
+ //!para llamar interseccion: Interseccion(AUTOMATA1,AUTOMATA2) ::::::::::::...................
 
 /*-------Concatenación-------*/
 /*--Función que concatena dos autómatas (por ahora funciona con ambos autómatas de igual alfabeto)*/
@@ -779,286 +1105,23 @@ function Concatenacion (a, b){
     return AFDConcatenacion;  //Se retorna el autómata para su posterior utilización sin afectar al autómata AFDejemplo uwu
 }
 
-/*--------------EJEMPLOOOOO  2 -----------------------*/
+//AFND A AFD
 //AUTOMATA FINITO NO DETERMINISTA //
-/*
 var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1"]
 var estado=[];
-estado[0]= {nombre:"q0",final:false,estado_to:[["q2","q1"],"q0"],epsilon:["q1"]};
-estado[1]= {nombre:"q1",final:true, estado_to:["q4","q1"],epsilon:[null]};
-estado[2]= {nombre:"q2",final:false,estado_to:["q0",null],epsilon:[null]};
-estado[3]= {nombre:"q3",final:false,estado_to:["q1",null],epsilon:[null]};
-estado[4]= {nombre:"q4",final:false,estado_to:["q3",null],epsilon:[null]};
+estado[0]= new EstadoN("q0",false,[["q2","q1"],"q0"],["q1"])
+estado[1]= new EstadoN("q1",true, ["q4","q1"],[null])
+estado[2]= new EstadoN("q2",false,["q0",null],[null])
+estado[3]= new EstadoN("q3",false,["q1",null],[null])
+estado[4]= new EstadoN("q4",false,["q3",null],[null])
 
 var AFDejemplo = {
    est_entrada: entrada,
    arr_alfabeto: alfabeto,
-   est_iniciales: inicial,
+   est_inicial: inicial,
    est_finales: final,
    arr_estados : estado,
 }
 console.log("EJEMPLO AFN")
 console.log(AFDejemplo)
 
-/*-------------------Equivalencia    ------------------*/
-/*
-function wea(estado){
-   console.log(Array.isArray(estado[0].epsilon[0]))
-
-   console.log(estado[0].epsilon[0].length)
-}
-wea(AFDejemplo.arr_estados)
-function buscar_estado(entrada2,estado2,nomb){
-   for (var i = 0; i<entrada2.lenght;i++){
-       if(estado2[i].nombre === nomb  ){
-           return i;}}}
-function encontrar(auxi,nomb){
-   var aux = 0
-   for (i=0;i<auxi.length;i++){
-       if(auxi[i]===nomb){
-           aux++;
-       }}
-   if (aux===0){
-       return nomb;
-   }
-}
-function buscar_alfab(entrada2, estado2, nomb, alfab){    
-
-               var aux;
-               var auxi = [];
-               var i;
-               var j = buscar_estado(entrada2,estado2,nomb);
-               aux = estado2[j].estado_to[alfa];
-               while( i!= null )
-                   if(estado2[j].epsilon != null){
-                       auxi.push(buscar_estado(entrada2,estado2,estado2[j].epsilon));
-                       aux += "," +  estado2[auxi].estado_to[alfa];
-               }
-                   else
-                       auxi = buscar_estado(entrada2,estado2,estado2[j].epsilon);
-                       if(estado2[auxi].epsilon != null){
-
-                   }
-                       else
-                           return auxi
-               }
-/*                while(i<entrada2.length){
-                  if(estado2[i].epsilon!=null){
-                       if(aux===null){
-                           epsi = estado2[i].epsilon;
-                           i++;
-                           if(estado2[i].nombre === nomb){
-                               aux = estado2[i].estado_to[alfab];
-                               i=0;}}
-                           
-                       if(aux!=null){
-                           if(estado2[i].nombre===epsi){
-                               epsi = estado2[i].epsilon;
-                               aux += (",") + estado2[i].estado_to[alfab];}
-                           i+=1}}
-
-                   if(estado2[i].epsilon===null){ 
-                       if (aux===null){
-                           i+=1;
-                           if(estado2[i].nombre===nomb){
-                               aux = estado2[i].estado_to[alfab];
-                               i=0;}}
-
-                       if(aux!=null){
-                           console.log(epsi);    
-                           if(estado2[i].nombre===epsi){
-                               aux += (",") + estado2[i].estado_to[alfab];
-                              }i+=1;}}
-                   }
-       return aux;*/
-
-       
-                  
-
-/*-----------------------------------------------------*/
-
-/*-------------------Equivalencia    ------------------*/
-/*
-var tablaTransiciones;
-var tablaClausuraEpsilon = [];
-for (let i = 0; i < AFDejemplo.est_entrada.length; i++){
-    tablaClausuraEpsilon.push(ClausuraEpsilon( AFDejemplo.est_entrada, AFDejemplo.arr_estados, AFDejemplo.est_entrada[i]));
-}
-tablaTransiciones = Tabla_Transición(AFDejemplo.arr_estados, AFDejemplo.est_entrada,AFDejemplo.arr_alfabeto)
-console.log(tablaClausuraEpsilon)
-console.log(tablaTransiciones)
-
-function compararArreglos(arregloA, arregloB){// se enviaran arreglos ordenados
-    if(arregloA.length!=arregloB.length){
-        return false
-    }else{
-        for(let i=0; i<arregloA.length;i++){
-            if(arregloA[i]!=arregloB[i]){
-                return false;
-            }
-        }
-    }
-    return true
-}
-function ArregloEsta(estado, ArregloEstados){
-    for(let i=0; i<ArregloEstados.length;i++){
-        if(compararArreglos(estado,ArregloEstados[i])){
-            return true;
-        }
-    }return false;
-}
-function TablaEquivalencia(Transiciones, ClausurasEpsilon, EstadoInicialAutomata){
-    let RecorrerEstados = false;
-    let CantidadEstados = 0;
-    let cantidadAlfabeto = Transiciones.length-2
-    var TablaRetorno = [];
-    var TransicionesAlfabeto = [];
-    let EstadoActual = [];
-    let transiciones = [];
-    var PosActual;
-    var Alcances;
-    var index;
-
-    for (let i = 0; i< EstadoInicialAutomata.length; i++){ // agregar primer estado, juntando los iniciales
-        EstadoActual.push(EstadoInicialAutomata[i]);
-        var aux = tablaClausuraEpsilon[Transiciones[0].indexOf(EstadoInicialAutomata[i])]
-        EstadoActual.push(aux[0])
-    }
-    TransicionesAlfabeto.push(EstadoActual);
-
-    while (!RecorrerEstados){
-        transiciones=[];
-        EstadoActual=[];
-        EstadoActual=TransicionesAlfabeto[CantidadEstados];
-        transiciones.push(EstadoActual);
-        for(let i=0; i<cantidadAlfabeto;i++){ 
-            Alcances = [];
-            for (let j=0; j<EstadoActual.length;j++){ // se agregan los alcances con el alfabeto desde los estados
-                PosActual = Transiciones[0].indexOf(EstadoActual[j]);
-                let auxilia = Transiciones[i+2][PosActual];
-                if(Array.isArray(auxilia)===true){
-                    for (let k=0; k<auxilia.length;k++){
-                        if((auxilia[k] != null) && (!BuscarEstado(auxilia[k],Alcances))){
-                            Alcances.push(auxilia[k]);}}}
-                else{
-                    if((auxilia != null) && (!BuscarEstado(auxilia,Alcances))){
-                        Alcances.push(auxilia);}
-                }           
-            }             
-
-            for (let j=0; j<EstadoActual.length;j++){ // se agregan los alcances; epsilon -> alfabeto
-                PosActual = Transiciones[0].indexOf(EstadoActual[j]);
-                for(let k=0; k<ClausurasEpsilon[PosActual].length; k++){
-                    index = Transiciones[0].indexOf(ClausurasEpsilon[PosActual][k]);
-                    if((Transiciones[i+2][index] != null) && (!BuscarEstado(Transiciones[i+2][index],Alcances))){
-                        Alcances.push(Transiciones[i+2][index]);
-                    }
-                }
-            }                
-            for (let j=0; j<Alcances.length;j++){ // se agregan los alcances epsilon -> alfabeto -> epsilon
-                PosActual = Transiciones[0].indexOf(Alcances[j]);
-                for(let k=0; k<ClausurasEpsilon[PosActual].length; k++){ // ClausurasEpsilon[PosActual][k]
-                    if( (ClausurasEpsilon[PosActual][k]!=null) && (!BuscarEstado(ClausurasEpsilon[PosActual][k],Alcances))){
-                        Alcances.push(ClausurasEpsilon[PosActual][k]);
-                    }  
-                }
-            }                
-            Alcances.sort();
-            if(!ArregloEsta(Alcances,TransicionesAlfabeto)){
-                TransicionesAlfabeto.push(Alcances);
-            }
-            //verificar si alcance es un estado nuevo y agregarlo a TransicionesAlfabeto
-            transiciones.push(Alcances);        
-        }
-        TablaRetorno.push(transiciones);
-        CantidadEstados++;
-        if(CantidadEstados >= TransicionesAlfabeto.length){
-            RecorrerEstados = true;
-        }
-    } 
-    //agregar sumideros
-    for(let i=0; i<TablaRetorno.length; i++){
-        for(let j=0; j<TablaRetorno[i].length;j++){
-            if (TablaRetorno[i][j].length==0){
-                TablaRetorno[i][j].push("S");
-            }
-        }
-    }
-    return TablaRetorno;
-}
-console.log("Tabla Equivalencias")
-console.log(TablaEquivalencia(tablaTransiciones, tablaClausuraEpsilon, AFDejemplo.est_iniciales))
-
-function Tabla_Transición(estado2,entrada2,alfabeto2){
-    let Tabla = new Array(alfabeto2.length+2);
-    let k = 0;
-    Tabla[0] = [estado2[0].nombre];
-    Tabla[1] = [estado2[0].epsilon];
-    for (var i=1; i < entrada2.length; i++){
-        Tabla[0].push(estado2[i].nombre);
-        Tabla[1].push(estado2[i].epsilon);
-        }
-    for(var j=2; j<Tabla.length;j++){
-        for(var z = 0; z<entrada2.length ; z++){
-            if(z === 0){
-                Tabla[j] = [estado2[z].estado_to[k]];
-                }
-            else
-                Tabla[j].push(estado2[z].estado_to[k])}
-        k++;}
-    return Tabla;
-}
-
-
-function Tabla_Epsilon(estado2,entrada2){
-    let Tabla = [];
-    Tabla[0] = [estado2[0].nombre];
-    Tabla[1] = [ClausuraEpsilon(entrada2, estado2, estado2[0].nombre)]
-    for(var i = 1; i<entrada2.length; i++){
-        (Tabla[0]).push(estado2[i].nombre);
-        (Tabla[1]).push(ClausuraEpsilon(entrada2, estado2 , estado2[i].nombre));
-    }
-    return Tabla;
-}
-
-function BuscarEstado(estado, arregloEstados){
-    for (let i=0; i<arregloEstados.length; i++){
-        if(arregloEstados[i]===estado){
-             return true;
-        }
-    }
-    return false
-}
-    
-function ClausuraEpsilon(EstadosEntrada, Estadosinfo, Estado){  
-    let EpsilonFinal = false;
-    let EpsilonCaminos = [];
-    let recorrerEpsilon = 0;
-    let InfoEstadoActual=Estadosinfo[EstadosEntrada.indexOf(Estado)];
-    let PosActual=EstadosEntrada.indexOf(Estado)
-    if(InfoEstadoActual.epsilon[0]==null){
-        EpsilonCaminos[0]=null;
-        return EpsilonCaminos;
-    }
-    while(!EpsilonFinal){
-        if(Estadosinfo[PosActual].epsilon[0] != null){
-            for (let i=0; i<Estadosinfo[PosActual].epsilon.length ; i++){
-                if((!BuscarEstado(Estadosinfo[PosActual].epsilon[i],EpsilonCaminos)) && (Estado != Estadosinfo[PosActual].epsilon[i])){
-                        EpsilonCaminos.push(Estadosinfo[PosActual].epsilon[i]); 
-                    }
-                }
-            }       
-            PosActual=EstadosEntrada.indexOf(EpsilonCaminos[recorrerEpsilon]);
-            InfoEstadoActual=Estadosinfo[PosActual];
-            recorrerEpsilon++;
-            if(recorrerEpsilon>EpsilonCaminos.length){
-                EpsilonFinal=true;
-            }
-        }
-        return EpsilonCaminos;
-    }
-//Ejemplo ejecucion funcion
-console.log("Camino Epsilon")
-console.log(ClausuraEpsilon(AFDejemplo.est_entrada, AFDejemplo.arr_estados, "q0"))
-console.log(Tabla_Epsilon(AFDejemplo.arr_estados,AFDejemplo.est_entrada))
-console.log(Tabla_Transición(AFDejemplo.arr_estados,AFDejemplo.est_entrada,AFDejemplo.arr_alfabeto)) */
