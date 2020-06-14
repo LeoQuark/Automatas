@@ -281,8 +281,8 @@ function crearAutomata(tipoautomata,entrada,alfabeto,inicial,finales,Estados,est
         estado=[];
     }
     var automata = new Quintupla(entrada,alfabeto,inicial,finales,Estados);
-    return automata;
-    // console.log(automata);  
+    console.log(automata);
+    return automata;  
 }
 
 /*----Crear tabla de transicion para mostrar los resultados----*/
@@ -357,25 +357,40 @@ function pregunta1(){
     }
 }
 
-function pregunta2(){
-    const resumenAutomatas = document.querySelector('#resumenAutomatas'),
-        transicionComplemento = document.querySelector('#transicionComplemento'),
-        transicionUnion = document.querySelector('#transicionUnion');
+
+const resultado2 = document.querySelector('#resultado2');
+resultado2.addEventListener('click',pregunta2);
+
+function pregunta2(e){
+    e.preventDefault();
+    // const para el primer automata
+    const resumenAutomatas1 = document.querySelector('#resumenAutomatas1'),
+        transicionComplemento1 = document.querySelector('#transicionComplemento1'),
+        transicionUnion1 = document.querySelector('#transicionUnion1');
+
+    // const para el segundo automata
+    const resumenAutomatas2 = document.querySelector('#resumenAutomatas2'),
+        transicionComplemento2 = document.querySelector('#transicionComplemento2'),
+        transicionUnion2 = document.querySelector('#transicionUnion2');
+      
     let complemento1, complemento2, union1, union2;
+
     if(tipoAutomata2.value == 'AFD' && tipoAutomata2.value == 'AFD'){  
         let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se procede a obtener un autómata a partir del complemento, unión, concatenación e intersección entre ambos autómatas ingresados.</p>`;
         //primer automata AFD
         let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento1 = complemento(AUTOMATA1);
-        resumenAutomatas.innerHTML = descripcion +`<br>`+ titulo;
-        crearTablaTransicionResultados(complemento1,transicionComplemento);
+        resumenAutomatas1.innerHTML = descripcion +`<br>`+ titulo;
+        crearTablaTransicionResultados(complemento1,transicionComplemento1);
 
         //segundo automata AFD
         let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento2 = complemento(AUTOMATA2);
-        // resumenAutomatas.innerHTML = descripcion + titulo;
-        // crearTablaTransicionResultados(complemento1,transicionComplemento);
+        resumenAutomatas2.innerHTML = titulo;
+        crearTablaTransicionResultados(complemento1,transicionComplemento2);
     }
+
+
     if(tipoAutomata.value == 'AFND' && tipoAutomata2.value == 'AFND'){
         let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se debe proceder a tranformar ambos autómatas a su <strong>AFD</strong> equivalente:</p>`;
         //primer automata AFND
@@ -409,6 +424,7 @@ function pregunta2(){
         let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
         complemento2 = complemento(AUTOMATA2);
     }
+    resultado2.disabled = true;
 }
 
 
