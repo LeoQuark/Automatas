@@ -1061,13 +1061,15 @@ function Union(Automata1, Automata2){ //va a retornar la union de los dos automa
 
 /*-------Concatenación-------*/
 /*--Función que concatena dos autómatas (por ahora funciona con ambos autómatas de igual alfabeto)*/
-function Concatenacion (a, b){
+function Concatenacion (auto1, auto2){
+    var a = JSON.parse(JSON.stringify(auto1));
+    var b = JSON.parse(JSON.stringify(auto2));
     var entradaConcatenacion, alfabetoConcatenacion, inicialConcatenacion;      //Se crean variables
     var finalConcatenacion, estadoConcatenacion = [];
     var aux, contador = 0;
     aux = a.est_entrada + "," + b.est_entrada;      //Concatenación de los parámetros
     entradaConcatenacion = aux.split(",");
-    aux = a.arr_alfabeto + "," + "epsilon";
+    aux = a.arr_alfabeto + "," + "ε";
     alfabetoConcatenacion = aux.split(",");
     inicialConcatenacion = a.est_inicial;
     aux = a.est_finales + "," + b.est_finales;
@@ -1102,8 +1104,10 @@ function Concatenacion (a, b){
             AFDConcatenacion.arr_estados[j].final = false;
         }
     }
-    return AFDConcatenacion;  //Se retorna el autómata para su posterior utilización sin afectar al autómata AFDejemplo uwu
+    /*console.log(AFDConcatenacion);*/
+    return JSON.parse(JSON.stringify(AFDConcatenacion));
 }
+/*Para llamar Concatenación: Concatenacion(AUTOMATA1, AUTOMATA2);*/
 
 //AFND A AFD
 //AUTOMATA FINITO NO DETERMINISTA //
