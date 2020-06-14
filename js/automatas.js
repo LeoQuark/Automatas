@@ -411,70 +411,6 @@ function pregunta2(){
     }
 }
 
-
-/*--------AFD O AFND---------*/
-/*function AFDoAFND(AUTOMATA){
-    for(let i=0;i<(AUTOMATA.arr_estados).length;i++){
-    }
-}*/
-
-/*--------------EJEMPLOOOOO-----------------------*/
-//AUTOMATA FINITO DETERMINISTA
-//EJEMPLO1
-/*
-var entrada=["q1","q2","q3","q4","q5"], alfabeto=["a","b"], inicial= ["q5"], final= ["q2","q3","q4","q5"]
-var estado=[]
-estado[0]= {nombre:"q5",final:true ,estado_to:["q4","q3"]}
-estado[1]= {nombre:"q4",final:true,estado_to:["q4","q2"]}
-estado[2]= {nombre:"q3",final:true,estado_to:["q4","q1"]}
-estado[3]= {nombre:"q2",final:true,estado_to:["q4","q1"]}
-estado[4]= {nombre:"q1",final:false,estado_to:["q1","q1"]}  */
-//EJEMPLO 2 
-/*
-var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1","q3"]
-var estado=[]
-estado[0]= {nombre:"q0",final:false ,estado_to:["q1","q3"]}
-estado[1]= {nombre:"q1",final:true,estado_to:["q2","q1"]}
-estado[2]= {nombre:"q2",final:false,estado_to:["q1","q2"]}
-estado[3]= {nombre:"q3",final:true,estado_to:["q4","q3"]}
-estado[4]= {nombre:"q4",final:false,estado_to:["q3","q4"]} 
-*/
-//EJEMPLO 3
-/*
-var entrada=["q","q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q"], final= ["q1","q3"]
-var estado=[]
-estado[0]= {nombre:"q",final:false ,estado_to:["q0","q0"]}
-estado[1]= {nombre:"q0",final:false ,estado_to:["q1","q3"]}
-estado[2]= {nombre:"q1",final:true,estado_to:["q2","q1"]}
-estado[3]= {nombre:"q2",final:false,estado_to:["q1","q2"]}
-estado[4]= {nombre:"q3",final:true,estado_to:["q4","q3"]}
-estado[5]= {nombre:"q4",final:false,estado_to:["q3","q4"]} 
-*/
-//EJEMPLO 4
-var entrada=["q0","q1","q2","q3"], alfabeto=["0","1"], inicial= ["q0"], final= ["q0","q1","q3"]
-var estado=[]
-estado[0]= {nombre:"q0",final:true ,estado_to:["q1","q3"]}
-estado[1]= {nombre:"q1",final:true ,estado_to:["q2","q3"]}
-estado[2]= {nombre:"q2",final:false,estado_to:["q2","q2"]}
-estado[3]= {nombre:"q3",final:true,estado_to:["q3","q3"]}
-//EJEMPLO 5 AFND
-/*
-var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q0","q1"]
-var estado=[]
-estado[0]= {nombre:"q0",final:true ,estado_to:["q1","q3"]}
-estado[1]= {nombre:"q1",final:true ,estado_to:["q2","q3"]}
-estado[2]= {nombre:"q2",final:false,estado_to:["q2","q2"]}
-estado[3]= {nombre:"q3",final:true,estado_to:["q3","q3"]} */
-
-var AFDejemplo = {
-    est_entrada: entrada,
-    arr_alfabeto: alfabeto,
-    est_inicial: inicial,
-    est_finales: final,
-    arr_estados : estado,
-}
-//console.log("EJEMPLO AFN",AFDejemplo)
-
 /*-----------Simplificacion-----------------*/
 /*Funcion para simplificar un automata*/ 
 
@@ -497,7 +433,6 @@ function buscariEstado(nom_estado,AFDejemplo){
         }
     }
 }
-
 function semiMatriz(AFDejemplo,matriz,estado1,estado2){
     console.log("Funcion semiMatriz")  
     var indice = (AFDejemplo.est_entrada).length, aux_m =[],aux=1, e1, e2
@@ -507,93 +442,326 @@ function semiMatriz(AFDejemplo,matriz,estado1,estado2){
             console.log("estado1",estado1[i], "estado2", estado2[j])
             e1=buscariEstado(estado1[i],AFDejemplo), e2=buscariEstado(estado2[j],AFDejemplo) 
             console.log("e1,e2 ",e1,e2)
+            if(((AFDejemplo.arr_estados)[e1]).final !== (((AFDejemplo.arr_estados)[e2]).final)){
+            console.log(((AFDejemplo.arr_estados)[e1]).final, " - ", (((AFDejemplo.arr_estados)[e2]).final))
+                aux_m[j]="x";
+                console.log("estados finales diferentes, x")
+           }
+           else{
+                var f1,f2, k1,k2, cont =0
+                //console.log("k ",(AFDejemplo.arr_alfabeto).length )
+                for(let k=0;k<(AFDejemplo.arr_alfabeto).length;k++){
+                    f1=(((AFDejemplo.arr_estados)[e1]).estado_to)[k], f2=(((AFDejemplo.arr_estados)[e2]).estado_to)[k] //f1,f2 estados_to de e1 y e2 
+                    console.log(f1,f2)
+                    if(f1==null || f2==null){
+                        aux_m[j]="x";
+                        console.log("null x")
+                    }
+                    else{
+                        k1=buscariEstado(f1,AFDejemplo), k2=buscariEstado(f2,AFDejemplo)
+                        console.log("k1,k2 ",k1,k2)
+                        if(((AFDejemplo.arr_estados)[k1]).final === true && ((AFDejemplo.arr_estados)[k2]).final=== true || ((AFDejemplo.arr_estados)[k1]).final === false && ((AFDejemplo.arr_estados)[k2]).final=== false){
+                            cont++;
+                        }
+                    }
+                }
+                if(cont === (AFDejemplo.arr_alfabeto).length ){
+                    aux_m[j]= [estado1[i],estado2[j]];
+                }
+                else
+                    aux_m[j]="x"
+           }
+        }
+        matriz.push(aux_m)
+        aux_m = []
+        aux++;   
+    }
+}
+
+function AFDSimplificado(AFD,matriz){
+    console.log(" AFDSimplificado, matriz simplificado",matriz)
+    var aux=1, simplificado= true, n_estados = [], aux_m, AFDSimplificado
+    for(let i=0;i<matriz.length;i++){
+        console.log(aux, matriz.length+1)
+        for (let j=0;j<aux && aux<matriz.length+1 ;j++){
+            console.log("i",i,"j",j)
+            for(let k=0;k<matriz[i][j].length;k++){
+                console.log(matriz[i][j][k], "x")
+                if((matriz[i][j])[k] != "x"){  //
+                    console.log(matriz[i][j][k])
+                    simplificado = false
+                    if(k==0){
+                        aux_m=matriz[i][j]
+                        n_estados.push(matriz[i][j]);
+                        console.log(matriz[i][j][k], simplificado)
+                    }  
+                }
+            }
+        }
+        aux++;
+    }
+    console.log("simplificado", simplificado)
+    console.log("estados simplificados", n_estados)
+    /*------ Quintupla automata simplificado------*/
+    if(simplificado === true){
+        //return AFD;
+    }
+    else{
+        var inicial = [], alfabeto = [], estados = [], existe = false, finales = [], transiciones = []
+        //INICIAL
+        for(let i=0;i<n_estados.length;i++){
+            console.log(n_estados[i], "-" ,AFD.est_inicial[0])
+            for(let j=0;j<n_estados[i].length;j++){
+                if(AFD.est_inicial[0] === n_estados[i][j]){
+                    inicial.push(n_estados[i])
+                    existe=true //no esta dentro de n_estados
+                    console.log("iguales")
+                }
+            }
+        }
+        //ALFABETO
+        alfabeto = AFD.arr_alfabeto
+        //ESTADOS
+        if(existe===false){
+            estados.push(AFD.est_inicial[0])
+            inicial.push(AFD.est_inicial[0])
+        }
+        for(let i=0;i<n_estados.length;i++){
+            estados.push(n_estados[i])
+        }
+        console.log(inicial);
+        console.log(estados);
+        //ESTADOS FINALES
+        let k;
+        if(existe===false){k=1} else{k=0}
+        for(k;k<estados.length;k++){
+            var b=(estados[k]).length
+            //console.log(b)
+            for(let l=0;l<(AFD.est_finales).length;l++){
+                //console.log(estados[k][b], "--", AFD.est_finales[l])
+                if(estados[k][b-2]===AFD.est_finales[l] || estados[k][b-2]===AFD.est_finales[l] ){
+                    finales.push(estados[k])
+                }   
+            }   
+        }
+        console.log(finales)
+    }
+    transiciones = Transiciones(AFD,estado,existe)
+    //console.log("transiciones",transiciones)
+    var AFDSimplificado = new Quintupla(estados,alfabeto,inicial,finales,transiciones)
+    return AFDSimplificado
+}
+function Transiciones(AFD,estados,bool){
+    console.log(estados)
+    var arr_estados = []
+    let i
+    if(bool == false){
+        i=1
+        for(let j=0;j<(AFD.arr_estados).length;j++){
+            if(estados[0] === ((AFD.arr_estados)[j]).nombre){
+                console.log((AFD.arr_estados)[j])
+                arr_estados.push((AFD.arr_estados)[j])
+            }
         }
     }
+    else{i=0}
+    for(i;i<estados.length;i++){
+        var aux= estados[i].length
+        for(let j=0;j<(AFD.arr_estados).length;j++){
+            if(estados[i][0] === ((AFD.arr_estados)[j]).nombre){
+                var aux_estado = (AFD.arr_estados)[j]
+                aux_estado.nombre=estados[i]
+                arr_estados.push(aux_estado)
+            }
+        }
+    }
+    console.log(arr_estados)
+    return arr_estados
+}
+function Simplificar(AFDejemplo){
+    // console.log("Funcion Simplificar")
+    var matriz = [], estado1 = [], estado2 =[], AFDsimp;
+    var ar_estados= AFDejemplo.est_entrada  //Todos los estados disponibles
+    arr_estados(estado1,estado2,ar_estados.length,ar_estados)
+    semiMatriz(AFDejemplo,matriz,estado2,estado1)
+    AFDsimp = AFDSimplificado(AFDejemplo, matriz)
+    // console.log("AFD SIMPLIFICADO",AFDsimp)
+    return AFDsimp;
+}
+// Simplificar(AFDejemplo)
+
+//COMPLEMENTO, UNION, CONCATENACION, INTERSECCION
+/*------------Complemento-----------*/
+function complemento(AFD){
+    var AFDComplemento = JSON.parse(JSON.stringify(AFD)), n_finales = []
+    for(let i=0;i<(AFDComplemento.arr_estados).length;i++){
+        if(((AFDComplemento.arr_estados)[i]).final === true){
+            ((AFDComplemento.arr_estados)[i]).final = false
+        }
+        else{
+            ((AFDComplemento.arr_estados)[i]).final = true
+        }
+    }
+    for(let j=0;j<(AFDComplemento.arr_estados).length;j++){
+        if(((AFDComplemento.arr_estados)[j]).final === true){
+            n_finales.push(((AFDComplemento.arr_estados)[j]).nombre)
+        } 
+    }
+    AFDComplemento.est_finales = n_finales;
+    var AFDcomp = new Quintupla;
+    AFDcomp = AFDComplemento;
+    console.log('AFD Complemento:',AFDcomp);
+    return AFDcomp;
+}
+/*---------UNION----------------*/
+function UnirListas(Lista1, Lista2){
+    var ListaFinal = [], ListaAux1 = []
+    for(let i=0; i< Lista1.length; i++){
+        ListaAux1.push(Lista1[i])
+    }
+    for(let j=0; j< Lista2.length; j++){
+        for(let k=0; k< ListaAux1.length; k++){
+            if(Lista2[j] === ListaAux1[k]){
+                Lista2.splice(j,1)
+            }
+        }
+    }
+    ListaFinal = ListaAux1.concat(Lista2)
+    return ListaFinal
+}
+function Estado_uwu(EstadoA,Estados, Alf,Alfabeto,AllEstados){ //retorna un objeto Estado
+    var Nombre, Final, Estado_to = [], Estados_tof = [], Indice, Indice_Aux
+    Indice =  AllEstados.indexOf(EstadoA.nombre)
+    Nombre = Estados[Indice]
+    Final = EstadoA.final
+    for(let i=0; i<(EstadoA.estado_to).length; i++){
+        Indice_Aux = AllEstados.indexOf((EstadoA.estado_to)[i])
+        Estado_to.push(Estados[Indice_Aux])
+    }
+    for(let x=0; x<Alf.length; x++){
+        Estados_tof[x] = null
+    }
+    for(let j=0; j<Alf.length; j++){
+        for(let k=0; k<Alfabeto.length; k++){
+            if(Alf[j] === Alfabeto[k]){
+                Estados_tof[j]=Estado_to[k]
+            }
+        }
+    }
+    var Aux = new Estado(Nombre,Final,Estados_tof)
+    return Aux
+}
+function Renombrar(A1,A2, Alf, Arr_Estados, Iniciales){
+    var Estado1 = A1.arr_estados, Estado2 = A2.arr_estados
+    var Estado_Aux1 = [], Estado_Aux2 = [], Estados = [], Asc = 66
+    //Estados
+    for(let i=0; i<Estado1.length; i++){
+            Estado_Aux1.push(String.fromCharCode(Asc+i))
+    }
+    for(let j = Estado1.length; j<Estado2.length+Estado1.length; j++){
+        Estado_Aux2.push(String.fromCharCode(Asc+j)) 
+    }
+    Estados = Estado_Aux1.concat(Estado_Aux2)
+    console.log(Estados)
+    //Arr_Estados
+    for(let k=0; k<Estado1.length; k++){
+        if(k < Estado1.length){
+            Arr_Estados.push(Estado_uwu(Estado1[k],Estado_Aux1,Alf,A1.arr_alfabeto,A1.est_entrada))
+        }
+    }
+    for(let l=0; l<Estado2.length; l++){
+            Arr_Estados.push(Estado_uwu(Estado2[l],Estado_Aux2,Alf,A2.arr_alfabeto,A2.est_entrada))
+    }
+
+    var Nombre1, Nombre2, Indice1, Indice2
+    var Nombre1 = A1.est_inicial, Nombre2 = A2.est_inicial
+    Indice1 = A1.est_entrada.indexOf(Nombre1[0])
+    Indice2 = A2.est_entrada.indexOf(Nombre2[0])
+    Iniciales.push(Estados[Indice1]); Iniciales.push(Estados[(Estado1.length)+Indice2])
+    return Estados
 
 }
-
-/*--------------EJEMPLOOOOO-----------------------*/
-//AUTOMATA FINITO DETERMINISTA
-//EJEMPLO1
-/*
-var entrada=["q1","q2","q3","q4","q5"], alfabeto=["a","b"], inicial= ["q5"], final= ["q2","q3","q4","q5"]
-var estado=[]
-estado[0]= {nombre:"q5",final:true ,estado_to:["q4","q3"]}
-estado[1]= {nombre:"q4",final:true,estado_to:["q4","q2"]}
-estado[2]= {nombre:"q3",final:true,estado_to:["q4","q1"]}
-estado[3]= {nombre:"q2",final:true,estado_to:["q4","q1"]}
-estado[4]= {nombre:"q1",final:false,estado_to:["q1","q1"]}  */
-//EJEMPLO 2 
-/*
-var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1","q3"]
-var estado=[]
-estado[0]= {nombre:"q0",final:false ,estado_to:["q1","q3"]}
-estado[1]= {nombre:"q1",final:true,estado_to:["q2","q1"]}
-estado[2]= {nombre:"q2",final:false,estado_to:["q1","q2"]}
-estado[3]= {nombre:"q3",final:true,estado_to:["q4","q3"]}
-estado[4]= {nombre:"q4",final:false,estado_to:["q3","q4"]} 
-*/
-//EJEMPLO 3
-/*
-var entrada=["q","q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q"], final= ["q1","q3"]
-var estado=[]
-estado[0]= {nombre:"q",final:false ,estado_to:["q0","q0"]}
-estado[1]= {nombre:"q0",final:false ,estado_to:["q1","q3"]}
-estado[2]= {nombre:"q1",final:true,estado_to:["q2","q1"]}
-estado[3]= {nombre:"q2",final:false,estado_to:["q1","q2"]}
-estado[4]= {nombre:"q3",final:true,estado_to:["q4","q3"]}
-estado[5]= {nombre:"q4",final:false,estado_to:["q3","q4"]} 
-*/
-//EJEMPLO 4
-var entrada=["q0","q1","q2","q3"], alfabeto=["0","1"], inicial= ["q0"], final= ["q0","q1","q3"]
-var estado=[]
-estado[0]= {nombre:"q0",final:true ,estado_to:["q1","q3"]}
-estado[1]= {nombre:"q1",final:true ,estado_to:["q2","q3"]}
-estado[2]= {nombre:"q2",final:false,estado_to:["q2","q2"]}
-estado[3]= {nombre:"q3",final:true,estado_to:["q3","q3"]}
-
-//EJEMPLO 5 AFND
-/*
-var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q0","q1"]
-var estado=[]
-estado[0]= {nombre:"q0",final:true ,estado_to:["q1","q3"]}
-estado[1]= {nombre:"q1",final:true ,estado_to:["q2","q3"]}
-estado[2]= {nombre:"q2",final:false,estado_to:["q2","q2"]}
-estado[3]= {nombre:"q3",final:true,estado_to:["q3","q3"]} */
-
-var AFDejemplo = {
-    est_entrada: entrada,
-    arr_alfabeto: alfabeto,
-    est_inicial: inicial,
-    est_finales: final,
-    arr_estados : estado,
+function Union(Automata1, Automata2){ //va a retornar la union de los dos automatas
+    console.log("Union")
+    var Alfabeto = [], Inicial = [], EstadoInicial_to = [], Iniciales = [], Finales = []
+    //Alfabeto
+    Alfabeto = UnirListas(Automata1.arr_alfabeto,Automata2.arr_alfabeto)
+    Alfabeto.push("Ɛ")
+    //Inicial
+    Inicial = [String.fromCharCode(65)]
+    //Entrada y arr_estados
+    var Arr_Estados = [], Estados = []
+    Estados = Renombrar(Automata1, Automata2, Alfabeto, Arr_Estados, Iniciales)
+    Estados.unshift(Inicial[0])
+    for(let i=0; i<Alfabeto.length; i++){
+        EstadoInicial_to.push(null)
+    }
+    EstadoInicial_to[Alfabeto.length-1] = Iniciales
+    var EstadoInicial = new Estado(Inicial[0],false,EstadoInicial_to)
+    Arr_Estados.unshift(EstadoInicial)
+    console.log(Arr_Estados)
+    //Finales
+    for(let j=0; j<Arr_Estados.length; j++){
+        if((Arr_Estados[j]).final === true){
+            Finales.push((Arr_Estados[j]).nombre)
+        }
+    }
+    //Union de los Automatas
+    var A1uA2 = new Quintupla(Estados,Alfabeto,Inicial,Finales,Arr_Estados)
+    console.log(A1uA2)
 }
-//console.log("EJEMPLO AFN",AFDejemplo)
+//PARA LLAMAR A LA FUNCION : UNION(AUTOMATA1,AUTOMATA2)
 
-/*--------------EJEMPLOOOOO-----------------------*
-//AUTOMATA FINITO DETERMINISTA
-var entrada=["q1","q2","q3","q4","q5"], alfabeto=["a","b"], inicial= ["q5"], final= ["q2","q3","q4","q5"]
-var estado=[]
-estado[0]= {nombre:"q5",final:true ,estado_to:["q4","q3"]}
-estado[1]= {nombre:"q4",final:true,estado_to:["q4","q2"]}
-estado[2]= {nombre:"q3",final:true,estado_to:["q4","q1"]}
-estado[3]= {nombre:"q2",final:true,estado_to:["q4","q1"]}
-estado[4]= {nombre:"q1",final:false,estado_to:[null,"q1"]}
 
-var AFDejemplo = {
-    est_entrada: entrada,
-    arr_alfabeto: alfabeto,
-    est_iniciales: inicial,
-    est_finales: final,
-    arr_estados : estado,
+/*-------Concatenación-------*/
+/*--Función que concatena dos autómatas (por ahora funciona con ambos autómatas de igual alfabeto)*/
+function Concatenacion (a, b){
+    var entradaConcatenacion, alfabetoConcatenacion, inicialConcatenacion;      //Se crean variables
+    var finalConcatenacion, estadoConcatenacion = [];
+    var aux, contador = 0;
+    aux = a.est_entrada + "," + b.est_entrada;      //Concatenación de los parámetros
+    entradaConcatenacion = aux.split(",");
+    aux = a.arr_alfabeto + "," + "epsilon";
+    alfabetoConcatenacion = aux.split(",");
+    inicialConcatenacion = a.est_inicial;
+    aux = a.est_finales + "," + b.est_finales;
+    finalConcatenacion = aux.split(",");
+    for (var i=0;i<a.arr_estados.length;i++){
+        estadoConcatenacion[contador] = a.arr_estados[i];
+        contador++;
+    }
+    for (var i=0;i<b.arr_estados.length;i++){
+        estadoConcatenacion[contador] = b.arr_estados[i];
+        contador++;
+    }
+    var AFDConcatenacion = {                        //Se crea un nuevo autómata definido
+        est_entrada: entradaConcatenacion,
+        arr_alfabeto: alfabetoConcatenacion,
+        est_inicial: inicialConcatenacion,
+        est_finales: finalConcatenacion,
+        arr_estados : estadoConcatenacion,
+    }
+    for (var m=0;m<AFDConcatenacion.arr_estados.length;m++){
+        AFDConcatenacion.arr_estados[m].estado_to[AFDConcatenacion.arr_alfabeto.length-1] = null;
+    }
+    //Se concatenan los estados finales del autómata A con el inicial del autómata B
+    for (var j=0;j<a.arr_estados.length;j++){   
+        if (AFDConcatenacion.arr_estados[j].final == true){
+            AFDConcatenacion.arr_estados[j].estado_to[AFDConcatenacion.arr_estados[j].estado_to.length-1] = b.est_inicial[0];
+        }
+    }
+    //Se cambia el estado del autómata concatenado
+    for (var j=0;j<a.arr_estados.length;j++){   
+        if (AFDConcatenacion.arr_estados[j].final == true){
+            AFDConcatenacion.arr_estados[j].final = false;
+        }
+    }
+    return AFDConcatenacion;  //Se retorna el autómata para su posterior utilización sin afectar al autómata AFDejemplo uwu
 }
-console.log("EJEMPLO AFN")
-console.log(AFDejemplo)
-
------------------------------------------------------*/
 
 /*--------------EJEMPLOOOOO  2 -----------------------*/
 //AUTOMATA FINITO NO DETERMINISTA //
+/*
 var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1"]
 var estado=[];
 estado[0]= {nombre:"q0",final:false,estado_to:[["q2","q1"],"q0"],epsilon:["q1"]};
@@ -612,9 +780,8 @@ var AFDejemplo = {
 console.log("EJEMPLO AFN")
 console.log(AFDejemplo)
 
-/*-----------------------------------------------------*/
-
 /*-------------------Equivalencia    ------------------*/
+/*
 function wea(estado){
    console.log(Array.isArray(estado[0].epsilon[0]))
 
@@ -691,6 +858,7 @@ function buscar_alfab(entrada2, estado2, nomb, alfab){
 /*-----------------------------------------------------*/
 
 /*-------------------Equivalencia    ------------------*/
+/*
 var tablaTransiciones;
 var tablaClausuraEpsilon = [];
 for (let i = 0; i < AFDejemplo.est_entrada.length; i++){
@@ -874,259 +1042,3 @@ console.log("Camino Epsilon")
 console.log(ClausuraEpsilon(AFDejemplo.est_entrada, AFDejemplo.arr_estados, "q0"))
 console.log(Tabla_Epsilon(AFDejemplo.arr_estados,AFDejemplo.est_entrada))
 console.log(Tabla_Transición(AFDejemplo.arr_estados,AFDejemplo.est_entrada,AFDejemplo.arr_alfabeto))
-
-/*-----------Simplificacion-----------------*/
-/*Funcion para simplificar un automata*/ 
-
-function arr_estados(matriz1, matriz2,indice,afd){ //
-    //console.log("Funcion arr_estados")  
-    for (let i=0;i<indice-1;i++){
-        matriz1[i]=afd[i]
-    }
-    for (let j=1;j<indice;j++){
-        matriz2[j-1]=afd[j]
-    }
-}
-function buscariEstado(nom_estado,AFDejemplo){
-    //console.log("Funcion buscariEstados") //Busca el indice de un estado en arr_estados de la Quintupla del automata
-    //console.log((AFDejemplo.arr_estados).length)
-    for (let i=0;i<(AFDejemplo.arr_estados).length;i++){
-        if((AFDejemplo.arr_estados)[i].nombre === nom_estado){
-            //console.log(i)
-            return i;
-        }
-    }
-}
-function semiMatriz(AFDejemplo,matriz,estado1,estado2){
-    console.log("Funcion semiMatriz")  
-    var indice = (AFDejemplo.est_entrada).length, aux_m =[],aux=1, e1, e2
-    for (let i=0;i<indice-1;i++){
-        for (let j=0;j<aux && aux<indice ;j++){ //columna, creo?
-            //console.log("aux",aux)
-            console.log("estado1",estado1[i], "estado2", estado2[j])
-            e1=buscariEstado(estado1[i],AFDejemplo), e2=buscariEstado(estado2[j],AFDejemplo) 
-            console.log("e1,e2 ",e1,e2)
-            if(((AFDejemplo.arr_estados)[e1]).final !== (((AFDejemplo.arr_estados)[e2]).final)){
-            console.log(((AFDejemplo.arr_estados)[e1]).final, " - ", (((AFDejemplo.arr_estados)[e2]).final))
-                aux_m[j]="x";
-                console.log("estados finales diferentes, x")
-           }
-           else{
-                var f1,f2, k1,k2, cont =0
-                //console.log("k ",(AFDejemplo.arr_alfabeto).length )
-                for(let k=0;k<(AFDejemplo.arr_alfabeto).length;k++){
-                    f1=(((AFDejemplo.arr_estados)[e1]).estado_to)[k], f2=(((AFDejemplo.arr_estados)[e2]).estado_to)[k] //f1,f2 estados_to de e1 y e2 
-                    console.log(f1,f2)
-                    if(f1==null || f2==null){
-                        aux_m[j]="x";
-                        console.log("null x")
-                    }
-                    else{
-                        k1=buscariEstado(f1,AFDejemplo), k2=buscariEstado(f2,AFDejemplo)
-                        console.log("k1,k2 ",k1,k2)
-                        if(((AFDejemplo.arr_estados)[k1]).final === true && ((AFDejemplo.arr_estados)[k2]).final=== true || ((AFDejemplo.arr_estados)[k1]).final === false && ((AFDejemplo.arr_estados)[k2]).final=== false){
-                            cont++;
-                        }
-                    }
-                }
-                if(cont === (AFDejemplo.arr_alfabeto).length ){
-                    aux_m[j]= [estado1[i],estado2[j]];
-                }
-                else
-                    aux_m[j]="x"
-           }
-        }
-        matriz.push(aux_m)
-        aux_m = []
-        aux++;   
-    }
-}
-
-function AFDSimplificado(AFD,matriz){
-    console.log(" AFDSimplificado, matriz simplificado",matriz)
-    var aux=1, simplificado= true, n_estados = [], aux_m, AFDSimplificado
-    for(let i=0;i<matriz.length;i++){
-        console.log(aux, matriz.length+1)
-        for (let j=0;j<aux && aux<matriz.length+1 ;j++){
-            console.log("i",i,"j",j)
-            for(let k=0;k<matriz[i][j].length;k++){
-                console.log(matriz[i][j][k], "x")
-                if((matriz[i][j])[k] != "x"){  //
-                    console.log(matriz[i][j][k])
-                    simplificado = false
-                    if(k==0){
-                        aux_m=matriz[i][j]
-                        n_estados.push(matriz[i][j]);
-                        console.log(matriz[i][j][k], simplificado)
-                    }  
-                }
-            }
-        }
-        aux++;
-    }
-    console.log("simplificado", simplificado)
-    console.log("estados simplificados", n_estados)
-    /*------ Quintupla automata simplificado------*/
-    if(simplificado === true){
-        //return AFD;
-    }
-    else{
-        var inicial = [], alfabeto = [], estados = [], existe = false, finales = [], transiciones = []
-        //INICIAL
-        for(let i=0;i<n_estados.length;i++){
-            console.log(n_estados[i], "-" ,AFD.est_inicial[0])
-            for(let j=0;j<n_estados[i].length;j++){
-                if(AFD.est_inicial[0] === n_estados[i][j]){
-                    inicial.push(n_estados[i])
-                    existe=true //no esta dentro de n_estados
-                    console.log("iguales")
-                }
-            }
-        }
-        //ALFABETO
-        alfabeto = AFD.arr_alfabeto
-        //ESTADOS
-        if(existe===false){
-            estados.push(AFD.est_inicial[0])
-            inicial.push(AFD.est_inicial[0])
-        }
-        for(let i=0;i<n_estados.length;i++){
-            estados.push(n_estados[i])
-        }
-        console.log(inicial);
-        console.log(estados);
-        //ESTADOS FINALES
-        let k;
-        if(existe===false){k=1} else{k=0}
-        for(k;k<estados.length;k++){
-            var b=(estados[k]).length
-            //console.log(b)
-            for(let l=0;l<(AFD.est_finales).length;l++){
-                //console.log(estados[k][b], "--", AFD.est_finales[l])
-                if(estados[k][b-2]===AFD.est_finales[l] || estados[k][b-2]===AFD.est_finales[l] ){
-                    finales.push(estados[k])
-                }   
-            }   
-        }
-        console.log(finales)
-    }
-    transiciones = Transiciones(AFD,estado,existe)
-    //console.log("transiciones",transiciones)
-    var AFDSimplificado = new Quintupla(estados,alfabeto,inicial,finales,transiciones)
-    return AFDSimplificado
-}
-function Transiciones(AFD,estados,bool){
-    console.log(estados)
-    var arr_estados = []
-    let i
-    if(bool == false){
-        i=1
-        for(let j=0;j<(AFD.arr_estados).length;j++){
-            if(estados[0] === ((AFD.arr_estados)[j]).nombre){
-                console.log((AFD.arr_estados)[j])
-                arr_estados.push((AFD.arr_estados)[j])
-            }
-        }
-    }
-    else{i=0}
-    for(i;i<estados.length;i++){
-        var aux= estados[i].length
-        for(let j=0;j<(AFD.arr_estados).length;j++){
-            if(estados[i][0] === ((AFD.arr_estados)[j]).nombre){
-                var aux_estado = (AFD.arr_estados)[j]
-                aux_estado.nombre=estados[i]
-                arr_estados.push(aux_estado)
-            }
-        }
-    }
-    console.log(arr_estados)
-    return arr_estados
-}
-function Simplificar(AFDejemplo){
-    // console.log("Funcion Simplificar")
-    var matriz = [], estado1 = [], estado2 =[], AFDsimp;
-    var ar_estados= AFDejemplo.est_entrada  //Todos los estados disponibles
-    arr_estados(estado1,estado2,ar_estados.length,ar_estados)
-    semiMatriz(AFDejemplo,matriz,estado2,estado1)
-    AFDsimp = AFDSimplificado(AFDejemplo, matriz)
-    // console.log("AFD SIMPLIFICADO",AFDsimp)
-    return AFDsimp;
-}
-// Simplificar(AFDejemplo)
-
-/*------------Complemento-----------*/
-function complemento(AFD){
-    var AFDComplemento = JSON.parse(JSON.stringify(AFD)), n_finales = []
-    for(let i=0;i<(AFDComplemento.arr_estados).length;i++){
-        if(((AFDComplemento.arr_estados)[i]).final === true){
-            ((AFDComplemento.arr_estados)[i]).final = false
-        }
-        else{
-            ((AFDComplemento.arr_estados)[i]).final = true
-        }
-    }
-    for(let j=0;j<(AFDComplemento.arr_estados).length;j++){
-        if(((AFDComplemento.arr_estados)[j]).final === true){
-            n_finales.push(((AFDComplemento.arr_estados)[j]).nombre)
-        } 
-    }
-    AFDComplemento.est_finales = n_finales;
-    var AFDcomp = new Quintupla;
-    AFDcomp = AFDComplemento;
-    console.log('AFD Complemento:',AFDcomp);
-    return AFDcomp;
-}
-function llamarComplemento(AFD){
-    var AFDcomp = new Quintupla
-    AFDcomp = complemento(AFD)
-    console.log("AFD ORIGINAL",AFDejemplo)
-    console.log("COMPLEMENTO",AFDcomp)
-}
-//llamarComplemento(AFDejemplo)
-
-/*-------Concatenación-------*/
-/*--Función que concatena dos autómatas (por ahora funciona con ambos autómatas de igual alfabeto)*/
-function Concatenacion (a, b){
-    var entradaConcatenacion, alfabetoConcatenacion, inicialConcatenacion;      //Se crean variables
-    var finalConcatenacion, estadoConcatenacion = [];
-    var aux, contador = 0;
-    aux = a.est_entrada + "," + b.est_entrada;      //Concatenación de los parámetros
-    entradaConcatenacion = aux.split(",");
-    aux = a.arr_alfabeto + "," + "epsilon";
-    alfabetoConcatenacion = aux.split(",");
-    inicialConcatenacion = a.est_inicial;
-    aux = a.est_finales + "," + b.est_finales;
-    finalConcatenacion = aux.split(",");
-    for (var i=0;i<a.arr_estados.length;i++){
-        estadoConcatenacion[contador] = a.arr_estados[i];
-        contador++;
-    }
-    for (var i=0;i<b.arr_estados.length;i++){
-        estadoConcatenacion[contador] = b.arr_estados[i];
-        contador++;
-    }
-    var AFDConcatenacion = {                        //Se crea un nuevo autómata definido
-        est_entrada: entradaConcatenacion,
-        arr_alfabeto: alfabetoConcatenacion,
-        est_inicial: inicialConcatenacion,
-        est_finales: finalConcatenacion,
-        arr_estados : estadoConcatenacion,
-    }
-    for (var m=0;m<AFDConcatenacion.arr_estados.length;m++){
-        AFDConcatenacion.arr_estados[m].estado_to[AFDConcatenacion.arr_alfabeto.length-1] = null;
-    }
-    //Se concatenan los estados finales del autómata A con el inicial del autómata B
-    for (var j=0;j<a.arr_estados.length;j++){   
-        if (AFDConcatenacion.arr_estados[j].final == true){
-            AFDConcatenacion.arr_estados[j].estado_to[AFDConcatenacion.arr_estados[j].estado_to.length-1] = b.est_inicial[0];
-        }
-    }
-    //Se cambia el estado del autómata concatenado
-    for (var j=0;j<a.arr_estados.length;j++){   
-        if (AFDConcatenacion.arr_estados[j].final == true){
-            AFDConcatenacion.arr_estados[j].final = false;
-        }
-    }
-    return AFDConcatenacion;  //Se retorna el autómata para su posterior utilización sin afectar al autómata AFDejemplo uwu
-}
-
