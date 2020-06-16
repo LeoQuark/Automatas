@@ -541,6 +541,7 @@ function pregunta2(){
 
 //AFND A AFD
 //AUTOMATA FINITO NO DETERMINISTA //
+/*
 var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1"]
 var estado=[];
 estado[0]= new EstadoN("q0",false,[["q2","q1"],"q0"],["q1"])
@@ -559,16 +560,9 @@ var AFDejemplo = {
 console.log("EJEMPLO AFN")
 console.log(AFDejemplo)
 
-
+*/
 
 /*-------------------Equivalencia    ------------------*/
-var tablaTransiciones;
-var tablaClausuraEpsilon = [];
-for (let i = 0; i < AFDejemplo.est_entrada.length; i++){
-    tablaClausuraEpsilon.push(ClausuraEpsilon( AFDejemplo.est_entrada, AFDejemplo.arr_estados, AFDejemplo.est_entrada[i]));
-}
-tablaTransiciones = Tabla_Transición(AFDejemplo.arr_estados, AFDejemplo.est_entrada,AFDejemplo.arr_alfabeto)
-
 function compararArreglos(arregloA, arregloB){// se enviaran arreglos ordenados
     if(arregloA.length!=arregloB.length){
         return false
@@ -588,7 +582,7 @@ function ArregloEsta(estado, ArregloEstados){
         }
     }return false;
 }
-function TablaEquivalencia(Transiciones, ClausurasEpsilon, EstadoInicialAutomata){
+function TablaEquivalencia(Transiciones, ClausurasEpsilon, EstadoInicialAutomata,tablaClausuraEpsilon){
     let RecorrerEstados = false;
     let CantidadEstados = 0;
     let cantidadAlfabeto = Transiciones.length-2
@@ -733,13 +727,16 @@ function ClausuraEpsilon(EstadosEntrada, Estadosinfo, Estado){
     let EpsilonCaminos = [];
     let recorrerEpsilon = 0;
     let InfoEstadoActual=Estadosinfo[EstadosEntrada.indexOf(Estado)];
+    console.log(InfoEstadoActual)
     let PosActual=EstadosEntrada.indexOf(Estado)
+    console.log(PosActual)
     if(InfoEstadoActual.epsilon[0]==null){
         EpsilonCaminos[0]=null;
         return EpsilonCaminos;
     }
+    console.log(Estadosinfo[PosActual].epsilon[0])
     while(!EpsilonFinal){
-        if(Estadosinfo[PosActual].epsilon[0] != null){
+        if(Estadosinfo[PosActual].epsilon[0] !== null){
             for (let i=0; i<Estadosinfo[PosActual].epsilon.length ; i++){
                 if((!BuscarEstado(Estadosinfo[PosActual].epsilon[i],EpsilonCaminos)) && (Estado != Estadosinfo[PosActual].epsilon[i])){
                     EpsilonCaminos.push(Estadosinfo[PosActual].epsilon[i]); 
@@ -757,12 +754,18 @@ function ClausuraEpsilon(EstadosEntrada, Estadosinfo, Estado){
 }
 
 function Equivalente(AUTOMATA){
+    var tablaTransiciones, tablaClausuraEpsilon = [];
+    for (let i = 0; i < AUTOMATA.est_entrada.length; i++){
+        tablaClausuraEpsilon.push(ClausuraEpsilon( AUTOMATA.est_entrada, AUTOMATA.arr_estados, AUTOMATA.est_entrada[i]));
+    }
+    tablaTransiciones = Tabla_Transición(AUTOMATA.arr_estados, AUTOMATA.est_entrada,AUTOMATA.arr_alfabeto)
+
     var EpsilonCaminos = [], Tabla = [], TablaTransicion = [], Tabla_Equivalencia = [], AFD;
-    EpsilonCaminos = ClausuraEpsilon(AUTOMATA.est_entrada, AUTOMATA.arr_estados, AUTOMATA.est_inicial[0])
+    EpsilonCaminos = ClausuraEpsilon(AUTOMATA.est_entrada, AUTOMATA.arr_estados, AUTOMATA.est_entrada[0])
     Tabla = Tabla_Epsilon(AUTOMATA.arr_estados,AUTOMATA.est_entrada)
     console.log(Tabla)
     TablaTransicion = Tabla_Transición(AUTOMATA.arr_estados,AUTOMATA.est_entrada,AUTOMATA.arr_alfabeto)
-    Tabla_Equivalencia = TablaEquivalencia(tablaTransiciones, tablaClausuraEpsilon, AUTOMATA.est_inicial)
+    Tabla_Equivalencia = TablaEquivalencia(tablaTransiciones, tablaClausuraEpsilon, AUTOMATA.est_inicial,tablaClausuraEpsilon)
     //console.log(Tabla_Equivalencia)
     AFD = Etiquetado(AUTOMATA,Tabla_Equivalencia,AUTOMATA.arr_alfabeto,Tabla)
     return AFD;
@@ -1125,7 +1128,7 @@ function Estado_uwu(EstadoA,Estados, Alf,Alfabeto,AllEstados){ //retorna un obje
             }
         }
     }
-    var Aux = new EstadoN(Nombre,Final,Estados_tof,null)
+    var Aux = new EstadoN(Nombre,Final,Estados_tof,[null])
     return Aux
 }
 function Renombrar(A1,A2, Alf, Arr_Estados, Iniciales){
