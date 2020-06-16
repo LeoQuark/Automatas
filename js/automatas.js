@@ -459,14 +459,14 @@ function pregunta2(){
     if(tipoAutomata.value == 'AFD' && tipoAutomata2.value == 'AFD'){  
         let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se procede a obtener un autómata a partir del complemento, unión, concatenación e intersección entre ambos autómatas ingresados.</p>`;
 
-        //primer automata AFD
+        //primer automata AFD complemento
         let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento1 = complemento(AUTOMATA1);
         resumenAutomatas1.innerHTML = descripcion +`<br>`+ titulo;
         crearTablaDeEstados(complemento1,tablaEstadosComplemento1);
         crearTablaTransicionResultados(complemento1,transicionComplemento1);
 
-        //segundo automata AFD
+        //segundo automata AFD complemento
         let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento2 = complemento(AUTOMATA2);
         resumenAutomatas2.innerHTML =`<br>`+ titulo2;
@@ -499,43 +499,155 @@ function pregunta2(){
     }
     if(tipoAutomata.value == 'AFND' && tipoAutomata2.value == 'AFND'){
         let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se debe proceder a tranformar ambos autómatas a su <strong>AFD</strong> equivalente</p>`;
-        //primer automata AFND
-        let titulo1 = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
-        resEquivalencia1.innerHTML = descripcion + `<br>` + titulo1;
+        //primer automata AFND a AFD
+        let tituloAFND = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
+        resEquivalencia1.innerHTML = descripcion + `<br>` + tituloAFND;
         equivalente1 = Equivalente(AUTOMATA1);
         crearTablaDeEstados(equivalente1,EstadosEquivalente1);
         crearTablaTransicionResultados(equivalente1,transEquivalente1);
+
+        //segundo automata AFND a AFD
+        let titulo2AFND = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
+        resEquivalencia2.innerHTML = titulo2AFND;
+        equivalente2 = Equivalente(AUTOMATA2);
+        crearTablaDeEstados(equivalente2,EstadosEquivalente2);
+        crearTablaTransicionResultados(equivalente2,transEquivalente2);
+
+        //primer automata AFD complemento
+        let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
+        complemento1 = complemento(equivalente1);
+        resumenAutomatas1.innerHTML = descripcion +`<br>`+ titulo;
+        crearTablaDeEstados(complemento1,tablaEstadosComplemento1);
+        crearTablaTransicionResultados(complemento1,transicionComplemento1);
+
+        //segundo automata AFD complemento
+        let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
+        complemento2 = complemento(equivalente2);
+        resumenAutomatas2.innerHTML =`<br>`+ titulo2;
+        crearTablaDeEstados(complemento2,tablaEstadosComplemento2);
+        crearTablaTransicionResultados(complemento2,transicionComplemento2);
+
+        // Union entre Automata1 y automata2
+        let tituloUnion = `<h4 class="text-center">Union</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la union de ambos:</p>`;
+        union = Union(equivalente1,equivalente2);
+        console.log('UNION:',union);
+        resumenUnion.innerHTML= `<br>` + tituloUnion;
+        crearTablaDeEstados(union,tablaEstadosUnion);
+        crearTablaTransicionResultados(union,transicionUnion);
+
+        //concatenacion entre AUTOMATA1 y AUTOMATA2
+        let tituloConcatenacion = `<h4 class="text-center">Concatenación</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la concatenación de ambos:</p>`;
+        concatenacion = Concatenacion(equivalente1,equivalente2);
+        console.log('CONCATENACION:',concatenacion);
+        resumenConcatenacion.innerHTML = `<br>` + tituloConcatenacion;
+        crearTablaDeEstados(concatenacion,tablaEstadosConcatenacion);
+        crearTablaTransicionResultados(concatenacion,transicionConcatenacion);
+
+        //Interseccion entre AUTOMATA1 y AUTOMATA2
+        let tituloInterseccion = `<h4 class="text-center">Intersección</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la intersección de ambos:</p>`;
+        interseccion = Interseccion(equivalente1,equivalente2);
+        console.log('INTERSECCION:', interseccion);
+        resumenInterseccion.innerHTML = `<br>` + tituloInterseccion;
+        crearTablaDeEstados(interseccion,tablaEstadosInterseccion);
+        crearTablaTransicionResultados(interseccion,transicionInterseccion);
     }
     if(tipoAutomata.value == 'AFND' && tipoAutomata2.value == 'AFD'){
         let descripcion = `<p>Dado que el 1<sup>er</sup> Autómata es de tipo '<strong>${tipoAutomata.value}</strong>', se debe obtener su '<strong>AFD</strong>' equivalente:</p>`;
-        //primer automata AFND
-        // let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
-        // resumenAutomatas1.innerHTML = descripcion;
-        // complemento1 = complemento(AUTOMATA1);
+        
+        //primer automata AFND a AFD
+        let tituloAFND = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
+        resEquivalencia1.innerHTML = descripcion + `<br>` + tituloAFND;
+        equivalente1 = Equivalente(AUTOMATA1);
+        crearTablaDeEstados(equivalente1,EstadosEquivalente1);
+        crearTablaTransicionResultados(equivalente1,transEquivalente1);
 
-        //segundo automata AFD
+        //primer automata AFD complemento
+        let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
+        complemento1 = complemento(equivalente1);
+        resumenAutomatas1.innerHTML = descripcion +`<br>`+ titulo;
+        crearTablaDeEstados(complemento1,tablaEstadosComplemento1);
+        crearTablaTransicionResultados(complemento1,transicionComplemento1);
+
+        //segundo automata AFD complemento
         let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento2 = complemento(AUTOMATA2);
         resumenAutomatas2.innerHTML =`<br>`+ titulo2;
         crearTablaDeEstados(complemento2,tablaEstadosComplemento2);
         crearTablaTransicionResultados(complemento2,transicionComplemento2);
+
+        // Union entre Automata1 y automata2
+        let tituloUnion = `<h4 class="text-center">Union</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la union de ambos:</p>`;
+        union = Union(equivalente1,AUTOMATA2);
+        console.log('UNION:',union);
+        resumenUnion.innerHTML= `<br>` + tituloUnion;
+        crearTablaDeEstados(union,tablaEstadosUnion);
+        crearTablaTransicionResultados(union,transicionUnion);
+
+        //concatenacion entre AUTOMATA1 y AUTOMATA2
+        let tituloConcatenacion = `<h4 class="text-center">Concatenación</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la concatenación de ambos:</p>`;
+        concatenacion = Concatenacion(equivalente1,AUTOMATA2);
+        console.log('CONCATENACION:',concatenacion);
+        resumenConcatenacion.innerHTML = `<br>` + tituloConcatenacion;
+        crearTablaDeEstados(concatenacion,tablaEstadosConcatenacion);
+        crearTablaTransicionResultados(concatenacion,transicionConcatenacion);
+
+        //Interseccion entre AUTOMATA1 y AUTOMATA2
+        let tituloInterseccion = `<h4 class="text-center">Intersección</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la intersección de ambos:</p>`;
+        interseccion = Interseccion(equivalente1,AUTOMATA2);
+        console.log('INTERSECCION:', interseccion);
+        resumenInterseccion.innerHTML = `<br>` + tituloInterseccion;
+        crearTablaDeEstados(interseccion,tablaEstadosInterseccion);
+        crearTablaTransicionResultados(interseccion,transicionInterseccion);
+
     }
     if(tipoAutomata.value == 'AFD' && tipoAutomata2.value == 'AFND'){
         let descripcion = `<p>Dado que el 2<sup>do</sup> Autómata es de tipo '<strong>${tipoAutomata2.value}</strong>', se debe obtener su '<strong>AFD</strong>' equivalente:</p>`;
-        //primer automata AFD
+
+        //segundo automata AFND a AFD
+        let titulo2AFND = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
+        resEquivalencia2.innerHTML = titulo2AFND;
+        equivalente2 = Equivalente(AUTOMATA2);
+        crearTablaDeEstados(equivalente2,EstadosEquivalente2);
+        crearTablaTransicionResultados(equivalente2,transEquivalente2);
+
+        //primer automata AFD complemento
         let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento1 = complemento(AUTOMATA1);
         resumenAutomatas1.innerHTML = descripcion +`<br>`+ titulo;
         crearTablaDeEstados(complemento1,tablaEstadosComplemento1);
         crearTablaTransicionResultados(complemento1,transicionComplemento1);
 
-        //segundo automata AFND
-        // let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
-        // complemento2 = complemento(AUTOMATA2);
+        //segundo automata AFD complemento
+        let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
+        complemento2 = complemento(equivalente2);
+        resumenAutomatas2.innerHTML =`<br>`+ titulo2;
+        crearTablaDeEstados(complemento2,tablaEstadosComplemento2);
+        crearTablaTransicionResultados(complemento2,transicionComplemento2);
+
+        // Union entre Automata1 y automata2
+        let tituloUnion = `<h4 class="text-center">Union</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la union de ambos:</p>`;
+        union = Union(AUTOMATA1,equivalente2);
+        console.log('UNION:',union);
+        resumenUnion.innerHTML= `<br>` + tituloUnion;
+        crearTablaDeEstados(union,tablaEstadosUnion);
+        crearTablaTransicionResultados(union,transicionUnion);
+
+        //concatenacion entre AUTOMATA1 y AUTOMATA2
+        let tituloConcatenacion = `<h4 class="text-center">Concatenación</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la concatenación de ambos:</p>`;
+        concatenacion = Concatenacion(AUTOMATA1,equivalente2);
+        console.log('CONCATENACION:',concatenacion);
+        resumenConcatenacion.innerHTML = `<br>` + tituloConcatenacion;
+        crearTablaDeEstados(concatenacion,tablaEstadosConcatenacion);
+        crearTablaTransicionResultados(concatenacion,transicionConcatenacion);
+
+        //Interseccion entre AUTOMATA1 y AUTOMATA2
+        let tituloInterseccion = `<h4 class="text-center">Intersección</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la intersección de ambos:</p>`;
+        interseccion = Interseccion(AUTOMATA1,equivalente2);
+        console.log('INTERSECCION:', interseccion);
+        resumenInterseccion.innerHTML = `<br>` + tituloInterseccion;
+        crearTablaDeEstados(interseccion,tablaEstadosInterseccion);
+        crearTablaTransicionResultados(interseccion,transicionInterseccion);
     }
-
-    
-
     resultado2.disabled=true;
 }
 
