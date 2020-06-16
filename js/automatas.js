@@ -357,6 +357,8 @@ function crearTablaTransicionResultados(automata,resultado){
 //     const instrucciones2 = document.querySelector('#instrucciones2').remove();
 // }
 
+var automata_union, automata_concatenacion, automata_interseccion;
+
 /*-----Primer analisis-----*/
 const resultado1 = document.querySelector('#resultado1');
 resultado1.addEventListener('click',pregunta1);
@@ -476,6 +478,7 @@ function pregunta2(){
         // Union entre Automata1 y automata2
         let tituloUnion = `<h4 class="text-center">Union</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la union de ambos:</p>`;
         union = Union(AUTOMATA1,AUTOMATA2);
+        automata_union = union;
         console.log('UNION:',union);
         resumenUnion.innerHTML= `<br>` + tituloUnion;
         crearTablaDeEstados(union,tablaEstadosUnion);
@@ -484,6 +487,7 @@ function pregunta2(){
         //concatenacion entre AUTOMATA1 y AUTOMATA2
         let tituloConcatenacion = `<h4 class="text-center">Concatenación</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la concatenación de ambos:</p>`;
         concatenacion = Concatenacion(AUTOMATA1,AUTOMATA2);
+        automata_concatenacion = concatenacion;
         console.log('CONCATENACION:',concatenacion);
         resumenConcatenacion.innerHTML = `<br>` + tituloConcatenacion;
         crearTablaDeEstados(concatenacion,tablaEstadosConcatenacion);
@@ -492,6 +496,7 @@ function pregunta2(){
         //Interseccion entre AUTOMATA1 y AUTOMATA2
         let tituloInterseccion = `<h4 class="text-center">Intersección</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la intersección de ambos:</p>`;
         interseccion = Interseccion(AUTOMATA1,AUTOMATA2);
+        automata_interseccion = interseccion;
         console.log('INTERSECCION:', interseccion);
         resumenInterseccion.innerHTML = `<br>` + tituloInterseccion;
         crearTablaDeEstados(interseccion,tablaEstadosInterseccion);
@@ -530,6 +535,7 @@ function pregunta2(){
         // Union entre Automata1 y automata2
         let tituloUnion = `<h4 class="text-center">Union</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la union de ambos:</p>`;
         union = Union(equivalente1,equivalente2);
+        automata_union = union;
         console.log('UNION:',union);
         resumenUnion.innerHTML= `<br>` + tituloUnion;
         crearTablaDeEstados(union,tablaEstadosUnion);
@@ -538,6 +544,7 @@ function pregunta2(){
         //concatenacion entre AUTOMATA1 y AUTOMATA2
         let tituloConcatenacion = `<h4 class="text-center">Concatenación</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la concatenación de ambos:</p>`;
         concatenacion = Concatenacion(equivalente1,equivalente2);
+        automata_concatenacion = concatenacion;
         console.log('CONCATENACION:',concatenacion);
         resumenConcatenacion.innerHTML = `<br>` + tituloConcatenacion;
         crearTablaDeEstados(concatenacion,tablaEstadosConcatenacion);
@@ -546,6 +553,7 @@ function pregunta2(){
         //Interseccion entre AUTOMATA1 y AUTOMATA2
         let tituloInterseccion = `<h4 class="text-center">Intersección</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la intersección de ambos:</p>`;
         interseccion = Interseccion(equivalente1,equivalente2);
+        automata_interseccion = interseccion;
         console.log('INTERSECCION:', interseccion);
         resumenInterseccion.innerHTML = `<br>` + tituloInterseccion;
         crearTablaDeEstados(interseccion,tablaEstadosInterseccion);
@@ -578,6 +586,7 @@ function pregunta2(){
         // Union entre Automata1 y automata2
         let tituloUnion = `<h4 class="text-center">Union</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la union de ambos:</p>`;
         union = Union(equivalente1,AUTOMATA2);
+        automata_union = union;
         console.log('UNION:',union);
         resumenUnion.innerHTML= `<br>` + tituloUnion;
         crearTablaDeEstados(union,tablaEstadosUnion);
@@ -586,6 +595,7 @@ function pregunta2(){
         //concatenacion entre AUTOMATA1 y AUTOMATA2
         let tituloConcatenacion = `<h4 class="text-center">Concatenación</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la concatenación de ambos:</p>`;
         concatenacion = Concatenacion(equivalente1,AUTOMATA2);
+        automata_concatenacion = concatenacion;
         console.log('CONCATENACION:',concatenacion);
         resumenConcatenacion.innerHTML = `<br>` + tituloConcatenacion;
         crearTablaDeEstados(concatenacion,tablaEstadosConcatenacion);
@@ -594,6 +604,7 @@ function pregunta2(){
         //Interseccion entre AUTOMATA1 y AUTOMATA2
         let tituloInterseccion = `<h4 class="text-center">Intersección</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la intersección de ambos:</p>`;
         interseccion = Interseccion(equivalente1,AUTOMATA2);
+        automata_interseccion = interseccion;
         console.log('INTERSECCION:', interseccion);
         resumenInterseccion.innerHTML = `<br>` + tituloInterseccion;
         crearTablaDeEstados(interseccion,tablaEstadosInterseccion);
@@ -627,6 +638,7 @@ function pregunta2(){
         // Union entre Automata1 y automata2
         let tituloUnion = `<h4 class="text-center">Union</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la union de ambos:</p>`;
         union = Union(AUTOMATA1,equivalente2);
+        automata_union = union;
         console.log('UNION:',union);
         resumenUnion.innerHTML= `<br>` + tituloUnion;
         crearTablaDeEstados(union,tablaEstadosUnion);
@@ -635,6 +647,7 @@ function pregunta2(){
         //concatenacion entre AUTOMATA1 y AUTOMATA2
         let tituloConcatenacion = `<h4 class="text-center">Concatenación</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la concatenación de ambos:</p>`;
         concatenacion = Concatenacion(AUTOMATA1,equivalente2);
+        automata_concatenacion = concatenacion;
         console.log('CONCATENACION:',concatenacion);
         resumenConcatenacion.innerHTML = `<br>` + tituloConcatenacion;
         crearTablaDeEstados(concatenacion,tablaEstadosConcatenacion);
@@ -643,6 +656,7 @@ function pregunta2(){
         //Interseccion entre AUTOMATA1 y AUTOMATA2
         let tituloInterseccion = `<h4 class="text-center">Intersección</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la intersección de ambos:</p>`;
         interseccion = Interseccion(AUTOMATA1,equivalente2);
+        automata_interseccion = interseccion;
         console.log('INTERSECCION:', interseccion);
         resumenInterseccion.innerHTML = `<br>` + tituloInterseccion;
         crearTablaDeEstados(interseccion,tablaEstadosInterseccion);
@@ -651,6 +665,81 @@ function pregunta2(){
     resultado2.disabled=true;
 }
 
+const resultado3 = document.querySelector('#resultado3');
+resultado3.addEventListener('click',pregunta3);
+function pregunta3(){
+    //union
+    const unionAFD = document.querySelector('#unionAFD'),
+        tablaEstadosUnionAFD = document.querySelector('#tablaEstadosUnionAFD'),
+        transicionUnionAFD = document.querySelector('#transicionUnionAFD'),
+        unionAFDSimplificado = document.querySelector('#unionAFDSimplificado'),
+        tablaEstadosUnionAFDSimplificado = document.querySelector('#tablaEstadosUnionAFDSimplificado'),
+        transicionUnionAFDSimplificado = document.querySelector('#transicionUnionAFDSimplificado');
+    //concatenacion
+    const ConcaAFD = document.querySelector('#ConcaAFD'),
+        tablaEstadosConcaAFD = document.querySelector('#tablaEstadosConcaAFD'),
+        transicionConcaAFD = document.querySelector('#transicionConcaAFD'),
+        ConcaSimplificado = document.querySelector('#ConcaSimplificado'),
+        tablaEstadosConcaAFDSimplificado = document.querySelector('#tablaEstadosConcaAFDSimplificado'),
+        transicionConcaAFDSimplificado = document.querySelector('#transicionConcaAFDSimplificado');
+    //interseccion
+    const InterseccionAFD = document.querySelector('#InterseccionAFD'),
+        tablaEstadosInterseccionAFD = document.querySelector('#tablaEstadosInterseccionAFD'),
+        transicionInterseccionAFD = document.querySelector('#transicionInterseccionAFD'),
+        InterSimplificado = document.querySelector('#InterSimplificado'),
+        tablaEstadosInterAFDSimplificado = document.querySelector('#tablaEstadosInterAFDSimplificado'),
+        transicionInterAFDSimplificado = document.querySelector('#transicionInterAFDSimplificado');
+
+    let UnionAFD, simplificarUnion,  concatenacionAFD, SimplificarConca, InterAFD, InterSimp;
+    
+    //PASAR LA UNION(AFND) A AFD
+    let tituloUnionAFD = `<h4 class="text-center">Union a AFD</h4><br><p>Obtenermos el autómata de la Union del punto anterior y lo convertiremos a AFD:</p>`;
+    UnionAFD = Equivalente(automata_union);
+    console.log('UNION A AFD:', UnionAFD);
+    unionAFD.innerHTML = tituloUnionAFD;
+    crearTablaDeEstados(UnionAFD,tablaEstadosUnionAFD);
+    crearTablaTransicionResultados(UnionAFD,transicionUnionAFD);
+    
+
+    //SIMPLIFICAR UNION(AFD)
+    let SimplificarUnionAFD = `<h4 class="text-center">Simplificar Union(AFD)</h4><br><p>Procedemos a simplificar el autómata de la union(AFD):</p>`;
+    simplificarUnion = Simplificar(UnionAFD);
+    console.log('UNION SIMPLIFICADO:', simplificarUnion);
+    unionAFDSimplificado.innerHTML = `<br>` + SimplificarUnionAFD;
+    crearTablaDeEstados(simplificarUnion,tablaEstadosUnionAFDSimplificado);
+    crearTablaTransicionResultados(simplificarUnion,transicionUnionAFDSimplificado);
+
+    //PASAR LA CONCATENACION(AFND) A AFD
+    let tituloConcaAFD = `<h4 class="text-center">Concatenación a AFD</h4><br><p>Obtenermos el autómata de la Concatenación del punto anterior y lo convertiremos a AFD:</p>`;
+    concatenacionAFD = Equivalente(automata_concatenacion);
+    console.log('CONCATENACION A AFD:', concatenacionAFD);
+    ConcaAFD.innerHTML = tituloConcaAFD;
+    crearTablaDeEstados(concatenacionAFD,tablaEstadosConcaAFD);
+    crearTablaTransicionResultados(concatenacionAFD,transicionConcaAFD);
+    //SIMPLIFICAR CONCATENACION(AFD)
+    let SimplificarConcaAFD = `<h4 class="text-center">Simplificar concatenación(AFD)</h4><br><p>Procedemos a simplificar el autómata de la concatenación(AFD):</p>`;
+    SimplificarConca = Simplificar(concatenacionAFD);
+    console.log('CONCATENACION SIMPLIFICADO:', SimplificarConca);
+    ConcaSimplificado.innerHTML = `<br>` + SimplificarConcaAFD;
+    crearTablaDeEstados(SimplificarConca,tablaEstadosConcaAFDSimplificado);
+    crearTablaTransicionResultados(SimplificarConca,transicionConcaAFDSimplificado);
+
+    //PASAR LA INTERSECCION(AFND) A AFD
+    let tituloInterAFD = `<h4 class="text-center">Intersección a AFD</h4><br><p>Obtenermos el autómata de la Intersección del punto anterior y lo convertiremos a AFD:</p>`;
+    InterAFD = Equivalente(automata_interseccion);
+    console.log('INTERSECCION A AFD:', InterAFD);
+    InterseccionAFD.innerHTML = tituloInterAFD;
+    crearTablaDeEstados(InterAFD,tablaEstadosInterseccionAFD);
+    crearTablaTransicionResultados(InterAFD,transicionInterseccionAFD);
+    //SIMPLIFICAR INTERSECCION(AFD)
+    let SimplificarInterAFD = `<h4 class="text-center">Simplificar Intersección(AFD)</h4><br><p>Procedemos a simplificar el autómata de la intersección(AFD):</p>`;
+    InterSimp = Simplificar(InterAFD);
+    console.log('INTERSECCION SIMPLIFICADO:', InterSimp);
+    InterSimplificado.innerHTML = `<br>` + SimplificarInterAFD;
+    crearTablaDeEstados(InterSimp,tablaEstadosInterAFDSimplificado);
+    crearTablaTransicionResultados(InterSimp,transicionInterAFDSimplificado);
+    resultado3.disabled = true;
+}
 //AFND A AFD
 //AUTOMATA FINITO NO DETERMINISTA //
 /*
