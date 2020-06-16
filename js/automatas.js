@@ -291,10 +291,27 @@ function crearAutomata(tipoautomata,entrada,alfabeto,inicial,finales,Estados,est
     // console.log(automata);  
 }
 
+function crearTablaDeEstados(automata,resultado){
+    let titulos = ['Inicial','Final','Estados'];
+    var tablaEstados=`
+    <table>
+        <tr>
+            <td class='tablatransicion'>${titulos[0]}</td>
+            <td class='tablatransicion'>${titulos[1]}</td>
+            <td class='tablatransicion'>${titulos[2]}</td>
+        </tr>
+        <tr>
+            <td class='tablatransicionHijos'>${automata.est_inicial}</td>
+            <td class='tablatransicionHijos'>${automata.est_finales}</td>
+            <td class='tablatransicionHijos'>${automata.est_entrada}</td>
+        </tr>
+    </table>`;
+    resultado.innerHTML = tablaEstados;
+}
+
 /*----Crear tabla de transicion para mostrar los resultados----*/
-function crearTablaTransicionResultados(automata,tablaTransicion){ 
-    console.log('LEITO',automata);
-    let transiciones = ['Entrada','Es Final','Lectura','Destino'];
+function crearTablaTransicionResultados(automata,resultado){ 
+    let transiciones = ['Entrada','Lectura','Destino'];
     var tablaPadre = document.createElement('table'),
         filaTitulo = document.createElement('tr'); 
 
@@ -309,30 +326,26 @@ function crearTablaTransicionResultados(automata,tablaTransicion){
         for(let j=0; j<automata.arr_alfabeto.length; j++){
             var filaDatos = document.createElement('tr'), 
                 columnaEstados = document.createElement('td'),
-                columnaFinal = document.createElement('td'), 
                 columnaAlfabeto = document.createElement('td'),
                 columnaDestinos = document.createElement('td');
-            //estilos y contenido a las columnas
+            
+            if(automata.arr_estados[i].estado_to[j] != null){
+                //estilos y contenido a las columnas
             columnaEstados.className='tablatransicionHijos';
             columnaEstados.textContent = automata.est_entrada[i];
-            columnaFinal.className='tablatransicionHijos';
-            if( automata.arr_estados[i].final )
-                columnaFinal.textContent = 'Si';
-            else   
-                columnaFinal.textContent = 'No';
             columnaAlfabeto.className='tablatransicionHijos';
             columnaAlfabeto.textContent = automata.arr_alfabeto[j];
             columnaDestinos.className='tablatransicionHijos';
             columnaDestinos.textContent = automata.arr_estados[i].estado_to[j];
             //agrego los elementos a sus nodos padres
             filaDatos.appendChild(columnaEstados);
-            filaDatos.appendChild(columnaFinal);
             filaDatos.appendChild(columnaAlfabeto);
             filaDatos.appendChild(columnaDestinos);
             tablaPadre.appendChild(filaDatos);
+            }
         }
     }
-    tablaTransicion.appendChild(tablaPadre);
+    resultado.appendChild(tablaPadre);
 }
 
 /*-----Eliminar bloque de anlisis de los automatas-----*/
@@ -344,78 +357,210 @@ function crearTablaTransicionResultados(automata,tablaTransicion){
 //     const instrucciones2 = document.querySelector('#instrucciones2').remove();
 // }
 
-/*-----1er automata Analisis-----*/
-
-
+/*-----Primer analisis-----*/
+const resultado1 = document.querySelector('#resultado1');
+resultado1.addEventListener('click',pregunta1);
 function pregunta1(){
-    const introduccion = document.querySelector('#primerAutomata');
+    const resumenSimplificado1 = document.querySelector('#resumenSimplificado1'),
+        tablaEstadosSimplificado1 = document.querySelector('#tablaEstadosSimplificado1'),
+        transicionSimplificado1 = document.querySelector('#transicionSimplificado1'),
+        resumenEquivalente1 = document.querySelector('#resumenEquivalente1'),
+        tablaEstadosEquivalente1 = document.querySelector('#tablaEstadosEquivalente1'),
+        transicionEquivalente1 = document.querySelector('#transicionEquivalente1');
+
+    const resumenSimplificado2 = document.querySelector('#resumenSimplificado2'),
+        tablaEstadosSimplificado2 = document.querySelector('#tablaEstadosSimplificado2'),
+        transicionSimplificado2 = document.querySelector('#transicionSimplificado2'),
+        resumenEquivalente2 = document.querySelector('#resumenEquivalente2'),
+        tablaEstadosEquivalente2 = document.querySelector('#tablaEstadosEquivalente2'),
+        transicionEquivalente2 = document.querySelector('#transicionEquivalente2');
+
+    let simplificado1, simplificado2, equivalente1, equivalente2;
+    //primer automata
     if(tipoAutomata.value == 'AFD'){
-        let descripcionAFD = `<p>Dado que se ingresó un autómata '<strong>${tipoAutomata.value}</strong>', se procede a realizar la simplificación:</p>`,
-            simplificado1 ;  
-        introduccion.innerHTML = descripcionAFD;
-        console.log('PRIMER AUTOMATA ',AUTOMATA1);
+        let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata.value}</strong>, se procede a realizar la simplificacion:</p>`;
+        resumenSimplificado1.innerHTML= titulo;
         simplificado1 = Simplificar(AUTOMATA1);
         console.log('simplificado1:',simplificado1);
+        crearTablaDeEstados(simplificado1,tablaEstadosSimplificado1);
+        crearTablaTransicionResultados(simplificado1,transicionSimplificado1);
     }else{
-        let descripcionAFD = `<p>Dado que se ingresó un autómata '<strong>${tipoAutomata.value}</strong>', se procede a obtener el AFD equivalente:</p>`,
-            simplificado2 = [];
-        introduccion.innerHTML = descripcionAFD;
+        let titulo1 = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata.value}</strong>, se debe obtener el AFD equivalente:</p>`,
+        titulo2 = `<br><p>Ya obtenido el <strong>AFD equivalente</strong>, se puede proceder a obtener la simplifcación de este:</p>`;
+        //AFND a AFD
+        resumenEquivalente1.innerHTML = titulo1;
+        equivalente1 = Equivalente(AUTOMATA1);
+        console.log('equivalente1:',equivalente1);
+        crearTablaDeEstados(equivalente1,tablaEstadosEquivalente1);
+        crearTablaTransicionResultados(equivalente1,transicionEquivalente1);
+        //Simplificar AFD
+        resumenSimplificado1.innerHTML = titulo2;
+        simplificado1 = Simplificar(equivalente1);
+        console.log('simplificado1:',simplificado1);
+        crearTablaDeEstados(simplificado1,tablaEstadosSimplificado1);
+        crearTablaTransicionResultados(simplificado1,transicionSimplificado1);
     }
+    if(tipoAutomata2.value == 'AFD'){
+        let titulo = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata2.value}</strong>, se procede a realizar la simplificacion:</p>`;
+        resumenSimplificado2.innerHTML= titulo;
+        simplificado2 = Simplificar(AUTOMATA2);
+        console.log('simplificado1:',simplificado2);
+        crearTablaDeEstados(simplificado2,tablaEstadosSimplificado2);
+        crearTablaTransicionResultados(simplificado2,transicionSimplificado2);
+    }else{
+        let titulo1 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata2.value}</strong>, se debe obtener el AFD equivalente:</p>`,
+        titulo2 = `<br><p>Ya obtenido el <strong>AFD equivalente</strong>, se puede proceder a obtener la simplifcación de este:</p>`;
+        //AFND a AFD
+        resumenEquivalente2.innerHTML = titulo1;
+        equivalente2 = Equivalente(AUTOMATA2);
+        console.log('equivalente2:',equivalente2);
+        crearTablaDeEstados(equivalente2,tablaEstadosEquivalente2);
+        crearTablaTransicionResultados(equivalente2,transicionEquivalente2);
+        //Simplificar AFD
+        resumenSimplificado2.innerHTML = titulo2;
+        simplificado2 = Simplificar(equivalente2);
+        console.log('simplificado2:',simplificado2);
+        crearTablaDeEstados(simplificado2,tablaEstadosSimplificado2);
+        crearTablaTransicionResultados(simplificado2,transicionSimplificado2);
+    }
+    resultado1.disabled=true;
 }
 
+const resultado2 = document.querySelector('#resultado2');
+resultado2.addEventListener('click',pregunta2);
 function pregunta2(){
-    const resumenAutomatas = document.querySelector('#resumenAutomatas'),
-        transicionComplemento = document.querySelector('#transicionComplemento'),
-        transicionUnion = document.querySelector('#transicionUnion');
-    let complemento1, complemento2, union1, union2;
-    if(tipoAutomata2.value == 'AFD' && tipoAutomata2.value == 'AFD'){  
+    // const para el primer automata
+    const resumenAutomatas1 = document.querySelector('#resumenAutomatas1'),
+        transicionComplemento1 = document.querySelector('#transicionComplemento1'),
+        tablaEstadosComplemento1 = document.querySelector('#tablaEstadosComplemento1'),
+        resEquivalencia1 = document.querySelector('#resEquivalencia1'),
+        EstadosEquivalente1 = document.querySelector('#EstadosEquivalente1'),
+        transEquivalente1 = document.querySelector('#transEquivalente1');
+    // const para el segundo automata
+    const resumenAutomatas2 = document.querySelector('#resumenAutomatas2'),
+        transicionComplemento2 = document.querySelector('#transicionComplemento2'),
+        tablaEstadosComplemento2 = document.querySelector('#tablaEstadosComplemento2'),
+        resEquivalencia2 = document.querySelector('#resEquivalencia2'),
+        EstadosEquivalente2 = document.querySelector('#EstadosEquivalente2'),
+        transEquivalente2 = document.querySelector('#transEquivalente2');
+    // const para union, concatenacion e interseccion
+    const resumenUnion = document.querySelector('#resumenUnion'),
+        tablaEstadosUnion = document.querySelector('#tablaEstadosUnion'),
+        transicionUnion = document.querySelector('#transicionUnion'),
+        resumenConcatenacion = document.querySelector('#resumenConcatenacion'),
+        tablaEstadosConcatenacion = document.querySelector('#tablaEstadosConcatenacion'),
+        transicionConcatenacion = document.querySelector('#transicionConcatenacion'),
+        resumenInterseccion = document.querySelector('#resumenInterseccion'),
+        tablaEstadosInterseccion = document.querySelector('#tablaEstadosInterseccion'),
+        transicionInterseccion = document.querySelector('#transicionInterseccion'); 
+
+    let equivalente1, equivalente2, complemento1, complemento2, union, concatenacion, interseccion;
+
+    if(tipoAutomata.value == 'AFD' && tipoAutomata2.value == 'AFD'){  
         let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se procede a obtener un autómata a partir del complemento, unión, concatenación e intersección entre ambos autómatas ingresados.</p>`;
+
         //primer automata AFD
         let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento1 = complemento(AUTOMATA1);
-        resumenAutomatas.innerHTML = descripcion +`<br>`+ titulo;
-        crearTablaTransicionResultados(complemento1,transicionComplemento);
+        resumenAutomatas1.innerHTML = descripcion +`<br>`+ titulo;
+        crearTablaDeEstados(complemento1,tablaEstadosComplemento1);
+        crearTablaTransicionResultados(complemento1,transicionComplemento1);
 
         //segundo automata AFD
         let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento2 = complemento(AUTOMATA2);
-        // resumenAutomatas.innerHTML = descripcion + titulo;
-        // crearTablaTransicionResultados(complemento1,transicionComplemento);
+        resumenAutomatas2.innerHTML =`<br>`+ titulo2;
+        crearTablaDeEstados(complemento2,tablaEstadosComplemento2);
+        crearTablaTransicionResultados(complemento2,transicionComplemento2);
+
+        // Union entre Automata1 y automata2
+        let tituloUnion = `<h4 class="text-center">Union</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la union de ambos:</p>`;
+        union = Union(AUTOMATA1,AUTOMATA2);
+        console.log('UNION:',union);
+        resumenUnion.innerHTML= `<br>` + tituloUnion;
+        crearTablaDeEstados(union,tablaEstadosUnion);
+        crearTablaTransicionResultados(union,transicionUnion);
+
+        //concatenacion entre AUTOMATA1 y AUTOMATA2
+        let tituloConcatenacion = `<h4 class="text-center">Concatenación</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la concatenación de ambos:</p>`;
+        concatenacion = Concatenacion(AUTOMATA1,AUTOMATA2);
+        console.log('CONCATENACION:',concatenacion);
+        resumenConcatenacion.innerHTML = `<br>` + tituloConcatenacion;
+        crearTablaDeEstados(concatenacion,tablaEstadosConcatenacion);
+        crearTablaTransicionResultados(concatenacion,transicionConcatenacion);
+
+        //Interseccion entre AUTOMATA1 y AUTOMATA2
+        let tituloInterseccion = `<h4 class="text-center">Intersección</h4><br><p>A partir de los 2 autómatas AFD, se obtiene la intersección de ambos:</p>`;
+        interseccion = Interseccion(AUTOMATA1,AUTOMATA2);
+        console.log('INTERSECCION:', interseccion);
+        resumenInterseccion.innerHTML = `<br>` + tituloInterseccion;
+        crearTablaDeEstados(interseccion,tablaEstadosInterseccion);
+        crearTablaTransicionResultados(interseccion,transicionInterseccion);
     }
     if(tipoAutomata.value == 'AFND' && tipoAutomata2.value == 'AFND'){
-        let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se debe proceder a tranformar ambos autómatas a su <strong>AFD</strong> equivalente:</p>`;
+        let descripcion = `<p>Dado que ambos autómatas ingresados son '<strong>${tipoAutomata2.value}</strong>', se debe proceder a tranformar ambos autómatas a su <strong>AFD</strong> equivalente</p>`;
         //primer automata AFND
-        let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
-        resumenAutomatas.innerHTML = descripcion + titulo;
-        complemento1 = complemento(AUTOMATA1);
-
-        //segundo automata AFND
-        let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
-        complemento2 = complemento(AUTOMATA2);
+        let titulo1 = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
+        resEquivalencia1.innerHTML = descripcion + `<br>` + titulo1;
+        equivalente1 = Equivalente(AUTOMATA1);
+        crearTablaDeEstados(equivalente1,EstadosEquivalente1);
+        crearTablaTransicionResultados(equivalente1,transEquivalente1);
     }
     if(tipoAutomata.value == 'AFND' && tipoAutomata2.value == 'AFD'){
         let descripcion = `<p>Dado que el 1<sup>er</sup> Autómata es de tipo '<strong>${tipoAutomata.value}</strong>', se debe obtener su '<strong>AFD</strong>' equivalente:</p>`;
-        //primer automataAFND
-        let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
-        resumenAutomatas.innerHTML = descripcion;
-        complemento1 = complemento(AUTOMATA1);
+        //primer automata AFND
+        // let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
+        // resumenAutomatas1.innerHTML = descripcion;
+        // complemento1 = complemento(AUTOMATA1);
 
         //segundo automata AFD
         let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
         complemento2 = complemento(AUTOMATA2);
+        resumenAutomatas2.innerHTML =`<br>`+ titulo2;
+        crearTablaDeEstados(complemento2,tablaEstadosComplemento2);
+        crearTablaTransicionResultados(complemento2,transicionComplemento2);
     }
     if(tipoAutomata.value == 'AFD' && tipoAutomata2.value == 'AFND'){
         let descripcion = `<p>Dado que el 2<sup>do</sup> Autómata es de tipo '<strong>${tipoAutomata2.value}</strong>', se debe obtener su '<strong>AFD</strong>' equivalente:</p>`;
         //primer automata AFD
         let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Obtenermos el complemento :</p>`;
-        resumenAutomatas.innerHTML = descripcion;
         complemento1 = complemento(AUTOMATA1);
+        resumenAutomatas1.innerHTML = descripcion +`<br>`+ titulo;
+        crearTablaDeEstados(complemento1,tablaEstadosComplemento1);
+        crearTablaTransicionResultados(complemento1,transicionComplemento1);
 
         //segundo automata AFND
-        let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
-        complemento2 = complemento(AUTOMATA2);
+        // let titulo2 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Obtenemos el <strong>AFD</strong> equivalente:</p>`;
+        // complemento2 = complemento(AUTOMATA2);
     }
+
+    
+
+    resultado2.disabled=true;
 }
+
+//AFND A AFD
+//AUTOMATA FINITO NO DETERMINISTA //
+var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1"]
+var estado=[];
+estado[0]= new EstadoN("q0",false,[["q2","q1"],"q0"],["q1"])
+estado[1]= new EstadoN("q1",true, ["q4","q1"],[null])
+estado[2]= new EstadoN("q2",false,["q0",null],[null])
+estado[3]= new EstadoN("q3",false,["q1",null],[null])
+estado[4]= new EstadoN("q4",false,["q3",null],[null])
+
+var AFDejemplo = {
+   est_entrada: entrada,
+   arr_alfabeto: alfabeto,
+   est_inicial: inicial,
+   est_finales: final,
+   arr_estados : estado,
+}
+console.log("EJEMPLO AFN")
+console.log(AFDejemplo)
+
+
+
 /*-------------------Equivalencia    ------------------*/
 var tablaTransiciones;
 var tablaClausuraEpsilon = [];
@@ -575,51 +720,52 @@ function Tabla_Epsilon(estado2,entrada2){
         (Tabla[1]).push(ClausuraEpsilon(entrada2, estado2 , estado2[i].nombre));
     }
     return Tabla;
-    }
-    function BuscarEstado(estado, arregloEstados){
-        for (let i=0; i<arregloEstados.length; i++){
-            if(arregloEstados[i]===estado){
-                return true;
-            }
-        }return false
-    }
-    function ClausuraEpsilon(EstadosEntrada, Estadosinfo, Estado){  
-        let EpsilonFinal = false;
-        let EpsilonCaminos = [];
-        let recorrerEpsilon = 0;
-        let InfoEstadoActual=Estadosinfo[EstadosEntrada.indexOf(Estado)];
-        let PosActual=EstadosEntrada.indexOf(Estado)
-        if(InfoEstadoActual.epsilon[0]==null){
-            EpsilonCaminos[0]=null;
-            return EpsilonCaminos;
+}
+function BuscarEstado(estado, arregloEstados){
+    for (let i=0; i<arregloEstados.length; i++){
+        if(arregloEstados[i]===estado){
+            return true;
         }
-        while(!EpsilonFinal){
-            if(Estadosinfo[PosActual].epsilon[0] != null){
-                for (let i=0; i<Estadosinfo[PosActual].epsilon.length ; i++){
-                    if((!BuscarEstado(Estadosinfo[PosActual].epsilon[i],EpsilonCaminos)) && (Estado != Estadosinfo[PosActual].epsilon[i])){
-                        EpsilonCaminos.push(Estadosinfo[PosActual].epsilon[i]); 
-                    }
-                }
-            }       
-            PosActual=EstadosEntrada.indexOf(EpsilonCaminos[recorrerEpsilon]);
-            InfoEstadoActual=Estadosinfo[PosActual];
-            recorrerEpsilon++;
-            if(recorrerEpsilon>EpsilonCaminos.length){
-                EpsilonFinal=true;
-            }
-        }
+    }return false
+}
+function ClausuraEpsilon(EstadosEntrada, Estadosinfo, Estado){  
+    let EpsilonFinal = false;
+    let EpsilonCaminos = [];
+    let recorrerEpsilon = 0;
+    let InfoEstadoActual=Estadosinfo[EstadosEntrada.indexOf(Estado)];
+    let PosActual=EstadosEntrada.indexOf(Estado)
+    if(InfoEstadoActual.epsilon[0]==null){
+        EpsilonCaminos[0]=null;
         return EpsilonCaminos;
     }
+    while(!EpsilonFinal){
+        if(Estadosinfo[PosActual].epsilon[0] != null){
+            for (let i=0; i<Estadosinfo[PosActual].epsilon.length ; i++){
+                if((!BuscarEstado(Estadosinfo[PosActual].epsilon[i],EpsilonCaminos)) && (Estado != Estadosinfo[PosActual].epsilon[i])){
+                    EpsilonCaminos.push(Estadosinfo[PosActual].epsilon[i]); 
+                }
+            }
+        }       
+        PosActual=EstadosEntrada.indexOf(EpsilonCaminos[recorrerEpsilon]);
+        InfoEstadoActual=Estadosinfo[PosActual];
+        recorrerEpsilon++;
+        if(recorrerEpsilon>EpsilonCaminos.length){
+            EpsilonFinal=true;
+        }
+    }
+    return EpsilonCaminos;
+}
 
 function Equivalente(AUTOMATA){
-    var EpsilonCaminos = [], Tabla = [], TablaTransicion = [], Tabla_Equivalencia = []
-    EpsilonCaminos = ClausuraEpsilon(AUTOMATA.est_entrada, AUTOMATA.arr_estados, "q0")
+    var EpsilonCaminos = [], Tabla = [], TablaTransicion = [], Tabla_Equivalencia = [], AFD;
+    EpsilonCaminos = ClausuraEpsilon(AUTOMATA.est_entrada, AUTOMATA.arr_estados, AUTOMATA.est_inicial[0])
     Tabla = Tabla_Epsilon(AUTOMATA.arr_estados,AUTOMATA.est_entrada)
     console.log(Tabla)
     TablaTransicion = Tabla_Transición(AUTOMATA.arr_estados,AUTOMATA.est_entrada,AUTOMATA.arr_alfabeto)
     Tabla_Equivalencia = TablaEquivalencia(tablaTransiciones, tablaClausuraEpsilon, AUTOMATA.est_inicial)
     //console.log(Tabla_Equivalencia)
-    Etiquetado(AUTOMATA,Tabla_Equivalencia,AUTOMATA.arr_alfabeto,Tabla)
+    AFD = Etiquetado(AUTOMATA,Tabla_Equivalencia,AUTOMATA.arr_alfabeto,Tabla)
+    return AFD;
 }
 
 /*-----------Crear AFD NUEVO----------------*/
@@ -653,7 +799,6 @@ function Comparar(Array1,Array2){ //se podia hacer con indexOf pero js no siempr
         if(Cont === Array1.length){
             return true
         }
-
     }
     else{
         return false
@@ -663,7 +808,6 @@ function Renombrar2(Estados,Arr_Estados,Aux1){
     var Asc = 65
     for(let i=0; i < Estados.length; i++){
         Aux1.push(String.fromCharCode(Asc+i))
-
     }
     var Aux3= [], Aux_Transiciones = []
     for(let j=0; j <Arr_Estados.length; j++){
@@ -726,11 +870,9 @@ function Crear_Afd(A, Estados, Transiciones, E,Tabla){
         //estado_to
         estado_to = Transiciones[x]
         Arr_estados.push(new Estado(nombre,final,estado_to))
-        
     }
     var AFD = new Quintupla(Estados,A.arr_alfabeto,InicialF,Final,Arr_estados)
     return AFD
-
 }
 function Etiquetado(A,TablaEquivalencia, Alfabeto,Tabla){
     var Estados = [], Arr_Estados= [], Transiciones = [], Estados_Renombrados = [], AFD
@@ -738,12 +880,11 @@ function Etiquetado(A,TablaEquivalencia, Alfabeto,Tabla){
     Transiciones = Renombrar2(Estados,Arr_Estados,Estados_Renombrados)
     AFD = Crear_Afd(A,Estados_Renombrados,Transiciones, Estados, Tabla)
     console.log(AFD)
+    return AFD;
 }
-Equivalente(AFDejemplo)
+// console.log('leoo',Equivalente(AFDejemplo));
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!para pasar de afnd a afd llamar a Equivalente(AUTOMATA) ::::::::::::...................
-
-
 
 /*-----------Simplificacion-----------------*/
 /*Funcion para simplificar un automata*/ 
@@ -1042,18 +1183,17 @@ function Union(Automata1, Automata2){ //va a retornar la union de los dos automa
     }
     //Union de los Automatas
     var A1uA2 = new Quintupla(Estados,Alfabeto,Inicial,Finales,Arr_Estados)
-
     console.log(A1uA2)
     return A1uA2
 }
 //PARA LLAMAR A LA FUNCION : UNION(AUTOMATA1,AUTOMATA2)
  //Interseccion
  function Interseccion(AUTOMATA1,AUTOMATA2){
-    var A1C, A2C, Union, AFDUnion, Interseccion
+    var A1C, A2C, union, AFDUnion, Interseccion
     A1C = complemento(AUTOMATA1)
     A2C = complemento(AUTOMATA2)
-    Union = Union(A1C,A2C)
-    AFDUnion = Equivalente(Union)
+    union = Union(A1C,A2C)
+    AFDUnion = Equivalente(union)
     Interseccion = complemento(AFDUnion)
     return Interseccion
  }
@@ -1109,23 +1249,5 @@ function Concatenacion (auto1, auto2){
 }
 /*Para llamar Concatenación: Concatenacion(AUTOMATA1, AUTOMATA2);*/
 
-//AFND A AFD
-//AUTOMATA FINITO NO DETERMINISTA //
-var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1"]
-var estado=[];
-estado[0]= new EstadoN("q0",false,[["q2","q1"],"q0"],["q1"])
-estado[1]= new EstadoN("q1",true, ["q4","q1"],[null])
-estado[2]= new EstadoN("q2",false,["q0",null],[null])
-estado[3]= new EstadoN("q3",false,["q1",null],[null])
-estado[4]= new EstadoN("q4",false,["q3",null],[null])
 
-var AFDejemplo = {
-   est_entrada: entrada,
-   arr_alfabeto: alfabeto,
-   est_inicial: inicial,
-   est_finales: final,
-   arr_estados : estado,
-}
-console.log("EJEMPLO AFN")
-console.log(AFDejemplo)
 

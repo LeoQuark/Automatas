@@ -145,22 +145,42 @@
                 <div class="bg-marineblue" id="primeraParte">
                     <h2 class="mb-0">
                     <button class="btn btn-link btn-block text-center text-white collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="text-decoration: none;" id="parte1">
-                    <p>Obtener AFD equivalente</p>
+                    <p>Obtener AFD equivalente y simplificar</p>
                     </button>
                     </h2>
                 </div>
                 <div id="collapseOne" class="collapse" aria-labelledby="primeraParte" data-parent="#accordionExample">
                     <div class="card-body">
-                        <!-- 1er automata -->
-                        <div>
-                            <div class="row d-flex justify-content-center">
-                                <h4>1 <sup>er</sup> Autómata</h4>
-                            </div><hr>
-                            <div class="row">
-                                <div class="col-lg-5 col-sm-12" id="primerAutomata">
-                                </div>
-                            </div>
+                        <div class="row d-flex justify-content-center my-1">
+                            <button class="btn btn-primary" id="resultado1">Obtener análisis</button>
+                        </div><br>
+                        <!-- primer automata AFND a AFD-->
+                        <div class="row">
+                            <div class="col" id="resumenEquivalente1"></div>
                         </div>
+                        <div class="row d-flex justify-content-center" id="tablaEstadosEquivalente1"></div><br>
+                        <div class="row d-flex justify-content-center" id="transicionEquivalente1"></div>
+
+                        <!-- primer automata AFD simplificado -->
+                        <div class="row">
+                            <div class="col" id="resumenSimplificado1"></div>
+                        </div>
+                        <div class="row d-flex justify-content-center" id="tablaEstadosSimplificado1"></div><br>
+                        <div class="row d-flex justify-content-center" id="transicionSimplificado1"></div>
+
+                        <!-- segundo automata AFND a AFD-->
+                        <div class="row">
+                            <div class="col" id="resumenEquivalente2"></div>
+                        </div>
+                        <div class="row d-flex justify-content-center" id="tablaEstadosEquivalente2"></div><br>
+                        <div class="row d-flex justify-content-center" id="transicionEquivalente2"></div>
+
+                        <!-- segundo automata AFD simplificado -->
+                        <div class="row">
+                            <div class="col" id="resumenSimplificado2"></div>
+                        </div>
+                        <div class="row d-flex justify-content-center" id="tablaEstadosSimplificado2"></div><br>
+                        <div class="row d-flex justify-content-center" id="transicionSimplificado2"></div>
                     </div>
                 </div>
             </div>
@@ -177,29 +197,55 @@
                     <div class="card-body">
                         <div class="row d-flex justify-content-center my-1">
                             <button class="btn btn-primary" id="resultado2">Obtener análisis</button>
+                        </div><br>
+                        <!-- primer automata AFND a AFD-->
+                        <div class="row">
+                            <div class="col" id="resEquivalencia1"></div>
                         </div>
-                        <!-- primer automata AFND---AFD -->
+                        <div class="row d-flex justify-content-center" id="EstadosEquivalente1"></div><br>
+                        <div class="row d-flex justify-content-center" id="transEquivalente1"></div>
 
-                        <!-- primer automata afd -->
+                        <!-- primer automata afd complemento -->
                         <div class="row">
                             <div class="col" id="resumenAutomatas1"></div>
                         </div>
+                        <div class="row d-flex justify-content-center" id="tablaEstadosComplemento1"></div><br>
                         <div class="row d-flex justify-content-center" id="transicionComplemento1"></div>
-                        <div class="row d-flex justify-content-center">
-                            <div class="col" id="transicionUnion1">
-                            </div>
-                        </div>
-                        <!-- segundo automata AFND---AFD -->
 
-                        <!-- segundo automata afd -->
+                        <!-- segundo automata AFND a AFD -->
+                        <div class="row">
+                            <div class="col" id="resEquivalencia2"></div>
+                        </div>
+                        <div class="row d-flex justify-content-center" id="EstadosEquivalente2"></div><br>
+                        <div class="row d-flex justify-content-center" id="transEquivalente2"></div>
+
+                        <!-- segundo automata afd  complemento -->
                         <div class="row">
                             <div class="col" id="resumenAutomatas2"></div>
                         </div>
+                        <div class="row d-flex justify-content-center" id="tablaEstadosComplemento2"></div><br>
                         <div class="row d-flex justify-content-center" id="transicionComplemento2"></div>
-                        <div class="row d-flex justify-content-center">
-                            <div class="col" id="transicionUnion2">
-                            </div>
+
+                        <!-- Union entre ambos automatas AFD -->
+                        <div class="row">
+                            <div class="col" id="resumenUnion"></div>
                         </div>
+                        <div class="row d-flex justify-content-center" id="tablaEstadosUnion"></div>
+                        <div class="row d-flex justify-content-center" id="transicionUnion"></div>
+
+                        <!-- concatenacion entre ambos automatas AFD -->
+                        <div class="row">
+                            <div class="col" id="resumenConcatenacion"></div>
+                        </div>
+                        <div class="row d-flex justify-content-center" id="tablaEstadosConcatenacion"></div>
+                        <div class="row d-flex justify-content-center" id="transicionConcatenacion"></div>
+
+                        <!-- interseccion entre ambos automatas AFD -->
+                        <div class="row">
+                            <div class="col" id="resumenInterseccion"></div>
+                        </div>
+                        <div class="row d-flex justify-content-center" id="tablaEstadosInterseccion"></div>
+                        <div class="row d-flex justify-content-center" id="transicionInterseccion"></div>
                     </div>
                 </div>
             </div>
