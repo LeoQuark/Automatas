@@ -363,71 +363,75 @@ var automata_union, automata_concatenacion, automata_interseccion;
 const resultado1 = document.querySelector('#resultado1');
 resultado1.addEventListener('click',pregunta1);
 function pregunta1(){
-    const resumenSimplificado1 = document.querySelector('#resumenSimplificado1'),
-        tablaEstadosSimplificado1 = document.querySelector('#tablaEstadosSimplificado1'),
-        transicionSimplificado1 = document.querySelector('#transicionSimplificado1'),
-        resumenEquivalente1 = document.querySelector('#resumenEquivalente1'),
+    //equivalencia y simplificacion para el automata1
+    const resumenEquivalente1 = document.querySelector('#resumenEquivalente1'),
         tablaEstadosEquivalente1 = document.querySelector('#tablaEstadosEquivalente1'),
-        transicionEquivalente1 = document.querySelector('#transicionEquivalente1');
-
-    const resumenSimplificado2 = document.querySelector('#resumenSimplificado2'),
-        tablaEstadosSimplificado2 = document.querySelector('#tablaEstadosSimplificado2'),
-        transicionSimplificado2 = document.querySelector('#transicionSimplificado2'),
-        resumenEquivalente2 = document.querySelector('#resumenEquivalente2'),
+        transicionEquivalente1 = document.querySelector('#transicionEquivalente1'),
+        resumenSimplificado1 = document.querySelector('#resumenSimplificado1'),
+        tablaEstadosSimplificado1 = document.querySelector('#tablaEstadosSimplificado1'),
+        transicionSimplificado1 = document.querySelector('#transicionSimplificado1');
+    //equivalencia y simplificacion para el automata2
+    const resumenEquivalente2 = document.querySelector('#resumenEquivalente2'),
         tablaEstadosEquivalente2 = document.querySelector('#tablaEstadosEquivalente2'),
-        transicionEquivalente2 = document.querySelector('#transicionEquivalente2');
-
+        transicionEquivalente2 = document.querySelector('#transicionEquivalente2'),
+        resumenSimplificado2 = document.querySelector('#resumenSimplificado2'),
+        tablaEstadosSimplificado2 = document.querySelector('#tablaEstadosSimplificado2'),
+        transicionSimplificado2 = document.querySelector('#transicionSimplificado2');
+    
     let simplificado1, simplificado2, equivalente1, equivalente2;
     //primer automata
-    if(tipoAutomata.value == 'AFD'){
-        let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata.value}</strong>, se procede a realizar la simplificacion:</p>`;
-        resumenSimplificado1.innerHTML= titulo;
-        simplificado1 = Simplificar(AUTOMATA1);
-        console.log('simplificado1:',simplificado1);
-        crearTablaDeEstados(simplificado1,tablaEstadosSimplificado1);
-        crearTablaTransicionResultados(simplificado1,transicionSimplificado1);
-    }else{
-        let titulo1 = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata.value}</strong>, se debe obtener el AFD equivalente:</p>`,
-        titulo2 = `<br><p>Ya obtenido el <strong>AFD equivalente</strong>, se puede proceder a obtener la simplifcación de este:</p>`;
-        //AFND a AFD
+    if(tipoAutomata.value == 'AFND'){
+        //equivalencia primer automata
+        let titulo1 = `<h4 class="text-center">Equivalencia 1<sup>er</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo '<strong>AFND</strong>', se procede a obtener su autómata equivalente:</p>`;
         resumenEquivalente1.innerHTML = titulo1;
         equivalente1 = Equivalente(AUTOMATA1);
-        console.log('equivalente1:',equivalente1);
+        console.log('EQUIVALENTE1:',equivalente1);
         crearTablaDeEstados(equivalente1,tablaEstadosEquivalente1);
         crearTablaTransicionResultados(equivalente1,transicionEquivalente1);
-        //Simplificar AFD
-        resumenSimplificado1.innerHTML = titulo2;
+
+        //simplificacion primer automata
+        let titulo2 = `<h4 class="text-center">Simplificación 1<sup>er</sup> Autómata</h4><br><p>Ya obtenido el equivalente (AFD) del primer autómata, se procede a obtener su simplificación:</p>`
+        resumenSimplificado1.innerHTML = `<br>` + titulo2;
         simplificado1 = Simplificar(equivalente1);
-        console.log('simplificado1:',simplificado1);
+        console.log('SIMPLIFICADO1:',simplificado1);
+        crearTablaDeEstados(simplificado1,tablaEstadosSimplificado1);
+        crearTablaTransicionResultados(simplificado1,transicionSimplificado1);
+    }else{ //si el primer automata es AFD
+        let titulo1 = `<h4 class="text-center">Simplificación 1<sup>er</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo '<strong>AFD</strong>', se procede a obtener su simplificación:</p>`;
+        resumenSimplificado1.innerHTML = titulo1;
+        simplificado1 = Simplificar(AUTOMATA1);
+        console.log('SIMPLIFICADO1:',simplificado1);
         crearTablaDeEstados(simplificado1,tablaEstadosSimplificado1);
         crearTablaTransicionResultados(simplificado1,transicionSimplificado1);
     }
-    if(tipoAutomata2.value == 'AFD'){
-        let titulo = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata2.value}</strong>, se procede a realizar la simplificacion:</p>`;
-        resumenSimplificado2.innerHTML= titulo;
-        simplificado2 = Simplificar(AUTOMATA2);
-        console.log('simplificado1:',simplificado2);
-        crearTablaDeEstados(simplificado2,tablaEstadosSimplificado2);
-        crearTablaTransicionResultados(simplificado2,transicionSimplificado2);
-    }else{
-        let titulo1 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata2.value}</strong>, se debe obtener el AFD equivalente:</p>`,
-        titulo2 = `<br><p>Ya obtenido el <strong>AFD equivalente</strong>, se puede proceder a obtener la simplifcación de este:</p>`;
-        //AFND a AFD
+    if(tipoAutomata2.value == 'AFND'){
+        //equivalencia segundo automata
+        let titulo1 = `<h4 class="text-center">Equivalencia 2<sup>do</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo '<strong>AFND</strong>', se procede a obtener su autómata equivalente:</p>`;
         resumenEquivalente2.innerHTML = titulo1;
         equivalente2 = Equivalente(AUTOMATA2);
-        console.log('equivalente2:',equivalente2);
+        console.log('EQUIVALENTE2',equivalente2);
         crearTablaDeEstados(equivalente2,tablaEstadosEquivalente2);
         crearTablaTransicionResultados(equivalente2,transicionEquivalente2);
-        //Simplificar AFD
-        resumenSimplificado2.innerHTML = titulo2;
+
+        //simplificacion segundo automata
+        let titulo2 = `<h4 class="text-center">Simplificación 2<sup>do</sup> Autómata</h4><br><p>Ya obtenido el equivalente (AFD) del segundo autómata, se procede a obtener su simplificación:</p>`
+        resumenSimplificado2.innerHTML = `<br>` + titulo2;
         simplificado2 = Simplificar(equivalente2);
-        console.log('simplificado2:',simplificado2);
+        console.log('SIMPLIFICADO2:',simplificado2);
+        crearTablaDeEstados(simplificado2,tablaEstadosSimplificado2);
+        crearTablaTransicionResultados(simplificado2,transicionSimplificado2);
+    }else{//si el segundo automata es AFD
+        let titulo1 = `<h4 class="text-center">Simplificación 2<sup>do</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo '<strong>AFD</strong>', se procede a obtener su simplificación:</p>`
+        resumenSimplificado2.innerHTML = titulo1;
+        simplificado2 = Simplificar(AUTOMATA2);
+        console.log('SIMPLIFICADO2:',simplificado2);
         crearTablaDeEstados(simplificado2,tablaEstadosSimplificado2);
         crearTablaTransicionResultados(simplificado2,transicionSimplificado2);
     }
     resultado1.disabled=true;
 }
 
+/*-----Segundo analisis-----*/
 const resultado2 = document.querySelector('#resultado2');
 resultado2.addEventListener('click',pregunta2);
 function pregunta2(){
@@ -665,6 +669,7 @@ function pregunta2(){
     resultado2.disabled=true;
 }
 
+/*-----Tercer analisis-----*/
 const resultado3 = document.querySelector('#resultado3');
 resultado3.addEventListener('click',pregunta3);
 function pregunta3(){
@@ -1402,55 +1407,111 @@ function Union(Automata1, Automata2){ //va a retornar la union de los dos automa
  }
  //!para llamar interseccion: Interseccion(AUTOMATA1,AUTOMATA2) ::::::::::::...................
 
-/*-------Concatenación-------*/
-/*--Función que concatena dos autómatas (por ahora funciona con ambos autómatas de igual alfabeto)*/
+/*-------CONCATENACIÓN-------*/
 function Concatenacion (auto1, auto2){
+    /*-----Creación de variables-----*/
+    var  estadosTotalesConcatenacion = [], alfabetoConcatenacion = [], estadoInicialConcatenacion = [];
+    var  estadosFinalesConcatenacion = [], estadosDesdeHaciaConcatenacion = [];
     var a = JSON.parse(JSON.stringify(auto1));
     var b = JSON.parse(JSON.stringify(auto2));
-    var entradaConcatenacion, alfabetoConcatenacion, inicialConcatenacion;      //Se crean variables
-    var finalConcatenacion, estadoConcatenacion = [];
-    var aux, contador = 0;
-    aux = a.est_entrada + "," + b.est_entrada;      //Concatenación de los parámetros
-    entradaConcatenacion = aux.split(",");
-    aux = a.arr_alfabeto + "," + "ε";
-    alfabetoConcatenacion = aux.split(",");
-    inicialConcatenacion = a.est_inicial;
-    aux = a.est_finales + "," + b.est_finales;
-    finalConcatenacion = aux.split(",");
-    for (var i=0;i<a.arr_estados.length;i++){
-        estadoConcatenacion[contador] = a.arr_estados[i];
-        contador++;
-    }
-    for (var i=0;i<b.arr_estados.length;i++){
-        estadoConcatenacion[contador] = b.arr_estados[i];
-        contador++;
-    }
-    var AFDConcatenacion = {                        //Se crea un nuevo autómata definido
-        est_entrada: entradaConcatenacion,
-        arr_alfabeto: alfabetoConcatenacion,
-        est_inicial: inicialConcatenacion,
-        est_finales: finalConcatenacion,
-        arr_estados : estadoConcatenacion,
-    }
-    for (var m=0;m<AFDConcatenacion.arr_estados.length;m++){
-        AFDConcatenacion.arr_estados[m].estado_to[AFDConcatenacion.arr_alfabeto.length-1] = null;
-    }
-    //Se concatenan los estados finales del autómata A con el inicial del autómata B
-    for (var j=0;j<a.arr_estados.length;j++){   
-        if (AFDConcatenacion.arr_estados[j].final == true){
-            AFDConcatenacion.arr_estados[j].estado_to[AFDConcatenacion.arr_estados[j].estado_to.length-1] = b.est_inicial[0];
-        }
-    }
-    //Se cambia el estado del autómata concatenado
-    for (var j=0;j<a.arr_estados.length;j++){   
-        if (AFDConcatenacion.arr_estados[j].final == true){
-            AFDConcatenacion.arr_estados[j].final = false;
-        }
-    }
-    /*console.log(AFDConcatenacion);*/
-    return JSON.parse(JSON.stringify(AFDConcatenacion));
-}
-/*Para llamar Concatenación: Concatenacion(AUTOMATA1, AUTOMATA2);*/
+    var estaditosA = JSON.parse(JSON.stringify(auto1.arr_estados));
+    var estaditosB = JSON.parse(JSON.stringify(auto2.arr_estados));
+    /*-----Operaciones varias-----*/
+    estadoInicialConcatenacion = a.est_inicial; //Se asigna estado de entrada (inicial) al autómata concatenado.
+    alfabetoConcatenacion = agruparAlfabeto(a.arr_alfabeto, b.arr_alfabeto, alfabetoConcatenacion);  //Se concatenan los alfabetos (sin repetir).
+    estadosFinalesConcatenacion = b.est_finales;  //Se asignan los estados finales del autómata concatenado.
+    estadosTotalesConcatenacion = agruparDatos(a.est_entrada, b.est_entrada, estadosTotalesConcatenacion);  //Se concatenan los estados de ambos autómatas.
+    /*-----Corrección de estados-----*/
+    var estCorregidoA = reparandoEstadosA(a.arr_estados, alfabetoConcatenacion, a, estaditosA, b.est_inicial);
+    var estCorregidoB = reparandoEstadosB(b.arr_estados, alfabetoConcatenacion, b, estaditosB);
+    /*-----Agrupación de estados-----*/
+    estadosDesdeHaciaConcatenacion = agruparDatos(estCorregidoA, estCorregidoB, estadosDesdeHaciaConcatenacion);  //Agrupa todos los estados.
+    /*-----Autómata concatenado-----*/
+    var A1conA2 = new Quintupla(estadosTotalesConcatenacion, alfabetoConcatenacion, estadoInicialConcatenacion, estadosFinalesConcatenacion, estadosDesdeHaciaConcatenacion);
 
+    console.log(A1conA2);  //Se muestra el autómata
+    return A1conA2;  //Se retorna el autómata
+
+    /*---AVISO: Falta cambiar nombre de estados en caso que los estados de ambos autómatas coincidan. Estoy en ello c: */
+}
+
+//Para llamar a la función: Concatenacion(AUTOMATA1, AUTOMATA2);
+
+function reparandoEstadosA(estadosA, alfabetin, automataA, c, inicioB){
+    var arrEstados = [];
+    for (var j=0;j<estadosA.length;j++){
+        var nombreEstado = estadosA[j].nombre;
+        var boolEstado = estadosA[j].final;
+        var estToEstado = [];
+        for (var x=0;x<alfabetin.length;x++){
+            estToEstado[x] = null;
+        }
+        for (var a=0;a<alfabetin.length;a++){
+            for (var b=0;b<automataA.arr_alfabeto.length;b++){
+                if (alfabetin[a] == automataA.arr_alfabeto[b]){
+                    estToEstado[a] = c[j].estado_to[b];
+                    break;
+                }
+            }
+
+        }
+        var epsilonEstado = [null, null];
+        arrEstados[j] = new EstadoN(nombreEstado, boolEstado, estToEstado, epsilonEstado);
+    }
+
+    for (var n=0;n<arrEstados.length;n++){
+        if(arrEstados[n].final == true){
+            arrEstados[n].final = false;
+            arrEstados[n].epsilon = [arrEstados[n].nombre, inicioB[0]];
+        }
+    }
+    return arrEstados;
+}
+
+function reparandoEstadosB(estadosA, alfabetin, automataA, c){
+    var arrEstados = [];
+    for (var j=0;j<estadosA.length;j++){
+        var nombreEstado = estadosA[j].nombre;
+        var boolEstado = estadosA[j].final;
+        var estToEstado = [];
+        for (var x=0;x<alfabetin.length;x++){
+            estToEstado[x] = null;
+        }
+        for (var a=0;a<alfabetin.length;a++){
+            for (var b=0;b<automataA.arr_alfabeto.length;b++){
+                if (alfabetin[a] == automataA.arr_alfabeto[b]){
+                    estToEstado[a] = c[j].estado_to[b];
+                    break;
+                }
+            }
+
+        }
+        var epsilonEstado = [null, null];
+        arrEstados[j] = new EstadoN(nombreEstado, boolEstado, estToEstado, epsilonEstado);
+    }
+    return arrEstados;
+}
+
+function agruparDatos(datos1, datos2, a){
+    return a = datos1.concat(datos2);
+}
+
+function agruparAlfabeto(alfabetoA, alfabetoB, final){
+    var aux = [];
+    for (var j=0;j<alfabetoB.length;j++){
+        var cont = 0;
+        for (var k=0;k<alfabetoA.length;k++){
+            if (alfabetoB[j] == alfabetoA[k]){
+                cont = cont + 1;
+            }
+        }
+        if (cont == 0){
+            aux.push(alfabetoB[j]);
+        }
+        cont = 0;
+    }
+    final = alfabetoA.concat(aux);
+    return final;
+}
 
 
