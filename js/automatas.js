@@ -363,71 +363,75 @@ var automata_union, automata_concatenacion, automata_interseccion;
 const resultado1 = document.querySelector('#resultado1');
 resultado1.addEventListener('click',pregunta1);
 function pregunta1(){
-    const resumenSimplificado1 = document.querySelector('#resumenSimplificado1'),
-        tablaEstadosSimplificado1 = document.querySelector('#tablaEstadosSimplificado1'),
-        transicionSimplificado1 = document.querySelector('#transicionSimplificado1'),
-        resumenEquivalente1 = document.querySelector('#resumenEquivalente1'),
+    //equivalencia y simplificacion para el automata1
+    const resumenEquivalente1 = document.querySelector('#resumenEquivalente1'),
         tablaEstadosEquivalente1 = document.querySelector('#tablaEstadosEquivalente1'),
-        transicionEquivalente1 = document.querySelector('#transicionEquivalente1');
-
-    const resumenSimplificado2 = document.querySelector('#resumenSimplificado2'),
-        tablaEstadosSimplificado2 = document.querySelector('#tablaEstadosSimplificado2'),
-        transicionSimplificado2 = document.querySelector('#transicionSimplificado2'),
-        resumenEquivalente2 = document.querySelector('#resumenEquivalente2'),
+        transicionEquivalente1 = document.querySelector('#transicionEquivalente1'),
+        resumenSimplificado1 = document.querySelector('#resumenSimplificado1'),
+        tablaEstadosSimplificado1 = document.querySelector('#tablaEstadosSimplificado1'),
+        transicionSimplificado1 = document.querySelector('#transicionSimplificado1');
+    //equivalencia y simplificacion para el automata2
+    const resumenEquivalente2 = document.querySelector('#resumenEquivalente2'),
         tablaEstadosEquivalente2 = document.querySelector('#tablaEstadosEquivalente2'),
-        transicionEquivalente2 = document.querySelector('#transicionEquivalente2');
-
+        transicionEquivalente2 = document.querySelector('#transicionEquivalente2'),
+        resumenSimplificado2 = document.querySelector('#resumenSimplificado2'),
+        tablaEstadosSimplificado2 = document.querySelector('#tablaEstadosSimplificado2'),
+        transicionSimplificado2 = document.querySelector('#transicionSimplificado2');
+    
     let simplificado1, simplificado2, equivalente1, equivalente2;
     //primer automata
-    if(tipoAutomata.value == 'AFD'){
-        let titulo = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata.value}</strong>, se procede a realizar la simplificacion:</p>`;
-        resumenSimplificado1.innerHTML= titulo;
-        simplificado1 = Simplificar(AUTOMATA1);
-        console.log('simplificado1:',simplificado1);
-        crearTablaDeEstados(simplificado1,tablaEstadosSimplificado1);
-        crearTablaTransicionResultados(simplificado1,transicionSimplificado1);
-    }else{
-        let titulo1 = `<h4 class="text-center">1<sup>er</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata.value}</strong>, se debe obtener el AFD equivalente:</p>`,
-        titulo2 = `<br><p>Ya obtenido el <strong>AFD equivalente</strong>, se puede proceder a obtener la simplifcación de este:</p>`;
-        //AFND a AFD
+    if(tipoAutomata.value == 'AFND'){
+        //equivalencia primer automata
+        let titulo1 = `<h4 class="text-center">Equivalencia 1<sup>er</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo '<strong>AFND</strong>', se procede a obtener su autómata equivalente:</p>`;
         resumenEquivalente1.innerHTML = titulo1;
         equivalente1 = Equivalente(AUTOMATA1);
-        console.log('equivalente1:',equivalente1);
+        console.log('EQUIVALENTE1:',equivalente1);
         crearTablaDeEstados(equivalente1,tablaEstadosEquivalente1);
         crearTablaTransicionResultados(equivalente1,transicionEquivalente1);
-        //Simplificar AFD
-        resumenSimplificado1.innerHTML = titulo2;
+
+        //simplificacion primer automata
+        let titulo2 = `<h4 class="text-center">Simplificación 1<sup>er</sup> Autómata</h4><br><p>Ya obtenido el equivalente (AFD) del primer autómata, se procede a obtener su simplificación:</p>`
+        resumenSimplificado1.innerHTML = `<br>` + titulo2;
         simplificado1 = Simplificar(equivalente1);
-        console.log('simplificado1:',simplificado1);
+        console.log('SIMPLIFICADO1:',simplificado1);
+        crearTablaDeEstados(simplificado1,tablaEstadosSimplificado1);
+        crearTablaTransicionResultados(simplificado1,transicionSimplificado1);
+    }else{ //si el primer automata es AFD
+        let titulo1 = `<h4 class="text-center">Simplificación 1<sup>er</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo '<strong>AFD</strong>', se procede a obtener su simplificación:</p>`;
+        resumenSimplificado1.innerHTML = titulo1;
+        simplificado1 = Simplificar(AUTOMATA1);
+        console.log('SIMPLIFICADO1:',simplificado1);
         crearTablaDeEstados(simplificado1,tablaEstadosSimplificado1);
         crearTablaTransicionResultados(simplificado1,transicionSimplificado1);
     }
-    if(tipoAutomata2.value == 'AFD'){
-        let titulo = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata2.value}</strong>, se procede a realizar la simplificacion:</p>`;
-        resumenSimplificado2.innerHTML= titulo;
-        simplificado2 = Simplificar(AUTOMATA2);
-        console.log('simplificado1:',simplificado2);
-        crearTablaDeEstados(simplificado2,tablaEstadosSimplificado2);
-        crearTablaTransicionResultados(simplificado2,transicionSimplificado2);
-    }else{
-        let titulo1 = `<h4 class="text-center">2<sup>do</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo <strong>${tipoAutomata2.value}</strong>, se debe obtener el AFD equivalente:</p>`,
-        titulo2 = `<br><p>Ya obtenido el <strong>AFD equivalente</strong>, se puede proceder a obtener la simplifcación de este:</p>`;
-        //AFND a AFD
+    if(tipoAutomata2.value == 'AFND'){
+        //equivalencia segundo automata
+        let titulo1 = `<h4 class="text-center">Equivalencia 2<sup>do</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo '<strong>AFND</strong>', se procede a obtener su autómata equivalente:</p>`;
         resumenEquivalente2.innerHTML = titulo1;
         equivalente2 = Equivalente(AUTOMATA2);
-        console.log('equivalente2:',equivalente2);
+        console.log('EQUIVALENTE2',equivalente2);
         crearTablaDeEstados(equivalente2,tablaEstadosEquivalente2);
         crearTablaTransicionResultados(equivalente2,transicionEquivalente2);
-        //Simplificar AFD
-        resumenSimplificado2.innerHTML = titulo2;
+
+        //simplificacion segundo automata
+        let titulo2 = `<h4 class="text-center">Simplificación 2<sup>do</sup> Autómata</h4><br><p>Ya obtenido el equivalente (AFD) del segundo autómata, se procede a obtener su simplificación:</p>`
+        resumenSimplificado2.innerHTML = `<br>` + titulo2;
         simplificado2 = Simplificar(equivalente2);
-        console.log('simplificado2:',simplificado2);
+        console.log('SIMPLIFICADO2:',simplificado2);
+        crearTablaDeEstados(simplificado2,tablaEstadosSimplificado2);
+        crearTablaTransicionResultados(simplificado2,transicionSimplificado2);
+    }else{//si el segundo automata es AFD
+        let titulo1 = `<h4 class="text-center">Simplificación 2<sup>do</sup> Autómata</h4><br><p>Dado que se ingresó un autómata de tipo '<strong>AFD</strong>', se procede a obtener su simplificación:</p>`
+        resumenSimplificado2.innerHTML = titulo1;
+        simplificado2 = Simplificar(AUTOMATA2);
+        console.log('SIMPLIFICADO2:',simplificado2);
         crearTablaDeEstados(simplificado2,tablaEstadosSimplificado2);
         crearTablaTransicionResultados(simplificado2,transicionSimplificado2);
     }
     resultado1.disabled=true;
 }
 
+/*-----Segundo analisis-----*/
 const resultado2 = document.querySelector('#resultado2');
 resultado2.addEventListener('click',pregunta2);
 function pregunta2(){
@@ -665,6 +669,7 @@ function pregunta2(){
     resultado2.disabled=true;
 }
 
+/*-----Tercer analisis-----*/
 const resultado3 = document.querySelector('#resultado3');
 resultado3.addEventListener('click',pregunta3);
 function pregunta3(){
