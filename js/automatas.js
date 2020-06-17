@@ -962,7 +962,7 @@ function Equivalente(AUTOMATA){
     tablaTransiciones = Tabla_Transición(AUTOMATA.arr_estados, AUTOMATA.est_entrada,AUTOMATA.arr_alfabeto)
 
     var EpsilonCaminos = [], Tabla = [], TablaTransicion = [], Tabla_Equivalencia = [], AFD;
-    EpsilonCaminos = ClausuraEpsilon(AUTOMATA.est_entrada, AUTOMATA.arr_estados, AUTOMATA.est_entrada[0])
+    //EpsilonCaminos = ClausuraEpsilon(AUTOMATA.est_entrada, AUTOMATA.arr_estados, AUTOMATA.est_entrada[0])
     Tabla = Tabla_Epsilon(AUTOMATA.arr_estados,AUTOMATA.est_entrada)
     console.log(Tabla)
     TablaTransicion = Tabla_Transición(AUTOMATA.arr_estados,AUTOMATA.est_entrada,AUTOMATA.arr_alfabeto)
@@ -1092,7 +1092,6 @@ function Etiquetado(A,TablaEquivalencia, Alfabeto,Tabla){
 
 /*-----------Simplificacion-----------------*/
 /*Funcion para simplificar un automata*/ 
-/*
 var entrada=["q1","q2","q3","q4","q5"], alfabeto=["a","b"], inicial= ["q5"], final= ["q2","q3","q4","q5"]
 var estado=[]
 estado[4]= new Estado("q5",true,["q4","q3"])
@@ -1106,7 +1105,7 @@ var AUTOMATA = {
     est_inicial: inicial,
     est_finales: final,
     arr_estados : estado,
-} */
+} 
 /*-----------Simplificacion-----------------*/
 /*Funcion para simplificar un automata*/ 
 function Arr_estados(Matriz1, Matriz2,Indice,A){ //
@@ -1260,7 +1259,6 @@ function ASimplificado(A,Matriz){
     var AFDSimplificado = new Quintupla(Estados,Alfabeto,Inicial,Finales,transiciones)
     return AFDSimplificado
 }
-
 function Simplificar(AUTOMATA){
     var Matriz = [], Estado1 = [], Estado2 = [], AFDSimp;
     var Arr_Estados= AUTOMATA.est_entrada  //Todos los estados disponibles
@@ -1271,6 +1269,7 @@ function Simplificar(AUTOMATA){
     console.log("AFD SIMPLIFICADO",AFDSimp)
     return AFDSimp;
 }
+Simplificar(AUTOMATA)
 //COMPLEMENTO, UNION, CONCATENACION, INTERSECCION
 /*------------Complemento-----------*/
 function complemento(AFD){
