@@ -994,7 +994,7 @@ function Separar(TablaEquivalencia, Alfabeto, Aux1, Aux2){
         Aux3 = []
     }
 }
-function Comparar(Array1,Array2){ //se podia hacer con indexOf pero js no siempre iguala bien los arrays
+function Comparar(Array1,Array2){ //se podia hacer con indexOf pero js no siempre iguala bien los arrays uwu
     var Cont = 0
     if(Array1.length === Array2.length){
         for(let i=0; i < Array1.length; i++){
@@ -1183,6 +1183,7 @@ function Transiciones(A, Estados, Bool){
         i=0
     }
     //
+    
     for(i;i<Estados.length;i++){
         for(let j=0;j<(A.arr_estados).length;j++){
             if(Estados[i][0] === ((A.arr_estados)[j]).nombre){
@@ -1232,6 +1233,7 @@ function ASimplificado(A,Matriz){
                 }
             }
         }
+        console.log(Nuevos_Estados)
         //ALFABETO
         Alfabeto = A.arr_alfabeto
         //ESTADOS
@@ -1259,20 +1261,65 @@ function ASimplificado(A,Matriz){
             }   
         }
     }
-    console.log(Estados)
+    console.log(Estados,Existe)
     transiciones = Transiciones(A,Estados,Existe)
     var AFDSimplificado = new Quintupla(Estados,Alfabeto,Inicial,Finales,transiciones)
     return AFDSimplificado
 }
+function RenombrarSim(A, Estados){
+    var ARenom, Asc = 65, Aux1 = [],Estados_renom = [], Estados_finales = [], Aux = []
+    for(let i=0; i < Estados.length; i++){
+        Aux1.push(Estados[i].nombre)
+        Estados_renom.push(String.fromCharCode(Asc+i))
+    }
+
+
+    console.log(Aux1,Estados_renom)
+    for(let j=0; j < A.arr_estados.length; j++){ //para crear los estados nuevos 
+        for(let k=0; k < (A.arr_estados)[j].estado_to.length; k++){
+            for(let h=0; h < Aux1.length; h++){
+                var indice = Aux1[h].indexOf((A.arr_estados)[j].estado_to[k])
+                if(indice>=0){
+                    Aux.push(Estados_renom[h])
+
+                }
+            }
+        }
+        var x = new Estado(Estados_renom[j],A.arr_estados[j].final,Aux)
+        Estados_finales.push(x)
+        Aux = []
+    }
+    //INICIAL
+    var indice_inicial
+    for(let y=0; y < Aux1.length; y++){
+        if(Comparar(Aux1[y],A.est_inicial[0]) === true){
+            indice_inicial = y
+        }
+    } 
+    //FINALES
+    var Finales_renom = []
+    for(let x=0; x < A.est_finales.length; x++){
+        
+        for(let h=0; h < Aux1.length; h++){
+            console.log(A.est_finales[x],Aux1[h])
+            if(Comparar(A.est_finales[x],Aux1[h]) === true){
+                Finales_renom.push(Estados_renom[h])
+            }
+        }
+    } 
+    ARenom = new Quintupla(Estados_renom,(A.arr_alfabeto),(Estados_renom[indice_inicial]),Finales_renom,Estados_finales)
+    return ARenom
+}
 function Simplificar(AUTOMATA){
-    var Matriz = [], Estado1 = [], Estado2 = [], AFDSimp;
+    var Matriz = [], Estado1 = [], Estado2 = [], AFDSimp, AFDRenombrado;
     var Arr_Estados= AUTOMATA.est_entrada  //Todos los estados disponibles
     Arr_estados(Estado1,Estado2,Arr_Estados.length,Arr_Estados)
     semiMatriz(AUTOMATA,Matriz,Estado2,Estado1)
     console.log(Estado1,Estado2)
     AFDSimp = ASimplificado(AUTOMATA, Matriz)
-    console.log("AFD SIMPLIFICADO",AFDSimp)
-    return AFDSimp;
+    AFDRenombrado = RenombrarSim(AFDSimp,AFDSimp.arr_estados)
+    console.log("AFD SIMPLIFICADO",AFDRenombrado)
+    return AFDRenombrado;
 }
 Simplificar(AUTOMATA)
 //COMPLEMENTO, UNION, CONCATENACION, INTERSECCION
