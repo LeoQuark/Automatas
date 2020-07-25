@@ -358,7 +358,6 @@ function crearTablaTransicionResultados(automata,resultado){
 // }
 
 var automata_union, automata_concatenacion, automata_interseccion;
-
 /*-----Primer analisis-----*/
 const resultado1 = document.querySelector('#resultado1');
 resultado1.addEventListener('click',pregunta1);
@@ -745,28 +744,6 @@ function pregunta3(){
     crearTablaTransicionResultados(InterSimp,transicionInterAFDSimplificado);
     resultado3.disabled = true;
 }
-//AFND A AFD
-//AUTOMATA FINITO NO DETERMINISTA //
-/*
-var entrada=["q0","q1","q2","q3","q4"], alfabeto=["a","b"], inicial= ["q0"], final= ["q1"]
-var estado=[];
-estado[0]= new EstadoN("q0",false,[["q2","q1"],"q0"],["q1"])
-estado[1]= new EstadoN("q1",true, ["q4","q1"],[null])
-estado[2]= new EstadoN("q2",false,["q0",null],[null])
-estado[3]= new EstadoN("q3",false,["q1",null],[null])
-estado[4]= new EstadoN("q4",false,["q3",null],[null])
-
-var AFDejemplo = {
-   est_entrada: entrada,
-   arr_alfabeto: alfabeto,
-   est_inicial: inicial,
-   est_finales: final,
-   arr_estados : estado,
-}
-console.log("EJEMPLO AFN")
-console.log(AFDejemplo)
-
-*/
 
 /*-------------------Equivalencia    ------------------*/
 function compararArreglos(arregloA, arregloB){// se enviaran arreglos ordenados
@@ -933,14 +910,14 @@ function ClausuraEpsilon(EstadosEntrada, Estadosinfo, Estado){
     let EpsilonCaminos = [];
     let recorrerEpsilon = 0;
     let InfoEstadoActual=Estadosinfo[EstadosEntrada.indexOf(Estado)];
-    console.log(InfoEstadoActual)
+    //console.log(InfoEstadoActual)
     let PosActual=EstadosEntrada.indexOf(Estado)
-    console.log(PosActual)
+    //console.log(PosActual)
     if(InfoEstadoActual.epsilon[0]==null){
         EpsilonCaminos[0]=null;
         return EpsilonCaminos;
     }
-    console.log(Estadosinfo[PosActual].epsilon[0])
+    //console.log(Estadosinfo[PosActual].epsilon[0])
     while(!EpsilonFinal){
         if(Estadosinfo[PosActual].epsilon[0] !== null){
             for (let i=0; i<Estadosinfo[PosActual].epsilon.length ; i++){
@@ -958,7 +935,6 @@ function ClausuraEpsilon(EstadosEntrada, Estadosinfo, Estado){
     }
     return EpsilonCaminos;
 }
-
 function Equivalente(AUTOMATA){
     var tablaTransiciones, tablaClausuraEpsilon = [];
     for (let i = 0; i < AUTOMATA.est_entrada.length; i++){
@@ -969,10 +945,9 @@ function Equivalente(AUTOMATA){
     var EpsilonCaminos = [], Tabla = [], TablaTransicion = [], Tabla_Equivalencia = [], AFD;
     //EpsilonCaminos = ClausuraEpsilon(AUTOMATA.est_entrada, AUTOMATA.arr_estados, AUTOMATA.est_entrada[0])
     Tabla = Tabla_Epsilon(AUTOMATA.arr_estados,AUTOMATA.est_entrada)
-    console.log(Tabla)
     TablaTransicion = Tabla_Transición(AUTOMATA.arr_estados,AUTOMATA.est_entrada,AUTOMATA.arr_alfabeto)
     Tabla_Equivalencia = TablaEquivalencia(tablaTransiciones, tablaClausuraEpsilon, AUTOMATA.est_inicial,tablaClausuraEpsilon)
-    //console.log(Tabla_Equivalencia)
+    console.log(Tabla_Equivalencia)
     AFD = Etiquetado(AUTOMATA,Tabla_Equivalencia,AUTOMATA.arr_alfabeto,Tabla)
     return AFD;
 }
@@ -1034,7 +1009,6 @@ function Renombrar2(Estados,Arr_Estados,Aux1){
     return Aux_Transiciones
 }
 function Finales(A, Estados,E){
-    console.log(E)
     var final = []
     for(let i=0; i < E.length; i++){
         for(let j=0; j < E[i].length; j++){
@@ -1048,13 +1022,11 @@ function Finales(A, Estados,E){
     }
     return final
 }
-function Crear_Afd(A, Estados, Transiciones, E,Tabla){
+function Crear_Afd(A, Estados, Transiciones, E,Tabla, TablaEquivalencia){
     //Inicial
-    var Inicial = A.est_inicial , Indice, InicialF
-    Indice = (A.est_entrada).indexOf(Inicial[0])
-    for(let i=0; i < Tabla[1][Indice].length; i++){
-        Inicial.push(Tabla[1][Indice][i])
-    }
+    var Inicial , Indice, InicialF
+    Inicial = TablaEquivalencia[0][0]
+    console.log(Inicial)
     for(let j=0; j < E.length; j++){
         var Bool
         Bool = Comparar(Inicial,E[j])
@@ -1087,30 +1059,10 @@ function Etiquetado(A,TablaEquivalencia, Alfabeto,Tabla){
     var Estados = [], Arr_Estados= [], Transiciones = [], Estados_Renombrados = [], AFD
     Separar(TablaEquivalencia, Alfabeto, Estados, Arr_Estados)
     Transiciones = Renombrar2(Estados,Arr_Estados,Estados_Renombrados)
-    AFD = Crear_Afd(A,Estados_Renombrados,Transiciones, Estados, Tabla)
-    console.log(AFD)
+
+    AFD = Crear_Afd(A,Estados_Renombrados,Transiciones, Estados, Tabla, TablaEquivalencia)
     return AFD;
 }
-// console.log('leoo',Equivalente(AFDejemplo));
-
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!para pasar de afnd a afd llamar a Equivalente(AUTOMATA) ::::::::::::...................
-
-/*-----------Simplificacion-----------------*/
-/*Funcion para simplificar un automata*/ 
-var entrada=["q1","q2","q3","q4","q5"], alfabeto=["a","b"], inicial= ["q5"], final= ["q2","q3","q4","q5"]
-var estado=[]
-estado[4]= new Estado("q5",true,["q4","q3"])
-estado[3]= new Estado("q4",true,["q4","q2"])
-estado[2]= new Estado("q3",true,["q4","q1"])
-estado[1]= new Estado("q2",true,["q4","q1"])
-estado[0]= new Estado("q1",false,["q1","q1"])
-var AUTOMATA = {
-    est_entrada: entrada,
-    arr_alfabeto: alfabeto,
-    est_inicial: inicial,
-    est_finales: final,
-    arr_estados : estado,
-} 
 /*-----------Simplificacion-----------------*/
 /*Funcion para simplificar un automata*/ 
 function Arr_estados(Matriz1, Matriz2,Indice,A){ //
@@ -1321,7 +1273,7 @@ function Simplificar(AUTOMATA){
     console.log("AFD SIMPLIFICADO",AFDRenombrado)
     return AFDRenombrado;
 }
-Simplificar(AUTOMATA)
+//Simplificar(AUTOMATA)
 //COMPLEMENTO, UNION, CONCATENACION, INTERSECCION
 /*------------Complemento-----------*/
 function complemento(AFD){
